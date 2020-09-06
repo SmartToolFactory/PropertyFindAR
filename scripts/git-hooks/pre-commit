@@ -1,0 +1,30 @@
+#!/bin/sh
+
+
+echo "Running static analysis..."
+
+
+# Inspect code using KtLint, and Detekt
+
+# Run KtLint only
+#./gradlew app:ktlintCheck --daemon
+
+# Format code using KtLint, then run Detekt and KtLint static analysis
+./gradlew app:ktlintFormat app:detekt app:ktlintCheck --daemon
+
+status=$?
+
+
+if [ "$status" = 0 ] ; then
+
+    echo "Static analysis found no problems."
+
+    exit 0
+
+else
+
+    echo 1>&2 "Static analysis found violations it could not fix."
+
+    exit 1
+
+fi
