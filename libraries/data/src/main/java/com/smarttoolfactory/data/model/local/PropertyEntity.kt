@@ -3,7 +3,6 @@ package com.smarttoolfactory.data.model.local
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.google.gson.annotations.SerializedName
 import com.smarttoolfactory.data.model.IEntity
 
 /**
@@ -17,95 +16,95 @@ import com.smarttoolfactory.data.model.IEntity
 data class PropertyEntity(
 
     @PrimaryKey
-    @ColumnInfo( name ="id")
+    @ColumnInfo(name = "id")
     val id: Int,
-    @ColumnInfo( name ="update")
+    @ColumnInfo(name = "update")
     val update: Int,
-    @ColumnInfo( name ="category_id")
+    @ColumnInfo(name = "category_id")
     val categoryId: Int,
-    @ColumnInfo( name ="title")
+    @ColumnInfo(name = "title")
     val title: String,
-    @ColumnInfo( name ="subject")
+    @ColumnInfo(name = "subject")
     val subject: String,
-    @ColumnInfo( name ="type")
+    @ColumnInfo(name = "type")
     val type: String,
-    @ColumnInfo( name ="type_id")
+    @ColumnInfo(name = "type_id")
     val typeId: Int,
-    @ColumnInfo( name ="thumbnail")
+    @ColumnInfo(name = "thumbnail")
     val thumbnail: String,
-    @ColumnInfo( name ="thumbnail_big")
+    @ColumnInfo(name = "thumbnail_big")
     val thumbnailBig: String,
-    @ColumnInfo( name ="image_count")
+    @ColumnInfo(name = "image_count")
     val imageCount: Int,
-    @ColumnInfo( name ="price")
+    @ColumnInfo(name = "price")
     val price: String,
-    @ColumnInfo( name ="price_period")
+    @ColumnInfo(name = "price_period")
     val pricePeriod: String,
-    @ColumnInfo( name ="price_period_raw")
+    @ColumnInfo(name = "price_period_raw")
     val pricePeriodRaw: String,
-    @ColumnInfo( name ="price_label")
+    @ColumnInfo(name = "price_label")
     val priceLabel: String,
-    @ColumnInfo( name ="price_value")
+    @ColumnInfo(name = "price_value")
     val priceValue: String,
-    @ColumnInfo( name ="price_value_raw")
+    @ColumnInfo(name = "price_value_raw")
     val priceValueRaw: Int,
-    @ColumnInfo( name ="currency")
+    @ColumnInfo(name = "currency")
     val currency: String,
-    @ColumnInfo( name ="featured")
+    @ColumnInfo(name = "featured")
     val featured: Boolean,
-    @ColumnInfo( name ="location")
+    @ColumnInfo(name = "location")
     val location: String,
-    @ColumnInfo( name ="area")
+    @ColumnInfo(name = "area")
     val area: String,
-    @ColumnInfo( name ="poa")
+    @ColumnInfo(name = "poa")
     val poa: Boolean,
-    @ColumnInfo( name ="rera_permit")
+    @ColumnInfo(name = "rera_permit")
     val reraPermit: String,
-    @ColumnInfo( name ="bathrooms")
+    @ColumnInfo(name = "bathrooms")
     val bathrooms: String,
-    @ColumnInfo( name ="bedrooms")
+    @ColumnInfo(name = "bedrooms")
     val bedrooms: String,
-    @ColumnInfo( name ="date_insert")
+    @ColumnInfo(name = "date_insert")
     val dateInsert: String,
-    @ColumnInfo( name ="date_update")
+    @ColumnInfo(name = "date_update")
     val dateUpdate: String,
-    @ColumnInfo( name ="agent_name")
+    @ColumnInfo(name = "agent_name")
     val agentName: String,
-    @ColumnInfo( name ="broker_name")
+    @ColumnInfo(name = "broker_name")
     val brokerName: String,
-    @ColumnInfo( name ="agent_license")
+    @ColumnInfo(name = "agent_license")
     val agentLicense: String,
-    @ColumnInfo( name ="location_id")
+    @ColumnInfo(name = "location_id")
     val locationId: Int,
-    @ColumnInfo( name ="hide_location")
+    @ColumnInfo(name = "hide_location")
     val hideLocation: Boolean,
-    @ColumnInfo( name ="broker")
+    @ColumnInfo(name = "broker")
 
     val broker: BrokerEntity,
-    @ColumnInfo( name ="amenities")
+    @ColumnInfo(name = "amenities")
     val amenities: List<String>,
-    @ColumnInfo( name ="amenities_keys")
+    @ColumnInfo(name = "amenities_keys")
     val amenitiesKeys: List<String>,
 
-    @ColumnInfo( name ="lat")
+    @ColumnInfo(name = "lat")
     val lat: Double,
-    @ColumnInfo( name ="long")
+    @ColumnInfo(name = "long")
     val long: Double,
-    @ColumnInfo( name ="premium")
+    @ColumnInfo(name = "premium")
     val premium: Boolean,
-    @ColumnInfo( name ="livingrooms")
+    @ColumnInfo(name = "livingrooms")
     val livingrooms: String,
-    @ColumnInfo( name ="verified")
+    @ColumnInfo(name = "verified")
     val verified: Boolean,
 
-    @ColumnInfo( name ="gallery")
+    @ColumnInfo(name = "gallery")
     val gallery: List<String>,
-    @ColumnInfo( name ="phone")
+    @ColumnInfo(name = "phone")
     val phone: String,
 
-    @ColumnInfo( name ="lead_email_receivers")
+    @ColumnInfo(name = "lead_email_receivers")
     val leadEmailReceivers: List<String>,
 
-    @ColumnInfo( name ="reference")
+    @ColumnInfo(name = "reference")
     val reference: String
 ) : IEntity

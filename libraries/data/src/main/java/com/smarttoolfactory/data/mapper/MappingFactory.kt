@@ -105,69 +105,7 @@ class PropertyDTOtoEntityListMapper @Inject constructor() :
                 // Maps List<String>
                 leadEmailReceivers = propertyDTO.leadEmailReceivers,
                 reference = propertyDTO.reference,
-
-
-                )
-
-//            PropertyEntity(
-//                id = propertyDTO.id,
-//                agentLicense = propertyDTO.agentLicense,
-//                agentName = propertyDTO.agentName,
-//
-//                // This could be an empty List<String>
-//                amenities = propertyDTO.amenities,
-//
-//                // This could be an empty List<String>
-//                amenitiesKeys = propertyDTO.amenitiesKeys,
-//
-//                area = propertyDTO.area,
-//                bathrooms = propertyDTO.bathrooms,
-//                bedrooms = propertyDTO.bedrooms,
-//
-//                // Maps brokerEntity: BrokerEntity
-//                broker =
-//                MapperFactory.createMapper<BrokerDTOtoEntityMapper>().map(propertyDTO.broker),
-//                brokerName = propertyDTO.brokerName,
-//                categoryId = propertyDTO.categoryId,
-//                currency = propertyDTO.currency,
-//                dateInsert = propertyDTO.dateInsert,
-//                dateUpdate = propertyDTO.dateUpdate,
-//                featured = propertyDTO.featured,
-//
-//                // Maps List<String>
-//                gallery = propertyDTO.gallery,
-//
-//                hideLocation = propertyDTO.hideLocation,
-//                imageCount = propertyDTO.imageCount,
-//                lat = propertyDTO.lat,
-//
-//                // Maps List<String>
-//                leadEmailReceivers = propertyDTO.leadEmailReceivers,
-//
-//                livingrooms = propertyDTO.livingrooms,
-//                location = propertyDTO.location,
-//                locationId = propertyDTO.locationId,
-//                long = propertyDTO.long,
-//                phone = propertyDTO.phone,
-//                poa = propertyDTO.poa,
-//                premium = propertyDTO.premium,
-//                price = propertyDTO.price,
-//                priceLabel = propertyDTO.priceLabel,
-//                pricePeriod = propertyDTO.pricePeriod,
-//                pricePeriodRaw = propertyDTO.pricePeriodRaw,
-//                priceValue = propertyDTO.priceValue,
-//                priceValueRaw = propertyDTO.priceValueRaw,
-//                reference = propertyDTO.reference,
-//                reraPermit = propertyDTO.reraPermit,
-//                subject = propertyDTO.subject,
-//                thumbnail = propertyDTO.thumbnail,
-//                thumbnailBig = propertyDTO.thumbnailBig,
-//                title = propertyDTO.title,
-//                type = propertyDTO.type,
-//                typeId = propertyDTO.typeId,
-//                update = propertyDTO.update,
-//                verified = propertyDTO.verified
-//            )
+            )
         }
     }
 }
@@ -175,17 +113,14 @@ class PropertyDTOtoEntityListMapper @Inject constructor() :
 /**
  * Create [Mapper] or [ListMapper] using Reflection api and factory pattern
  */
-class MapperFactory {
+object MapperFactory {
 
-    companion object {
+    inline fun <reified T : Mapper<out Mappable, out Mappable>> createMapper(): T {
+        return T::class.java.getDeclaredConstructor().newInstance()
+    }
 
-        inline fun <reified T : Mapper<out Mappable, out Mappable>> createMapper(): T {
-            return T::class.java.newInstance()
-        }
-
-        inline fun <reified T : ListMapper<out Mappable, out Mappable>> createListMapper(): T {
-            return T::class.java.newInstance()
-        }
+    inline fun <reified T : ListMapper<out Mappable, out Mappable>> createListMapper(): T {
+        return T::class.java.getDeclaredConstructor().newInstance()
     }
 }
 
@@ -215,8 +150,6 @@ object GenericMapper {
                         entityField?.set(it.javaClass, it.get(propertyDTO))
                     }
                 }
-
-                println("Field: $it")
             }
         }
     }
