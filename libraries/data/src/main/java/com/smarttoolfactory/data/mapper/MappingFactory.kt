@@ -87,7 +87,7 @@ class PropertyDTOtoEntityListMapper @Inject constructor() :
 
                 // Maps BrokerEntity
                 broker =
-                MapperFactory.createMapper<BrokerDTOtoEntityMapper>().map(propertyDTO.broker),
+                    MapperFactory.createMapper<BrokerDTOtoEntityMapper>().map(propertyDTO.broker),
                 // Maps List<String>
                 amenities = propertyDTO.amenities,
                 amenitiesKeys = propertyDTO.amenitiesKeys,
