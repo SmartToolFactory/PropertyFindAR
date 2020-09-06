@@ -61,16 +61,16 @@ class PropertyApiCoroutinesTest : AbstractPropertyApiTest() {
             enqueueResponse(HttpURLConnection.HTTP_OK)
 
             // WHEN
-            var postList: List<PropertyDTO> = emptyList()
+            var propertyDTOList: List<PropertyDTO> = emptyList()
 
             launch(this.coroutineContext) {
-                postList = api.getPropertyResponse().res
+                propertyDTOList = api.getPropertyResponse().res
             }
             advanceUntilIdle()
 
             // THEN
-            Truth.assertThat(postList).isNotNull()
-            Truth.assertThat(postList?.size).isEqualTo(25)
+            Truth.assertThat(propertyDTOList).isNotNull()
+            Truth.assertThat(propertyDTOList?.size).isEqualTo(25)
         }
 
     @BeforeEach
