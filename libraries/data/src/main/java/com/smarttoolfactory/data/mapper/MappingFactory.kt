@@ -92,8 +92,8 @@ class PropertyDTOtoEntityListMapper @Inject constructor() :
                 amenities = propertyDTO.amenities,
                 amenitiesKeys = propertyDTO.amenitiesKeys,
 
-                lat = propertyDTO.lat,
-                long = propertyDTO.long,
+                latitude = propertyDTO.lat,
+                longitude = propertyDTO.long,
                 premium = propertyDTO.premium,
                 livingrooms = propertyDTO.livingrooms,
                 verified = propertyDTO.verified,

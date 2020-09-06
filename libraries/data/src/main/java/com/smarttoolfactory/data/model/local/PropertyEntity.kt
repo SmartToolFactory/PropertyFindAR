@@ -86,10 +86,10 @@ data class PropertyEntity(
     @ColumnInfo(name = "amenities_keys")
     val amenitiesKeys: List<String>,
 
-    @ColumnInfo(name = "lat")
-    val lat: Double,
-    @ColumnInfo(name = "long")
-    val long: Double,
+    @ColumnInfo(name = "latitude")
+    val latitude: Double,
+    @ColumnInfo(name = "longitude")
+    val longitude: Double,
     @ColumnInfo(name = "premium")
     val premium: Boolean,
     @ColumnInfo(name = "livingrooms")
