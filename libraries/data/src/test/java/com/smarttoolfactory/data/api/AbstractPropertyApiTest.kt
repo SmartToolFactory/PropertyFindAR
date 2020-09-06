@@ -100,7 +100,6 @@ abstract class AbstractPropertyApiTest {
 
     @AfterEach
     open fun tearDown() {
-        println("AbstractPostApiTest TEAR DOWN")
         mockWebServer.shutdown()
     }
 

@@ -157,10 +157,10 @@ class PropertyApiRxJava3Test : AbstractPropertyApiTest() {
     }
 
     @Test
-    fun `Service should return post list`() {
+    fun `Service should return property list`() {
 
         // GIVEN
-        val postDTOList = propertyListOrderByNone
+        val propertyDTO = propertyListOrderByNone
 
         // WHEN
         val expected = api
@@ -169,18 +169,18 @@ class PropertyApiRxJava3Test : AbstractPropertyApiTest() {
             .res
 
         // THEN
-        Truth.assertThat(expected.size).isEqualTo(postDTOList.size)
-        Truth.assertThat(expected).containsExactlyElementsIn(postDTOList)
+        Truth.assertThat(expected.size).isEqualTo(propertyDTO.size)
+        Truth.assertThat(expected).containsExactlyElementsIn(propertyDTO)
     }
 
     /**
      * ✅ This test PASSES when [TestObserver] used with [TestObserver.await]
      */
     @Test
-    fun `Service should return post list with TestObserver`() {
+    fun `Service should return property list with TestObserver`() {
 
         // GIVEN
-        val postDTOList = propertyListOrderByNone
+        val propertyDTOList = propertyListOrderByNone
 
         // WHEN
         val testObserver = api
@@ -191,17 +191,17 @@ class PropertyApiRxJava3Test : AbstractPropertyApiTest() {
             .assertComplete()
             .assertNoErrors()
             .assertValue {
-                it.res.size == postDTOList.size
+                it.res.size == propertyDTOList.size
             }
 
         testObserver.dispose()
     }
 
     @Test
-    fun `Service should return post list with TestObserver blockingSubscribe`() {
+    fun `Service should return property list with TestObserver blockingSubscribe`() {
 
         // GIVEN
-        val postDTOList = propertyListOrderByNone
+        val propertyDTOList = propertyListOrderByNone
         val testObserver = TestObserver<PropertyResponse>()
 
         // WHEN
@@ -209,16 +209,16 @@ class PropertyApiRxJava3Test : AbstractPropertyApiTest() {
         val expected = testObserver.values()[0].res
 
         // THEN
-        Truth.assertThat(expected.size).isEqualTo(postDTOList.size)
-        Truth.assertThat(expected).containsExactlyElementsIn(postDTOList)
+        Truth.assertThat(expected.size).isEqualTo(propertyDTOList.size)
+        Truth.assertThat(expected).containsExactlyElementsIn(propertyDTOList)
         testObserver.dispose()
     }
 
     @Test
-    fun `Service should return post list ordered by price ascening`() {
+    fun `Service should return property list ordered by price ascening`() {
 
         // GIVEN
-        val postDTOList = propertyListOrderByPriceAscending
+        val propertyDTOList = propertyListOrderByPriceAscending
         val testObserver = TestObserver<PropertyResponse>()
 
         // WHEN
@@ -226,16 +226,16 @@ class PropertyApiRxJava3Test : AbstractPropertyApiTest() {
         val expected = testObserver.values()[0].res
 
         // THEN
-        Truth.assertThat(expected.size).isEqualTo(postDTOList.size)
-        Truth.assertThat(expected).containsExactlyElementsIn(postDTOList)
+        Truth.assertThat(expected.size).isEqualTo(propertyDTOList.size)
+        Truth.assertThat(expected).containsExactlyElementsIn(propertyDTOList)
         testObserver.dispose()
     }
 
     @Test
-    fun `Service should return post list ordered by beds descending`() {
+    fun `Service should return property list ordered by beds descending`() {
 
         // GIVEN
-        val postDTOList = propertyListOrderByBedsDescending
+        val propertyDTOList = propertyListOrderByBedsDescending
         val testObserver = TestObserver<PropertyResponse>()
 
         // WHEN
@@ -243,8 +243,8 @@ class PropertyApiRxJava3Test : AbstractPropertyApiTest() {
         val expected = testObserver.values()[0].res
 
         // THEN
-        Truth.assertThat(expected.size).isEqualTo(postDTOList.size)
-        Truth.assertThat(expected).containsExactlyElementsIn(postDTOList)
+        Truth.assertThat(expected.size).isEqualTo(propertyDTOList.size)
+        Truth.assertThat(expected).containsExactlyElementsIn(propertyDTOList)
         testObserver.dispose()
     }
 
@@ -252,8 +252,8 @@ class PropertyApiRxJava3Test : AbstractPropertyApiTest() {
     fun `Service should return results for page2 after page1`() {
 
         // GIVEN
-        val postDTOList1 = propertyListPage1
-        val postDTOList2 = propertyListPage2
+        val propertyDTOList1 = propertyListPage1
+        val propertyDTOList2 = propertyListPage2
 
         val testObserver = TestObserver<PropertyResponse>()
 
@@ -265,11 +265,11 @@ class PropertyApiRxJava3Test : AbstractPropertyApiTest() {
         val expected2 = testObserver.values()[0].res
 
         // THEN
-        Truth.assertThat(expected1.size).isEqualTo(postDTOList1.size)
-        Truth.assertThat(expected1).containsExactlyElementsIn(postDTOList1)
+        Truth.assertThat(expected1.size).isEqualTo(propertyDTOList1.size)
+        Truth.assertThat(expected1).containsExactlyElementsIn(propertyDTOList1)
 
-        Truth.assertThat(expected2.size).isEqualTo(postDTOList2.size)
-        Truth.assertThat(expected2).containsExactlyElementsIn(postDTOList2)
+        Truth.assertThat(expected2.size).isEqualTo(propertyDTOList2.size)
+        Truth.assertThat(expected2).containsExactlyElementsIn(propertyDTOList2)
 
         testObserver.dispose()
     }
