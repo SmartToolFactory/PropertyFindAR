@@ -7,13 +7,11 @@ import com.smarttoolfactory.test_utils.util.convertToObjectFromJson
 import com.smarttoolfactory.test_utils.util.getResourceAsText
 import org.junit.jupiter.api.Test
 
-
 class PropertyEntityEntityListMapperTest {
 
     private val propertyDTOResponse by lazy {
         convertToObjectFromJson<PropertyResponse>(getResourceAsText(RESPONSE_JSON_PATH))!!
     }
-
 
     @Test
     fun `Given a valid propertyDTO list, should map to propertyEntity list`() {
