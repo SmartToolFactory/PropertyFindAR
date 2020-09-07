@@ -14,6 +14,8 @@ interface PropertyRepositoryCoroutines {
 
     fun getCurrentPageNumber(): Int
 
+    suspend fun getOrderFilter(): String
+
     suspend fun fetchEntitiesFromRemote(orderBy: String = ORDER_BY_NONE): List<PropertyEntity>
 
     suspend fun fetchEntitiesFromRemoteByPage(
@@ -36,6 +38,8 @@ interface PropertyRepositoryCoroutines {
 interface PropertyRepositoryRxJava3 {
 
     fun getCurrentPageNumber(): Int
+
+    fun getOrderFilter(): String
 
     fun fetchEntitiesFromRemote(orderBy: String = ORDER_BY_NONE): Single<List<PropertyEntity>>
 

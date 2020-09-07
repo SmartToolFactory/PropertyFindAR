@@ -23,6 +23,10 @@ class PropertyRepositoryImplCoroutines(
         return currentPageNumber
     }
 
+    override suspend fun getOrderFilter(): String {
+        return orderBy
+    }
+
     override suspend fun fetchEntitiesFromRemote(orderBy: String): List<PropertyEntity> {
         this.orderBy = orderBy
         return mapper.map(remoteDataSource.getPropertyDTOs(orderBy))
@@ -61,6 +65,10 @@ class PropertyRepositoryImlRxJava3(
 
     override fun getCurrentPageNumber(): Int {
         return currentPageNumber
+    }
+
+    override fun getOrderFilter(): String {
+        return orderBy
     }
 
     override fun fetchEntitiesFromRemote(orderBy: String): Single<List<PropertyEntity>> {

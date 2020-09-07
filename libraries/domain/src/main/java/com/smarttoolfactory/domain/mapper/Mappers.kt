@@ -1,31 +1,18 @@
-package com.smarttoolfactory.data.mapper
+package com.smarttoolfactory.domain.mapper
 
-import com.smarttoolfactory.data.model.IEntity
-import com.smarttoolfactory.data.model.Mappable
+import com.smarttoolfactory.data.mapper.ListMapper
+import com.smarttoolfactory.data.mapper.Mapper
+import com.smarttoolfactory.data.mapper.MapperFactory
 import com.smarttoolfactory.data.model.local.BrokerEntity
 import com.smarttoolfactory.data.model.local.PropertyEntity
-import com.smarttoolfactory.data.model.remote.BrokerDTO
-import com.smarttoolfactory.data.model.remote.PropertyDTO
+import com.smarttoolfactory.domain.model.BrokerItem
+import com.smarttoolfactory.domain.model.PropertyItem
 import javax.inject.Inject
 
-/**
- * Mapper for transforming objects between REST and database or REST/db and domain
- * as [IEntity]  which are Non-nullable to Non-nullable
- */
-interface Mapper<I, O> {
-    fun map(input: I): O
-}
+private class BrokerEntityToItemMapper : Mapper<BrokerEntity, BrokerItem> {
 
-/**
- * Mapper for transforming objects between REST and database or REST/db and domain
- * as [List] of [IEntity] which are Non-nullable to Non-nullable
- */
-interface ListMapper<I, O> : Mapper<List<I>, List<O>>
-
-private class BrokerDTOtoEntityMapper : Mapper<BrokerDTO, BrokerEntity> {
-
-    override fun map(input: BrokerDTO): BrokerEntity {
-        return BrokerEntity(
+    override fun map(input: BrokerEntity): BrokerItem {
+        return BrokerItem(
             id = input.id,
             name = input.name,
             address = input.address,
@@ -45,14 +32,14 @@ private class BrokerDTOtoEntityMapper : Mapper<BrokerDTO, BrokerEntity> {
     }
 }
 
-class PropertyDTOtoEntityListMapper @Inject constructor() :
-    ListMapper<PropertyDTO, PropertyEntity> {
+class PropertyEntityToItemListMapper @Inject constructor() :
+    ListMapper<PropertyEntity, PropertyItem> {
 
-    override fun map(input: List<PropertyDTO>): List<PropertyEntity> {
+    override fun map(input: List<PropertyEntity>): List<PropertyItem> {
 
         return input.map { input ->
 
-            PropertyEntity(
+            PropertyItem(
                 id = input.id,
                 update = input.update,
                 categoryId = input.categoryId,
@@ -87,13 +74,13 @@ class PropertyDTOtoEntityListMapper @Inject constructor() :
 
                 // Maps BrokerEntity
                 broker =
-                    MapperFactory.createMapper<BrokerDTOtoEntityMapper>().map(input.broker),
+                    MapperFactory.createMapper<BrokerEntityToItemMapper>().map(input.broker),
                 // Maps List<String>
                 amenities = input.amenities,
                 amenitiesKeys = input.amenitiesKeys,
 
-                latitude = input.lat,
-                longitude = input.long,
+                latitude = input.latitude,
+                longitude = input.longitude,
                 premium = input.premium,
                 livingrooms = input.livingrooms,
                 verified = input.verified,
@@ -106,51 +93,6 @@ class PropertyDTOtoEntityListMapper @Inject constructor() :
                 leadEmailReceivers = input.leadEmailReceivers,
                 reference = input.reference,
             )
-        }
-    }
-}
-
-/**
- * Create [Mapper] or [ListMapper] using Reflection api and factory pattern
- */
-object MapperFactory {
-
-    inline fun <reified T : Mapper<out Mappable, out Mappable>> createMapper(): T {
-        return T::class.java.getDeclaredConstructor().newInstance()
-    }
-
-    inline fun <reified T : ListMapper<out Mappable, out Mappable>> createListMapper(): T {
-        return T::class.java.getDeclaredConstructor().newInstance()
-    }
-}
-
-/**
- * Generic Mapper for complex objects with Reflection api, but NOT working
- */
-object GenericMapper {
-
-    // TODO Build a generic mapper for complex objects
-    fun generate(propertyDTO: PropertyDTO, propertyEntity: PropertyEntity) {
-
-        propertyDTO?.run {
-
-            javaClass.declaredFields.forEach {
-
-                it.isAccessible = true
-
-                when (it.type) {
-                    Int::class.java,
-                    Double::class.java,
-                    Float::class.java,
-                    String::class.java,
-                    Boolean::class.java -> {
-
-                        val entityField = propertyEntity?.javaClass?.getField(it.name)
-                        entityField?.isAccessible = true
-                        entityField?.set(it.javaClass, it.get(propertyDTO))
-                    }
-                }
-            }
         }
     }
 }
