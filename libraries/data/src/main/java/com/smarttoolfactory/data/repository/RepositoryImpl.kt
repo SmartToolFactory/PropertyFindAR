@@ -1,5 +1,6 @@
 package com.smarttoolfactory.data.repository
 
+import com.smarttoolfactory.data.constant.ORDER_BY_NONE
 import com.smarttoolfactory.data.mapper.PropertyDTOtoEntityListMapper
 import com.smarttoolfactory.data.model.local.PropertyEntity
 import com.smarttoolfactory.data.source.LocalPropertyDataSourceCoroutines
@@ -15,31 +16,37 @@ class PropertyRepositoryImplCoroutines(
     private val mapper: PropertyDTOtoEntityListMapper
 ) : PropertyRepositoryCoroutines {
 
+    private var currentPageNumber = 0
+    private var orderBy = ORDER_BY_NONE
+
     override fun getCurrentPageNumber(): Int {
-        TODO("Not yet implemented")
+        return currentPageNumber
     }
 
     override suspend fun fetchEntitiesFromRemote(orderBy: String): List<PropertyEntity> {
-        TODO("Not yet implemented")
+        this.orderBy = orderBy
+        return mapper.map(remoteDataSource.getPropertyDTOs(orderBy))
     }
 
     override suspend fun fetchEntitiesFromRemoteByPage(
         page: Int,
         orderBy: String
     ): List<PropertyEntity> {
-        TODO("Not yet implemented")
+        currentPageNumber = page
+        this.orderBy = orderBy
+        return mapper.map(remoteDataSource.getPropertyDTOsWithPagination(page, orderBy))
     }
 
     override suspend fun getPropertyEntitiesFromLocal(): List<PropertyEntity> {
-        TODO("Not yet implemented")
+        return localDataSource.getPropertyEntities()
     }
 
     override suspend fun savePropertyEntities(propertyEntities: List<PropertyEntity>) {
-        TODO("Not yet implemented")
+        localDataSource.saveEntities(propertyEntities)
     }
 
     override suspend fun deletePropertyEntities() {
-        TODO("Not yet implemented")
+        localDataSource.deletePropertyEntities()
     }
 }
 
@@ -49,30 +56,41 @@ class PropertyRepositoryImlRxJava3(
     private val mapper: PropertyDTOtoEntityListMapper
 ) : PropertyRepositoryRxJava3 {
 
+    private var currentPageNumber = 0
+    private var orderBy = ORDER_BY_NONE
+
     override fun getCurrentPageNumber(): Int {
-        TODO("Not yet implemented")
+        return currentPageNumber
     }
 
     override fun fetchEntitiesFromRemote(orderBy: String): Single<List<PropertyEntity>> {
-        TODO("Not yet implemented")
+
+        return remoteDataSource.getPropertyDTOs(orderBy).map {
+            this.orderBy = orderBy
+            mapper.map(it)
+        }
     }
 
     override fun fetchEntitiesFromRemoteByPage(
         page: Int,
         orderBy: String
     ): Single<List<PropertyEntity>> {
-        TODO("Not yet implemented")
+        return remoteDataSource.getPropertyDTOsWithPagination(page, orderBy).map {
+            this.currentPageNumber = page
+            this.orderBy = orderBy
+            mapper.map(it)
+        }
     }
 
     override fun getPropertyEntitiesFromLocal(): Single<List<PropertyEntity>> {
-        TODO("Not yet implemented")
+        return localDataSource.getPropertyEntities()
     }
 
     override fun savePropertyEntities(propertyEntities: List<PropertyEntity>): Completable {
-        TODO("Not yet implemented")
+        return localDataSource.saveEntities(propertyEntities)
     }
 
     override fun deletePropertyEntities(): Completable {
-        TODO("Not yet implemented")
+        return localDataSource.deletePropertyEntities()
     }
 }

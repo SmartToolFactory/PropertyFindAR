@@ -165,8 +165,10 @@ class PropertyRepositoryRxJava3Test {
         Truth.assertThat(page2).isEqualTo(2)
 
         coVerifyOrder {
-            remoteDataSource.getPropertyDTOs()
-            mapper.map(propertyDTOList)
+            remoteDataSource.getPropertyDTOsWithPagination(1)
+            mapper.map(page1DTO)
+            remoteDataSource.getPropertyDTOsWithPagination(2)
+            mapper.map(page2DTO)
         }
     }
 
