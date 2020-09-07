@@ -4,5 +4,6 @@ include(
     ":libraries:data",
     ":libraries:domain",
     ":libraries:core",
-    ":features:account"
+    ":features:account",
+    ":features:notification"
 )
