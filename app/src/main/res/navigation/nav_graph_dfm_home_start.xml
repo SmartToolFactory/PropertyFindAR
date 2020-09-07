@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph_dfm_home_start"
+    app:startDestination="@id/nav_graph_home">
+
+    <!-- Account  dynamic feature module -->
+    <include-dynamic
+        android:id="@+id/nav_graph_home"
+        android:name="com.smarttoolfactory.home"
+        app:graphResName="nav_graph_home"
+        app:moduleName="home">
+    </include-dynamic>
+
+</navigation>

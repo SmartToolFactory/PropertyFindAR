@@ -95,6 +95,13 @@ android {
         jvmTarget = "1.8"
     }
 
+    dynamicFeatures = mutableSetOf(
+        Modules.DynamicFeature.HOME,
+        Modules.DynamicFeature.FAVORITES,
+        Modules.DynamicFeature.NOTIFICATION,
+        Modules.DynamicFeature.ACCOUNT
+    )
+
     testOptions {
         unitTests.isIncludeAndroidResources = true
     }
