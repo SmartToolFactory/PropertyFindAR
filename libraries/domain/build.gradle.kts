@@ -60,10 +60,8 @@ dependencies {
     implementation(Deps.COROUTINES_CORE)
     implementation(Deps.COROUTINES_ANDROID)
 
-    testImplementation(project(Modules.AndroidLibrary.TEST_UTILS))
-
     testImplementation(Deps.GSON)
 
     addUnitTestDependencies()
-    addInstrumentationTestDependencies()
+    testImplementation(project(Modules.AndroidLibrary.TEST_UTILS))
 }
