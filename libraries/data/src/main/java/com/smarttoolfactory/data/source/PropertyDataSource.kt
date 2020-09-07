@@ -1,6 +1,5 @@
 package com.smarttoolfactory.data.source
 
-
 import com.smarttoolfactory.data.constant.ORDER_BY_NONE
 import com.smarttoolfactory.data.model.local.PropertyEntity
 import com.smarttoolfactory.data.model.remote.PropertyDTO
