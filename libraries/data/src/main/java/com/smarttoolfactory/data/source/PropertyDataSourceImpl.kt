@@ -51,14 +51,14 @@ class RemoteDataSourceRxJava3Impl @Inject constructor(private val api: PropertyA
     RemotePropertyDataSourceRxJava3 {
 
     override fun getPropertyDTOs(orderBy: String): Single<List<PropertyDTO>> {
-        TODO("Not yet implemented")
+        return api.getPropertyResponse(orderBy).map { it.res }
     }
 
     override fun getPropertyDTOsWithPagination(
         page: Int,
         orderBy: String
     ): Single<List<PropertyDTO>> {
-        TODO("Not yet implemented")
+        return api.getPropertyResponseForPage(page, orderBy).map { it.res }
     }
 }
 
@@ -66,14 +66,14 @@ class LocalDataSourceRxJava3Impl @Inject constructor(private val dao: PropertyDa
     LocalPropertyDataSourceRxJava3 {
 
     override fun getPropertyEntities(): Single<List<PropertyEntity>> {
-        TODO("Not yet implemented")
+        return dao.getPropertiesSingle()
     }
 
     override fun saveEntities(properties: List<PropertyEntity>): Completable {
-        TODO("Not yet implemented")
+        return dao.insert(properties)
     }
 
     override fun deletePropertyEntities(): Completable {
-        TODO("Not yet implemented")
+        return dao.deleteAll()
     }
 }
