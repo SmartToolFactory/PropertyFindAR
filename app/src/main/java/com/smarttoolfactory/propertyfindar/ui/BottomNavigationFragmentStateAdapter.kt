@@ -24,23 +24,26 @@ class BottomNavigationFragmentStateAdapter(fragmentManager: FragmentManager, lif
 
     override fun createFragment(position: Int): Fragment {
         return when (position) {
+
+            // Home Dynamic Feature Module
             0 -> NavHostContainerFragment.createNavHostContainerFragment(
                 R.layout.fragment_navhost_home,
                 R.id.nested_nav_host_fragment_home
             )
 
-            // Vertical NavHost Post Fragment Container
+            // Favorites Dynamic Feature Module
             1 -> NavHostContainerFragment.createNavHostContainerFragment(
                 R.layout.fragment_navhost_favorites,
                 R.id.nested_nav_host_fragment_favorites
             )
 
-            // Horizontal NavHost Post Fragment Container
+            // Notification Dynamic Feature Module
             2 -> NavHostContainerFragment.createNavHostContainerFragment(
                 R.layout.fragment_navhost_notification,
                 R.id.nested_nav_host_fragment_notification
             )
 
+            // Notification Account Feature Module
             else -> NavHostContainerFragment.createNavHostContainerFragment(
                 R.layout.fragment_navhost_account,
                 R.id.nested_nav_host_fragment_account
