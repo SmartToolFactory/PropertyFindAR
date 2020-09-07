@@ -1,7 +1,6 @@
 package com.smarttoolfactory.home
 
-import android.os.Bundle
-import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -40,8 +39,7 @@ class HomeFragment : DynamicNavigationFragment<FragmentHomeBinding>() {
 
     private val navControllerViewModel by activityViewModels<NavControllerViewModel>()
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun bindViews() {
 
         // ViewPager2
         val viewPager = dataBinding!!.viewPager
@@ -58,6 +56,17 @@ class HomeFragment : DynamicNavigationFragment<FragmentHomeBinding>() {
          */
         viewPager.adapter =
             HomeViewPager2FragmentStateAdapter(childFragmentManager, viewLifecycleOwner.lifecycle)
+
+        dataBinding!!.toolbar.inflateMenu(R.menu.menu_home)
+
+        dataBinding!!.toolbar.setOnMenuItemClickListener {
+            if (it.itemId == R.id.menu_item_sort) {
+                Toast.makeText(requireContext(), "Toast", Toast.LENGTH_SHORT).show()
+                true
+            }
+
+            false
+        }
 
         // Bind tabs and viewpager
         TabLayoutMediator(tabLayout, viewPager, tabConfigurationStrategy).attach()
@@ -101,14 +110,18 @@ class HomeFragment : DynamicNavigationFragment<FragmentHomeBinding>() {
             it.adapter = null
         }
 
+        // Remove menu item click listener
+        dataBinding!!.toolbar.setOnMenuItemClickListener(null)
+
         super.onDestroyView()
     }
 
     private val tabConfigurationStrategy =
         TabLayoutMediator.TabConfigurationStrategy { tab, position ->
             when (position) {
-                0 -> tab.text = "Properties With Flow"
-                else -> tab.text = "Properties With RxJava3"
+                0 -> tab.text = "Flow"
+                1 -> tab.text = "RxJava3"
+                else -> tab.text = "Flow+Pagination"
             }
         }
 }

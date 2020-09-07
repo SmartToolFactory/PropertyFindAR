@@ -14,6 +14,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="150dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginBottom="4dp"
         android:padding="2dp">
 
@@ -29,7 +31,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent=".4">
+            app:layout_constraintWidth_percent=".45">
 
             <ImageView
                 imageSrc="@{item.thumbnail}"
@@ -39,6 +41,29 @@
                 android:src="@drawable/placeholder"
                 app:layout_constraintBottom_toBottomOf="parent" />
 
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="@+id/cvThumbnail"
+            app:layout_constraintTop_toTopOf="@+id/cvThumbnail">
+
+            <TextView
+                visibilityBasedOn="@{item.verified}"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="-4dp"
+                android:background="#66BB6A"
+                android:paddingStart="8dp"
+                android:paddingTop="1dp"
+                android:paddingEnd="8dp"
+                android:paddingBottom="1dp"
+                android:translationZ="5dp"
+                android:textSize="10sp"
+                android:text="VERIFIED"
+                android:textColor="@color/white" />
         </androidx.cardview.widget.CardView>
 
         <com.google.android.material.textview.MaterialTextView
@@ -64,7 +89,8 @@
             android:layout_marginTop="4dp"
             android:maxLines="1"
             android:text="@{item.price + ` `+ item.currency}"
-            android:textSize="20sp"
+            android:textColor="@color/black"
+            android:textSize="18sp"
             app:layout_constraintEnd_toStartOf="@id/ivLike"
             app:layout_constraintStart_toStartOf="@+id/tvTitle"
             app:layout_constraintTop_toBottomOf="@+id/tvTitle"
@@ -73,12 +99,11 @@
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/ivLike"
             favoriteImageSrc="@{item.isFavorite}"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginEnd="12dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:background="#00ffffff"
             android:padding="2dp"
-            android:src="@drawable/ic_baseline_favorite_border_24"
+            android:src="@drawable/ic_baseline_favorite_border_30"
             android:tint="#29B6F6"
             app:layout_constraintBottom_toBottomOf="@+id/tvPrice"
             app:layout_constraintEnd_toEndOf="parent"
@@ -89,11 +114,11 @@
             android:id="@+id/tvLocation"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="3dp"
             android:maxLines="2"
             android:text="@{item.location}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/ivLike"
+            android:textColor="#000"
+            app:layout_constraintEnd_toEndOf="@id/ivLike"
             app:layout_constraintStart_toStartOf="@+id/tvTitle"
             app:layout_constraintTop_toBottomOf="@+id/tvPrice"
             tools:text="Casa, Arabian Ranches 2, Dubai" />
@@ -105,13 +130,15 @@
             android:layout_marginTop="4dp"
             android:src="@drawable/ic_outline_airline_seat_individual_suite_24"
             app:layout_constraintStart_toStartOf="@+id/tvTitle"
-            app:layout_constraintTop_toBottomOf="@+id/tvLocation" />
+            app:layout_constraintTop_toBottomOf="@+id/tvLocation"
+            app:tint="@color/black" />
 
         <com.google.android.material.textview.MaterialTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:text="@{item.bedrooms}"
+            android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="@id/ivBeds"
             app:layout_constraintStart_toEndOf="@+id/ivBeds"
             app:layout_constraintTop_toTopOf="@+id/ivBeds"

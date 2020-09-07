@@ -37,7 +37,12 @@ class PropertyListRxjava3Fragment : DynamicNavigationFragment<FragmentPropertyLi
 
             // Set RecyclerViewAdapter
             this.adapter =
-                PropertyItemListAdapter(R.layout.row_property, viewModel::onClick)
+                PropertyItemListAdapter(
+                    R.layout.row_property,
+                    viewModel::onClick,
+                    viewModel::onLikeButtonClick
+
+                )
         }
 
         val swipeRefreshLayout = dataBinding.swipeRefreshLayout
