@@ -6,7 +6,6 @@ import com.smarttoolfactory.domain.dispatcher.UseCaseDispatchers
 import com.smarttoolfactory.domain.error.EmptyDataException
 import com.smarttoolfactory.domain.mapper.PropertyEntityToItemListMapper
 import com.smarttoolfactory.domain.model.PropertyItem
-import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.emitAll
@@ -14,6 +13,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
 /**
  * UseCase for getting UI Item list with offline first or offline last approach.
@@ -79,9 +79,41 @@ class GetPropertiesUseCaseFlow @Inject constructor(
      * * If data is fetched from remote source: delete old data, save new data and return new data
      * * If both network and db don't have any data throw empty set exception
      *
+     * * If filter is not same with the one retrieved from ViewModel refresh data by calling
+     * [GetPropertiesUseCaseFlow.getPropertiesOfflineLast]
+     *
      */
-    fun getPropertiesOfflineFirst(orderBy: String): Flow<List<PropertyItem>> {
-        TODO()
+    suspend fun getPropertiesOfflineFirst(orderBy: String): Flow<List<PropertyItem>> {
+
+        return if (repository.getOrderFilter() == orderBy) {
+            flow {
+                emit(repository.getPropertyEntitiesFromLocal())
+            }
+                .catch { throwable ->
+                    emitAll(flowOf(listOf()))
+                }
+                .map {
+                    if (it.isEmpty()) {
+                        repository.run {
+                            val data = fetchEntitiesFromRemote()
+                            deletePropertyEntities()
+                            savePropertyEntities(data)
+                            data
+                        }
+                    } else {
+                        it
+                    }
+                }
+                .flowOn(dispatcherProvider.ioDispatcher)
+                .catch { throwable ->
+                    emitAll(flowOf(listOf()))
+                }
+                .map {
+                    toPostListOrError(it)
+                }
+        } else {
+            getPropertiesOfflineLast(orderBy)
+        }
     }
 
     private fun toPostListOrError(entityList: List<PropertyEntity>): List<PropertyItem> {

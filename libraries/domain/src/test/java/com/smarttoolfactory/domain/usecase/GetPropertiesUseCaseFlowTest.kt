@@ -305,6 +305,7 @@ class GetPropertiesUseCaseFlowTest {
                     .dispose()
 
                 coVerifySequence {
+                    repository.getOrderFilter()
                     repository.getPropertyEntitiesFromLocal()
                     repository.fetchEntitiesFromRemote()
                     repository.deletePropertyEntities()
@@ -340,6 +341,7 @@ class GetPropertiesUseCaseFlowTest {
                     .dispose()
 
                 coVerifySequence {
+                    repository.getOrderFilter()
                     repository.getPropertyEntitiesFromLocal()
                     repository.fetchEntitiesFromRemote()
                     repository.deletePropertyEntities()
@@ -372,6 +374,7 @@ class GetPropertiesUseCaseFlowTest {
                     .dispose()
 
                 coVerifySequence {
+                    repository.getOrderFilter()
                     repository.getPropertyEntitiesFromLocal()
                     repository.fetchEntitiesFromRemote()
                 }
