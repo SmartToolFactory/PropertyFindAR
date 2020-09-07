@@ -11,7 +11,7 @@ import io.reactivex.rxjava3.core.Single
 import javax.inject.Inject
 
 /*
-    *** Coroutines Implementations for PostDataSources ***
+    *** Coroutines Implementations for DataSources ***
  */
 class RemotePropertyDataSourceCoroutinesImpl
 @Inject constructor(private val api: PropertyApiCoroutines) : RemotePropertyDataSourceCoroutines {
@@ -45,7 +45,7 @@ class LocalPropertyDataSourceImpl
 }
 
 /*
-    *** RxJava3 Implementations for PostDataSources ***
+    *** RxJava3 Implementations for DataSources ***
  */
 class RemoteDataSourceRxJava3Impl @Inject constructor(private val api: PropertyApiRxJava) :
     RemotePropertyDataSourceRxJava3 {
