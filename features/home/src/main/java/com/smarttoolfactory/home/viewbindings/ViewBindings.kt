@@ -65,7 +65,7 @@ fun View.visibilityBasedOn(condition: Boolean) {
 fun ImageButton.setFavoriteImageSrc(favorite: Boolean) {
 
     val imageResource = if (favorite) R.drawable.ic_baseline_favorite_24
-    else R.drawable.ic_baseline_favorite_24
+    else R.drawable.ic_baseline_favorite_border_24
 
     setImageResource(imageResource)
 }
