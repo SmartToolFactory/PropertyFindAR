@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">PropertyFindAR</string>
+    <string name="title_home">Home</string>
+    <string name="title_favorites">Favorites</string>
+    <string name="title_notification">Notification</string>
+    <string name="title_account">Account</string>
+    <string name="title_search">Search</string>
+    <string name="title_property_detail">Property Detail</string>
+
 </resources>

@@ -95,6 +95,10 @@ android {
         jvmTarget = "1.8"
     }
 
+    dynamicFeatures = mutableSetOf(
+        Modules.DynamicFeature.ACCOUNT
+    )
+
     testOptions {
         unitTests.isIncludeAndroidResources = true
     }

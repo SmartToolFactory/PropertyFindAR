@@ -15,7 +15,7 @@ fun <T> Flow<T>.convertToFlowViewState(
     dispatcher: CoroutineDispatcher = Dispatchers.Default
 ): Flow<ViewState<T>> {
     return this
-        .map { postList -> ViewState(status = Status.SUCCESS, data = postList) }
+        .map { list -> ViewState(status = Status.SUCCESS, data = list) }
         .catch { cause: Throwable -> emitAll(flowOf(ViewState(Status.ERROR, error = cause))) }
         .flowOn(dispatcher)
 }
