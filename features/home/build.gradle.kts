@@ -16,7 +16,7 @@ android {
 
     defaultConfig {
 
-        applicationId = "com.smarttoolfactory.account"
+        applicationId = "com.smarttoolfactory.home"
 
         minSdkVersion(AndroidVersion.MIN_SDK_VERSION)
         targetSdkVersion(AndroidVersion.TARGET_SDK_VERSION)
@@ -65,13 +65,13 @@ dependencies {
     implementation(Deps.APPCOMPAT)
     implementation(Deps.MATERIAL)
     implementation(Deps.CONSTRAINT_LAYOUT)
+    implementation(Deps.RECYCLER_VIEW)
+    implementation(Deps.VIEWPAGER2)
+    implementation(Deps.SWIPE_REFRESH_LAYOUT)
 
     // Glide
     implementation(Deps.GLIDE)
     kapt(Deps.GLIDE_COMPILER)
-
-    // Lottie
-    implementation(Deps.LOTTIE)
 
     // Unit Tests
     addUnitTestDependencies()
