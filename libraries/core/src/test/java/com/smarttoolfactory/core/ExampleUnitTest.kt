@@ -1,6 +1,6 @@
 package com.smarttoolfactory.core
 
-import org.junit.Assert.assertEquals
+import junit.framework.Assert.assertEquals
 import org.junit.Test
 
 /**
