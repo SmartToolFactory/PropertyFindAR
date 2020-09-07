@@ -9,8 +9,9 @@ import com.smarttoolfactory.data.source.RemotePropertyDataSourceCoroutines
 import com.smarttoolfactory.data.source.RemotePropertyDataSourceRxJava3
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Single
+import javax.inject.Inject
 
-class PropertyRepositoryImplCoroutines(
+class PropertyRepositoryImplCoroutines @Inject constructor(
     private val localDataSource: LocalPropertyDataSourceCoroutines,
     private val remoteDataSource: RemotePropertyDataSourceCoroutines,
     private val mapper: PropertyDTOtoEntityListMapper
@@ -54,7 +55,7 @@ class PropertyRepositoryImplCoroutines(
     }
 }
 
-class PropertyRepositoryImlRxJava3(
+class PropertyRepositoryImlRxJava3 @Inject constructor(
     private val localDataSource: LocalPropertyDataSourceRxJava3,
     private val remoteDataSource: RemotePropertyDataSourceRxJava3,
     private val mapper: PropertyDTOtoEntityListMapper

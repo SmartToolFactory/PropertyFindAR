@@ -106,6 +106,7 @@ dependencies {
 
     implementation(project(Modules.AndroidLibrary.DATA))
     implementation(project(Modules.AndroidLibrary.DOMAIN))
+    implementation(project(Modules.AndroidLibrary.CORE))
 
     addAppModuleDependencies()
 
