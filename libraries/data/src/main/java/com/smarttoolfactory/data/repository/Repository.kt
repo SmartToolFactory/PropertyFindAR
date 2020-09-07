@@ -14,7 +14,7 @@ interface PropertyRepositoryCoroutines {
 
     fun getCurrentPageNumber(): Int
 
-    fun getOrderFilter(): String
+    suspend fun getOrderFilter(): String
 
     suspend fun fetchEntitiesFromRemote(orderBy: String = ORDER_BY_NONE): List<PropertyEntity>
 

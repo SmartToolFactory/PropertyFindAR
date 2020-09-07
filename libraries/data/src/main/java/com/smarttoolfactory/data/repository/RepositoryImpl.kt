@@ -23,7 +23,7 @@ class PropertyRepositoryImplCoroutines(
         return currentPageNumber
     }
 
-    override fun getOrderFilter(): String {
+    override suspend fun getOrderFilter(): String {
         return orderBy
     }
 

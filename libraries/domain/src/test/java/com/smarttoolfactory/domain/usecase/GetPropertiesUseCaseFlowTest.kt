@@ -16,6 +16,7 @@ import io.mockk.clearMocks
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.coVerifyOrder
+import io.mockk.coVerifySequence
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
@@ -228,6 +229,7 @@ class GetPropertiesUseCaseFlowTest {
                     repository.savePropertyEntities(propertyEntities = entityList)
                 } just runs
                 coEvery { repository.getPropertyEntitiesFromLocal() } returns listOf()
+
                 coEvery { entityToPropertyMapper.map(entityList) } returns itemList
 
                 // WHEN
@@ -245,6 +247,134 @@ class GetPropertiesUseCaseFlowTest {
                 coVerify(exactly = 0) { repository.savePropertyEntities(entityList) }
 
                 verify(exactly = 0) { entityToPropertyMapper.map(entityList) }
+            }
+    }
+
+    @Nested
+    @DisplayName("Offline-First Tests")
+    inner class OffLineFirstTest {
+
+        @Test
+        fun `given Local source has data, should return data`() =
+            testCoroutineExtension.runBlockingTest {
+
+                // GIVEN
+                coEvery { repository.getOrderFilter() } returns ORDER_BY_NONE
+                coEvery { repository.getPropertyEntitiesFromLocal() } returns entityList
+                coEvery { entityToPropertyMapper.map(entityList) } returns itemList
+                // WHEN
+                val testObserver = useCase.getPropertiesOfflineFirst(ORDER_BY_NONE).test(this)
+
+                // THEN
+                testObserver
+                    .assertComplete()
+                    .assertNoErrors()
+                    .assertValues {
+                        it.first().containsAll(itemList)
+                    }
+                    .dispose()
+
+                coVerifySequence {
+                    repository.getOrderFilter()
+                    repository.getPropertyEntitiesFromLocal()
+                    entityToPropertyMapper.map(entityList)
+                }
+            }
+
+        @Test
+        fun `given Local source is empty, should fetch data from Remote`() =
+            testCoroutineExtension.runBlockingTest {
+
+                // GIVEN
+                coEvery { repository.getOrderFilter() } returns ORDER_BY_NONE
+                coEvery { repository.getPropertyEntitiesFromLocal() } returns listOf()
+                coEvery { repository.fetchEntitiesFromRemote() } returns entityList
+                coEvery { repository.deletePropertyEntities() } just runs
+                coEvery { repository.savePropertyEntities(propertyEntities = entityList) } just runs
+                coEvery { entityToPropertyMapper.map(entityList) } returns itemList
+                // WHEN
+                val testObserver = useCase.getPropertiesOfflineFirst(ORDER_BY_NONE).test(this)
+
+                // THEN
+                testObserver
+                    .assertComplete()
+                    .assertNoErrors()
+                    .assertValues {
+                        it.first().containsAll(itemList)
+                    }
+                    .dispose()
+
+                coVerifySequence {
+                    repository.getPropertyEntitiesFromLocal()
+                    repository.fetchEntitiesFromRemote()
+                    repository.deletePropertyEntities()
+                    repository.savePropertyEntities(propertyEntities = entityList)
+                    entityToPropertyMapper.map(entityList)
+                }
+            }
+
+        @Test
+        fun `given exception returned from Local source should fetch data from Remote`() =
+            testCoroutineExtension.runBlockingTest {
+
+                // GIVEN
+                coEvery { repository.getOrderFilter() } returns ORDER_BY_NONE
+                coEvery {
+                    repository.getPropertyEntitiesFromLocal()
+                } throws SQLException("Database Exception")
+                coEvery { repository.fetchEntitiesFromRemote() } returns entityList
+                coEvery { repository.deletePropertyEntities() } just runs
+                coEvery { repository.savePropertyEntities(propertyEntities = entityList) } just runs
+                coEvery { entityToPropertyMapper.map(entityList) } returns itemList
+
+                // WHEN
+                val testObserver = useCase.getPropertiesOfflineFirst(ORDER_BY_NONE).test(this)
+
+                // THEN
+                testObserver
+                    .assertComplete()
+                    .assertNoErrors()
+                    .assertValues {
+                        it.first().containsAll(itemList)
+                    }
+                    .dispose()
+
+                coVerifySequence {
+                    repository.getPropertyEntitiesFromLocal()
+                    repository.fetchEntitiesFromRemote()
+                    repository.deletePropertyEntities()
+                    repository.savePropertyEntities(propertyEntities = entityList)
+                    entityToPropertyMapper.map(entityList)
+                }
+            }
+
+        @Test
+        fun `given Local source is empty and Remote returned error, should throw exception`() =
+            testCoroutineExtension.runBlockingTest {
+
+                // GIVEN
+                coEvery { repository.getOrderFilter() } returns ORDER_BY_NONE
+                coEvery { repository.getPropertyEntitiesFromLocal() } returns listOf()
+
+                coEvery {
+                    repository.fetchEntitiesFromRemote()
+                } throws Exception("Network Exception")
+
+                coEvery { entityToPropertyMapper.map(entityList) } returns itemList
+
+                // WHEN
+                val testObserver = useCase.getPropertiesOfflineFirst(ORDER_BY_NONE).test(this)
+
+                // THEN
+                testObserver
+                    .assertNotComplete()
+                    .assertError(EmptyDataException::class.java)
+                    .dispose()
+
+                coVerifySequence {
+                    repository.getPropertyEntitiesFromLocal()
+                    repository.fetchEntitiesFromRemote()
+                }
             }
     }
 
