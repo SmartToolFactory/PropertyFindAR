@@ -10,6 +10,7 @@ import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
@@ -83,37 +84,41 @@ class GetPropertiesUseCaseFlow @Inject constructor(
      * [GetPropertiesUseCaseFlow.getPropertiesOfflineLast]
      *
      */
-    suspend fun getPropertiesOfflineFirst(orderBy: String): Flow<List<PropertyItem>> {
+    fun getPropertiesOfflineFirst(orderBy: String): Flow<List<PropertyItem>> {
 
-        return if (repository.getOrderFilter() != orderBy) {
-            flow {
-                emit(repository.getPropertyEntitiesFromLocal())
-            }
-                .catch { throwable ->
-                    emitAll(flowOf(listOf()))
-                }
-                .map {
-                    if (it.isEmpty()) {
-                        repository.run {
-                            val data = fetchEntitiesFromRemote()
-                            deletePropertyEntities()
-                            savePropertyEntities(data)
-                            data
-                        }
-                    } else {
-                        it
+        return flow { emit(repository.getOrderFilter() == orderBy) }
+            .flatMapMerge { sameFilter ->
+
+                if (sameFilter) {
+                    flow {
+                        emit(repository.getPropertyEntitiesFromLocal())
                     }
+                        .catch { throwable ->
+                            emitAll(flowOf(listOf()))
+                        }
+                        .map {
+                            if (it.isEmpty()) {
+                                repository.run {
+                                    val data = fetchEntitiesFromRemote()
+                                    deletePropertyEntities()
+                                    savePropertyEntities(data)
+                                    data
+                                }
+                            } else {
+                                it
+                            }
+                        }
+                        .flowOn(dispatcherProvider.ioDispatcher)
+                        .catch { throwable ->
+                            emitAll(flowOf(listOf()))
+                        }
+                        .map {
+                            toPropertyListOrError(it)
+                        }
+                } else {
+                    getPropertiesOfflineLast(orderBy)
                 }
-                .flowOn(dispatcherProvider.ioDispatcher)
-                .catch { throwable ->
-                    emitAll(flowOf(listOf()))
-                }
-                .map {
-                    toPropertyListOrError(it)
-                }
-        } else {
-            getPropertiesOfflineLast(orderBy)
-        }
+            }
     }
 
     private fun toPropertyListOrError(entityList: List<PropertyEntity>): List<PropertyItem> {
