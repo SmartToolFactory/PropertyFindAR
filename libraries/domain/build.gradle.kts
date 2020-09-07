@@ -1,4 +1,3 @@
-import extension.addInstrumentationTestDependencies
 import extension.addUnitTestDependencies
 
 plugins {

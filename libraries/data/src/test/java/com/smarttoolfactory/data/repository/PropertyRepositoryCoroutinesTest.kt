@@ -28,6 +28,12 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 
+/**
+ * Used single instance of tests instead of creating new instance for each test.
+ *
+ * @see <a href="https://phauer.com/2018/best-practices-unit-testing-kotlin/">Kotlin Test Performance</a>
+ *
+ */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 internal class PropertyRepositoryCoroutinesTest {
 
