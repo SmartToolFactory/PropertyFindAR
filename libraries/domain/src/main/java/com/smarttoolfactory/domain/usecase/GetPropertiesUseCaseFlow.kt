@@ -1,5 +1,6 @@
 package com.smarttoolfactory.domain.usecase
 
+import com.smarttoolfactory.data.constant.ORDER_BY_NONE
 import com.smarttoolfactory.data.model.local.PropertyEntity
 import com.smarttoolfactory.data.repository.PropertyRepositoryCoroutines
 import com.smarttoolfactory.domain.dispatcher.UseCaseDispatchers
@@ -10,7 +11,7 @@ import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.emitAll
-import kotlinx.coroutines.flow.flatMapMerge
+import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
@@ -47,7 +48,7 @@ class GetPropertiesUseCaseFlow @Inject constructor(
      * * If both network and db don't have any data throw empty set exception
      *
      */
-    fun getPropertiesOfflineLast(orderBy: String): Flow<List<PropertyItem>> {
+    fun getPropertiesOfflineLast(orderBy: String = ORDER_BY_NONE): Flow<List<PropertyItem>> {
         return flow { emit(repository.fetchEntitiesFromRemote(orderBy)) }
             .map {
                 if (it.isNullOrEmpty()) {
@@ -84,10 +85,10 @@ class GetPropertiesUseCaseFlow @Inject constructor(
      * [GetPropertiesUseCaseFlow.getPropertiesOfflineLast]
      *
      */
-    fun getPropertiesOfflineFirst(orderBy: String): Flow<List<PropertyItem>> {
+    fun getPropertiesOfflineFirst(orderBy: String = ORDER_BY_NONE): Flow<List<PropertyItem>> {
 
         return flow { emit(repository.getOrderFilter() == orderBy) }
-            .flatMapMerge { sameFilter ->
+            .flatMapConcat { sameFilter ->
 
                 if (sameFilter) {
                     flow {

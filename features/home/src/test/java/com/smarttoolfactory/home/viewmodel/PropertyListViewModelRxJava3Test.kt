@@ -41,9 +41,17 @@ class PropertyListViewModelRxJava3Test {
     @JvmField
     val rxImmediateSchedulerRule = RxImmediateSchedulerRule()
 
-    private val itemList = convertToObjectFromJson<PopertItems>(
-        getResourceAsText(RESPONSE_JSON_PATH)
-    )!!.res
+    companion object {
+
+        private data class PropertyItems(
+            val total: Int,
+            val res: List<PropertyItem>
+        )
+
+        private val itemList = convertToObjectFromJson<PropertyItems>(
+            getResourceAsText(RESPONSE_JSON_PATH)
+        )!!.res
+    }
 
     /*
         Mocks
@@ -51,14 +59,9 @@ class PropertyListViewModelRxJava3Test {
     private val useCase: GetPropertiesUseCaseRxJava3 = mockk()
 
     /**
-     * ViewModel to test post list which is SUT
+     * ViewModel to test list which is SUT
      */
     private lateinit var viewModel: PropertyListViewModelRxJava3
-
-    data class PopertItems(
-        val total: Int,
-        val res: List<PropertyItem>
-    )
 
     @Test
     fun `given exception returned from useCase, should have ViewState ERROR offlineFirst`() {
