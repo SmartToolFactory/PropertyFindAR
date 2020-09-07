@@ -2,7 +2,8 @@ package com.smarttoolfactory.home.di
 
 import androidx.fragment.app.Fragment
 import com.smarttoolfactory.core.di.CoreModuleDependencies
-
+import com.smarttoolfactory.home.propertylist.PropertyListFlowFragment
+import com.smarttoolfactory.home.propertylist.PropertyListRxjava3Fragment
 import dagger.BindsInstance
 import dagger.Component
 
@@ -11,6 +12,9 @@ import dagger.Component
     modules = [HomeModule::class]
 )
 interface HomeComponent {
+
+    fun inject(fragment: PropertyListFlowFragment)
+    fun inject(fragment: PropertyListRxjava3Fragment)
 
     @Component.Factory
     interface Factory {

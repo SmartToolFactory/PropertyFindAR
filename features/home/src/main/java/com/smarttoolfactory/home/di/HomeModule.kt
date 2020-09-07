@@ -19,7 +19,10 @@ import kotlinx.coroutines.SupervisorJob
 class HomeModule {
 
     @Provides
-    fun providePropertyListViewModelFlow(fragment: Fragment, factory: PropertyListFlowViewModelFactory) =
+    fun providePropertyListViewModelFlow(
+        fragment: Fragment,
+        factory: PropertyListFlowViewModelFactory
+    ) =
         ViewModelProvider(fragment, factory).get(PropertyListViewModelFlow::class.java)
 
     @Provides
