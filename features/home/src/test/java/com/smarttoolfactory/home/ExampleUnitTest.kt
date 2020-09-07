@@ -1,4 +1,4 @@
-package com.smarttoolfactory.favorites
+package com.smarttoolfactory.home
 
 import org.junit.Assert.assertEquals
 import org.junit.Test

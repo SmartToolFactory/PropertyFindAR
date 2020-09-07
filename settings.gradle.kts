@@ -4,7 +4,8 @@ include(
     ":libraries:data",
     ":libraries:domain",
     ":libraries:core",
-    ":features:account",
+    ":features:home",
+    ":features:favorites",
     ":features:notification",
-    ":features:favorites"
+    ":features:account"
 )
