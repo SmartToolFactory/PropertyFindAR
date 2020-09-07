@@ -5,5 +5,6 @@ include(
     ":libraries:domain",
     ":libraries:core",
     ":features:account",
-    ":features:notification"
+    ":features:notification",
+    ":features:favorites"
 )
