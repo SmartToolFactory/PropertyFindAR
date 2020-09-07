@@ -1,11 +1,19 @@
 package com.smarttoolfactory.domain.usecase
 
+import com.smarttoolfactory.data.model.local.PropertyEntity
 import com.smarttoolfactory.data.repository.PropertyRepositoryCoroutines
 import com.smarttoolfactory.domain.dispatcher.UseCaseDispatchers
+import com.smarttoolfactory.domain.error.EmptyDataException
 import com.smarttoolfactory.domain.mapper.PropertyEntityToItemListMapper
 import com.smarttoolfactory.domain.model.PropertyItem
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 
 /**
  * UseCase for getting UI Item list with offline first or offline last approach.
@@ -23,7 +31,7 @@ import kotlinx.coroutines.flow.Flow
  */
 class GetPropertiesUseCaseFlow @Inject constructor(
     private val repository: PropertyRepositoryCoroutines,
-    private val entityToItemMapper: PropertyEntityToItemListMapper,
+    private val mapper: PropertyEntityToItemListMapper,
     private val dispatcherProvider: UseCaseDispatchers
 ) {
 
@@ -39,7 +47,26 @@ class GetPropertiesUseCaseFlow @Inject constructor(
      *
      */
     fun getPropertiesOfflineLast(orderBy: String): Flow<List<PropertyItem>> {
-        TODO()
+        return flow { emit(repository.fetchEntitiesFromRemote(orderBy)) }
+            .map {
+                if (it.isNullOrEmpty()) {
+                    throw EmptyDataException("No Data is available in Remote source!")
+                } else {
+                    repository.run {
+                        deletePropertyEntities()
+                        savePropertyEntities(it)
+                        getPropertyEntitiesFromLocal()
+                    }
+                }
+            }
+            .flowOn(dispatcherProvider.ioDispatcher)
+            // This is where remote exception or least likely db exceptions are caught
+            .catch { throwable ->
+                emitAll(flowOf(repository.getPropertyEntitiesFromLocal()))
+            }
+            .map {
+                toPostListOrError(it)
+            }
     }
 
     /**
@@ -55,5 +82,13 @@ class GetPropertiesUseCaseFlow @Inject constructor(
      */
     fun getPropertiesOfflineFirst(orderBy: String): Flow<List<PropertyItem>> {
         TODO()
+    }
+
+    private fun toPostListOrError(entityList: List<PropertyEntity>): List<PropertyItem> {
+        return if (!entityList.isNullOrEmpty()) {
+            mapper.map(entityList)
+        } else {
+            throw EmptyDataException("Empty data mapping error!")
+        }
     }
 }

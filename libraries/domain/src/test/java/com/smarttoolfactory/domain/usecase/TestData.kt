@@ -13,6 +13,9 @@ import com.smarttoolfactory.test_utils.util.getResourceAsText
 // FIXME Cannot convert from Json to Entity even with wrapper, check out Moshi or Jackson
 object TestData {
 
+    /*
+        DTOs
+     */
     private val propertyResponse = convertToObjectFromJson<PropertyResponse>(
         getResourceAsText(RESPONSE_JSON_PATH)
     )!!
@@ -27,13 +30,18 @@ object TestData {
         getResourceAsText(RESPONSE_JSON_PATH_PAGE_2)
     )!!
 
+    /*
+        Properties
+     */
     private val entityMapper = MapperFactory.createListMapper<PropertyDTOtoEntityListMapper>()
 
     val entityList = entityMapper.map(propertyDTOList)
     val entityListPage1 = entityMapper.map(propertyResponsePage1.res)
     val entityListPage2 = entityMapper.map(propertyResponsePage2.res)
 
-    // Items
+    /*
+        Items
+     */
     val itemMapper = MapperFactory.createListMapper<PropertyEntityToItemListMapper>()
 
     val itemList = itemMapper.map(entityList)

@@ -129,7 +129,7 @@ class GetPropertiesUseCaseFlowTest {
 
                 // WHEN
                 val testObserver =
-                    useCase.getPropertiesOfflineLast(repository.getOrderFilter()).test(this)
+                    useCase.getPropertiesOfflineLast(ORDER_BY_NONE).test(this)
 
                 // THEN
                 testObserver
