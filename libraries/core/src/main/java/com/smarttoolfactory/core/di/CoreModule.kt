@@ -1,6 +1,5 @@
 package com.smarttoolfactory.core.di
 
-import com.smarttoolfactory.core.CoreDependency
 import com.smarttoolfactory.domain.dispatcher.UseCaseDispatchers
 import dagger.Module
 import dagger.Provides
@@ -14,9 +13,6 @@ import kotlinx.coroutines.SupervisorJob
 @InstallIn(ApplicationComponent::class)
 @Module(includes = [DataModule::class])
 class CoreModule {
-
-    @Provides
-    fun provideCoreDependency() = CoreDependency()
 
     @Singleton
     @Provides

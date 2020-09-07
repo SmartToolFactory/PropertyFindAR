@@ -1,6 +1,5 @@
 package com.smarttoolfactory.core.di
 
-import com.smarttoolfactory.core.CoreDependency
 import com.smarttoolfactory.domain.usecase.GetPropertiesUseCaseFlow
 import com.smarttoolfactory.domain.usecase.GetPropertiesUseCaseRxJava3
 import dagger.hilt.EntryPoint
@@ -15,14 +14,8 @@ import dagger.hilt.android.components.ApplicationComponent
 interface CoreModuleDependencies {
 
     /*
-       Provision methods to provide dependencies to components that depend on this component
-     */
-    fun coreDependency(): CoreDependency
-
-    /*
      Provision methods to provide dependencies to components that depend on this component
    */
-
     fun getPropertiesUseCaseFlow(): GetPropertiesUseCaseFlow
     fun getPropertiesUseCaseRxJava3(): GetPropertiesUseCaseRxJava3
 }
