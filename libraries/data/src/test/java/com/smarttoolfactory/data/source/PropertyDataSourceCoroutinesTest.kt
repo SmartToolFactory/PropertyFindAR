@@ -42,7 +42,7 @@ class PropertyDataSourceCoroutinesTest {
 
         private val api = mockk<PropertyApiCoroutines>()
 
-        private lateinit var remotePostDataSource: RemotePropertyDataSourceCoroutines
+        private lateinit var remoteDataSource: RemotePropertyDataSourceCoroutines
 
         @Test
         fun `given network error occurred, should throw Exception`() = runBlockingTest {
@@ -52,7 +52,7 @@ class PropertyDataSourceCoroutinesTest {
 
             // WHEN
             val expected = try {
-                remotePostDataSource.getPropertyDTOs()
+                remoteDataSource.getPropertyDTOs()
             } catch (e: Exception) {
                 e
             }
@@ -70,7 +70,7 @@ class PropertyDataSourceCoroutinesTest {
             coEvery { api.getPropertyResponse().res } returns actual
 
             // WHEN
-            val expected = remotePostDataSource.getPropertyDTOs()
+            val expected = remoteDataSource.getPropertyDTOs()
 
             // THEN
             Truth.assertThat(expected).isEqualTo(actual)
@@ -79,7 +79,7 @@ class PropertyDataSourceCoroutinesTest {
 
         @BeforeEach
         fun setUp() {
-            remotePostDataSource = RemotePropertyDataSourceCoroutinesImpl(api)
+            remoteDataSource = RemotePropertyDataSourceCoroutinesImpl(api)
         }
 
         @AfterEach
@@ -93,7 +93,7 @@ class PropertyDataSourceCoroutinesTest {
 
         private val dao = mockk<PropertyDaoCoroutines>()
 
-        private lateinit var localPostDataSource: LocalPropertyDataSourceCoroutines
+        private lateinit var localDataSource: LocalPropertyDataSourceCoroutines
 
         @Test
         fun `given DB is empty should return an empty list`() = runBlockingTest {
@@ -103,7 +103,7 @@ class PropertyDataSourceCoroutinesTest {
             coEvery { dao.getPropertyList() } returns expected
 
             // WHEN
-            val actual = localPostDataSource.getPropertyEntities()
+            val actual = localDataSource.getPropertyEntities()
 
             // THEN
             Truth.assertThat(actual).isEmpty()
@@ -117,7 +117,7 @@ class PropertyDataSourceCoroutinesTest {
             coEvery { dao.getPropertyList() } returns entityList
 
             // WHEN
-            val actual = localPostDataSource.getPropertyEntities()
+            val actual = localDataSource.getPropertyEntities()
 
             // THEN
             Truth.assertThat(actual).containsExactlyElementsIn(entityList)
@@ -135,7 +135,7 @@ class PropertyDataSourceCoroutinesTest {
             coEvery { dao.insert(entityList) } returns idList
 
             // WHEN
-            val result = localPostDataSource.saveEntities(entityList)
+            val result = localDataSource.saveEntities(entityList)
 
             // THEN
             Truth.assertThat(result).containsExactlyElementsIn(idList)
@@ -149,7 +149,7 @@ class PropertyDataSourceCoroutinesTest {
             coEvery { dao.deleteAll() } just runs
 
             // WHEN
-            localPostDataSource.deletePropertyEntities()
+            localDataSource.deletePropertyEntities()
 
             // THEN
             coVerify(exactly = 1) { dao.deleteAll() }
@@ -157,7 +157,7 @@ class PropertyDataSourceCoroutinesTest {
 
         @BeforeEach
         fun setUp() {
-            localPostDataSource = LocalPropertyDataSourceImpl(dao)
+            localDataSource = LocalPropertyDataSourceImpl(dao)
         }
 
         @AfterEach

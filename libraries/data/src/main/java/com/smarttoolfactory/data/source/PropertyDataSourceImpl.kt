@@ -1,9 +1,13 @@
 package com.smarttoolfactory.data.source
 
 import com.smarttoolfactory.data.api.PropertyApiCoroutines
+import com.smarttoolfactory.data.api.PropertyApiRxJava
 import com.smarttoolfactory.data.db.PropertyDaoCoroutines
+import com.smarttoolfactory.data.db.PropertyDaoRxJava3
 import com.smarttoolfactory.data.model.local.PropertyEntity
 import com.smarttoolfactory.data.model.remote.PropertyDTO
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Single
 import javax.inject.Inject
 
 /*
@@ -21,7 +25,6 @@ class RemotePropertyDataSourceCoroutinesImpl
         orderBy: String
     ): List<PropertyDTO> {
         return api.getPropertyResponseForPage(page, orderBy).res
-
     }
 }
 
@@ -38,5 +41,39 @@ class LocalPropertyDataSourceImpl
 
     override suspend fun deletePropertyEntities() {
         return dao.deleteAll()
+    }
+}
+
+/*
+    *** RxJava3 Implementations for PostDataSources ***
+ */
+class RemoteDataSourceRxJava3Impl @Inject constructor(private val api: PropertyApiRxJava) :
+    RemotePropertyDataSourceRxJava3 {
+
+    override fun getPropertyDTOs(orderBy: String): Single<List<PropertyDTO>> {
+        TODO("Not yet implemented")
+    }
+
+    override fun getPropertyDTOsWithPagination(
+        page: Int,
+        orderBy: String
+    ): Single<List<PropertyDTO>> {
+        TODO("Not yet implemented")
+    }
+}
+
+class LocalDataSourceRxJava3Impl @Inject constructor(private val dao: PropertyDaoRxJava3) :
+    LocalPropertyDataSourceRxJava3 {
+
+    override fun getPropertyEntities(): Single<List<PropertyEntity>> {
+        TODO("Not yet implemented")
+    }
+
+    override fun saveEntities(properties: List<PropertyEntity>): Completable {
+        TODO("Not yet implemented")
+    }
+
+    override fun deletePropertyEntities(): Completable {
+        TODO("Not yet implemented")
     }
 }
