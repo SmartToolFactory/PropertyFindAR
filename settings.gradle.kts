@@ -1,5 +1,6 @@
 include(
     ":app",
     ":libraries:test-utils",
-    ":libraries:data"
+    ":libraries:data",
+    ":libraries:domain"
 )
