@@ -6,6 +6,7 @@ import com.smarttoolfactory.domain.dispatcher.UseCaseDispatchers
 import com.smarttoolfactory.domain.error.EmptyDataException
 import com.smarttoolfactory.domain.mapper.PropertyEntityToItemListMapper
 import com.smarttoolfactory.domain.model.PropertyItem
+import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.emitAll
@@ -13,7 +14,6 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
-import javax.inject.Inject
 
 /**
  * UseCase for getting UI Item list with offline first or offline last approach.
@@ -65,7 +65,7 @@ class GetPropertiesUseCaseFlow @Inject constructor(
                 emitAll(flowOf(repository.getPropertyEntitiesFromLocal()))
             }
             .map {
-                toPostListOrError(it)
+                toPropertyListOrError(it)
             }
     }
 
@@ -85,7 +85,7 @@ class GetPropertiesUseCaseFlow @Inject constructor(
      */
     suspend fun getPropertiesOfflineFirst(orderBy: String): Flow<List<PropertyItem>> {
 
-        return if (repository.getOrderFilter() == orderBy) {
+        return if (repository.getOrderFilter() != orderBy) {
             flow {
                 emit(repository.getPropertyEntitiesFromLocal())
             }
@@ -109,14 +109,14 @@ class GetPropertiesUseCaseFlow @Inject constructor(
                     emitAll(flowOf(listOf()))
                 }
                 .map {
-                    toPostListOrError(it)
+                    toPropertyListOrError(it)
                 }
         } else {
             getPropertiesOfflineLast(orderBy)
         }
     }
 
-    private fun toPostListOrError(entityList: List<PropertyEntity>): List<PropertyItem> {
+    private fun toPropertyListOrError(entityList: List<PropertyEntity>): List<PropertyItem> {
         return if (!entityList.isNullOrEmpty()) {
             mapper.map(entityList)
         } else {

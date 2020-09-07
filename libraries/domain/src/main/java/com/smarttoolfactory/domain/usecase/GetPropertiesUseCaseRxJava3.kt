@@ -1,9 +1,12 @@
 package com.smarttoolfactory.domain.usecase
 
+import com.smarttoolfactory.data.model.local.PropertyEntity
 import com.smarttoolfactory.data.repository.PropertyRepositoryRxJava3
+import com.smarttoolfactory.domain.error.EmptyDataException
 import com.smarttoolfactory.domain.mapper.PropertyEntityToItemListMapper
 import com.smarttoolfactory.domain.model.PropertyItem
 import io.reactivex.rxjava3.core.Single
+import io.reactivex.rxjava3.schedulers.Schedulers
 import javax.inject.Inject
 
 /**
@@ -22,7 +25,7 @@ import javax.inject.Inject
  */
 class GetPropertiesUseCaseRxJava3 @Inject constructor(
     private val repository: PropertyRepositoryRxJava3,
-    private val entityToItemMapper: PropertyEntityToItemListMapper,
+    private val mapper: PropertyEntityToItemListMapper,
 ) {
 
     /**
@@ -36,8 +39,24 @@ class GetPropertiesUseCaseRxJava3 @Inject constructor(
      * * If both network and db don't have any data throw empty set exception
      *
      */
-    fun getPropertiesOfflineLast(): Single<List<PropertyItem>> {
-        TODO()
+    fun getPropertiesOfflineLast(orderBy: String): Single<List<PropertyItem>> {
+
+        return repository.fetchEntitiesFromRemote(orderBy)
+            .subscribeOn(Schedulers.io())
+            .observeOn(Schedulers.computation())
+            .flatMap {
+                if (it.isNullOrEmpty()) {
+                    throw EmptyDataException("No Data is available in remote source!")
+                } else {
+                    repository.deletePropertyEntities()
+                        .andThen(repository.savePropertyEntities(it))
+                        .andThen(repository.getPropertyEntitiesFromLocal())
+                }
+            }
+            .onErrorResumeNext { throwable ->
+                repository.getPropertyEntitiesFromLocal()
+            }
+            .toPropertyListOrError()
     }
 
     /**
@@ -51,11 +70,46 @@ class GetPropertiesUseCaseRxJava3 @Inject constructor(
      * * If both network and db don't have any data throw empty set exception
      *
      */
-    fun getPropertiesOfflineFirst(): Single<List<PropertyItem>> {
-        TODO()
+    fun getPropertiesOfflineFirst(orderBy: String): Single<List<PropertyItem>> {
+
+        return if (repository.getOrderFilter() != orderBy) {
+            getPropertiesOfflineLast(orderBy)
+        } else {
+            return repository.getPropertyEntitiesFromLocal()
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.computation())
+                .onErrorResumeNext { cause ->
+                    Single.just(listOf())
+                }
+                .concatMap { list ->
+                    if (list.isNullOrEmpty()) {
+                        repository.fetchEntitiesFromRemote()
+                            .concatMap {
+                                repository.deletePropertyEntities()
+                                    .andThen(repository.savePropertyEntities(it))
+                                    .andThen(Single.just(it))
+                            }
+                    } else {
+                        Single.just(list)
+                    }
+                }
+                .onErrorResumeNext { cause ->
+                    Single.just(listOf())
+                }
+                .toPropertyListOrError()
+        }
     }
 
-    fun getPropertyListWithPagination(page: Int, orderBy: String): Single<List<PropertyItem>> {
-        TODO()
+    /**
+     * Uses `if(propertyListEntity.isNotEmpty) mapper.map(it)  else Single.error`
+     * with RxJava to map [PropertyEntity] list to [PropertyItem]
+     */
+    private fun Single<List<PropertyEntity>>.toPropertyListOrError(): Single<List<PropertyItem>> {
+        return this
+            .filter { it.isNotEmpty() }
+            .map { mapper.map(it) }
+            .switchIfEmpty(
+                Single.error(EmptyDataException("Data is not available in any source!"))
+            )
     }
 }

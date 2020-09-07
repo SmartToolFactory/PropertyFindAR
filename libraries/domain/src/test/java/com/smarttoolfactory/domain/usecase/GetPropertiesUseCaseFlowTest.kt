@@ -2,16 +2,12 @@ package com.smarttoolfactory.domain.usecase
 
 import android.database.SQLException
 import com.smarttoolfactory.data.constant.ORDER_BY_NONE
-import com.smarttoolfactory.data.model.remote.PropertyResponse
 import com.smarttoolfactory.data.repository.PropertyRepositoryCoroutines
 import com.smarttoolfactory.domain.dispatcher.UseCaseDispatchers
 import com.smarttoolfactory.domain.error.EmptyDataException
 import com.smarttoolfactory.domain.mapper.PropertyEntityToItemListMapper
-import com.smarttoolfactory.test_utils.RESPONSE_JSON_PATH
 import com.smarttoolfactory.test_utils.extension.TestCoroutineExtension
 import com.smarttoolfactory.test_utils.test_observer.test
-import com.smarttoolfactory.test_utils.util.convertToObjectFromJson
-import com.smarttoolfactory.test_utils.util.getResourceAsText
 import io.mockk.clearMocks
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -40,19 +36,16 @@ import org.junit.jupiter.api.extension.RegisterExtension
 class GetPropertiesUseCaseFlowTest {
 
     private val repository: PropertyRepositoryCoroutines = mockk()
-    private val entityToPropertyMapper: PropertyEntityToItemListMapper = mockk()
+    private val mapper: PropertyEntityToItemListMapper = mockk()
 
     private val dispatcherProvider: UseCaseDispatchers =
         UseCaseDispatchers(Dispatchers.Main, Dispatchers.Main, Dispatchers.Main)
 
     companion object {
+
         @JvmField
         @RegisterExtension
         val testCoroutineExtension = TestCoroutineExtension()
-
-        private val propertyResponse = convertToObjectFromJson<PropertyResponse>(
-            getResourceAsText(RESPONSE_JSON_PATH)
-        )!!
 
         private val entityList = TestData.entityList
 
@@ -89,7 +82,7 @@ class GetPropertiesUseCaseFlowTest {
                     repository.savePropertyEntities(propertyEntities = entityList)
                 } just runs
                 coEvery { repository.getPropertyEntitiesFromLocal() } returns entityList
-                coEvery { entityToPropertyMapper.map(entityList) } returns itemList
+                coEvery { mapper.map(entityList) } returns itemList
 
                 // WHEN
                 val testObserver = useCase.getPropertiesOfflineLast(ORDER_BY_NONE).test(this)
@@ -109,7 +102,7 @@ class GetPropertiesUseCaseFlowTest {
                     repository.deletePropertyEntities()
                     repository.savePropertyEntities(entityList)
                     repository.getPropertyEntitiesFromLocal()
-                    entityToPropertyMapper.map(entityList)
+                    mapper.map(entityList)
                 }
             }
 
@@ -126,7 +119,7 @@ class GetPropertiesUseCaseFlowTest {
                     repository.savePropertyEntities(propertyEntities = entityList)
                 } just runs
                 coEvery { repository.getPropertyEntitiesFromLocal() } returns entityList
-                coEvery { entityToPropertyMapper.map(entityList) } returns itemList
+                coEvery { mapper.map(entityList) } returns itemList
 
                 // WHEN
                 val testObserver =
@@ -145,7 +138,7 @@ class GetPropertiesUseCaseFlowTest {
                 coVerify(exactly = 1) { repository.getPropertyEntitiesFromLocal() }
                 coVerify(exactly = 0) { repository.deletePropertyEntities() }
                 coVerify(exactly = 0) { repository.savePropertyEntities(entityList) }
-                verify(exactly = 1) { entityToPropertyMapper.map(entityList) }
+                verify(exactly = 1) { mapper.map(entityList) }
             }
 
         @Test
@@ -159,7 +152,7 @@ class GetPropertiesUseCaseFlowTest {
                     repository.savePropertyEntities(propertyEntities = entityList)
                 } just runs
                 coEvery { repository.getPropertyEntitiesFromLocal() } returns entityList
-                coEvery { entityToPropertyMapper.map(entityList) } returns itemList
+                coEvery { mapper.map(entityList) } returns itemList
 
                 // WHEN
                 val testObserver = useCase.getPropertiesOfflineLast(ORDER_BY_NONE).test(this)
@@ -178,7 +171,7 @@ class GetPropertiesUseCaseFlowTest {
                 coVerify(exactly = 0) { repository.deletePropertyEntities() }
                 coVerify(exactly = 0) { repository.savePropertyEntities(entityList) }
 
-                verify(exactly = 1) { entityToPropertyMapper.map(entityList) }
+                verify(exactly = 1) { mapper.map(entityList) }
             }
 
         @Test
@@ -196,7 +189,7 @@ class GetPropertiesUseCaseFlowTest {
                 coEvery {
                     repository.getPropertyEntitiesFromLocal()
                 } throws SQLException("Database Exception")
-                coEvery { entityToPropertyMapper.map(entityList) } returns itemList
+                coEvery { mapper.map(entityList) } returns itemList
 
                 // WHEN
                 val testObserver = useCase.getPropertiesOfflineLast(ORDER_BY_NONE).test(this)
@@ -212,7 +205,7 @@ class GetPropertiesUseCaseFlowTest {
                 coVerify(exactly = 0) { repository.deletePropertyEntities() }
                 coVerify(exactly = 0) { repository.savePropertyEntities(entityList) }
 
-                verify(exactly = 0) { entityToPropertyMapper.map(entityList) }
+                verify(exactly = 0) { mapper.map(entityList) }
             }
 
         @Test
@@ -230,7 +223,7 @@ class GetPropertiesUseCaseFlowTest {
                 } just runs
                 coEvery { repository.getPropertyEntitiesFromLocal() } returns listOf()
 
-                coEvery { entityToPropertyMapper.map(entityList) } returns itemList
+                coEvery { mapper.map(entityList) } returns itemList
 
                 // WHEN
                 val testObserver = useCase.getPropertiesOfflineLast(ORDER_BY_NONE).test(this)
@@ -246,7 +239,7 @@ class GetPropertiesUseCaseFlowTest {
                 coVerify(exactly = 0) { repository.deletePropertyEntities() }
                 coVerify(exactly = 0) { repository.savePropertyEntities(entityList) }
 
-                verify(exactly = 0) { entityToPropertyMapper.map(entityList) }
+                verify(exactly = 0) { mapper.map(entityList) }
             }
     }
 
@@ -261,7 +254,7 @@ class GetPropertiesUseCaseFlowTest {
                 // GIVEN
                 coEvery { repository.getOrderFilter() } returns ORDER_BY_NONE
                 coEvery { repository.getPropertyEntitiesFromLocal() } returns entityList
-                coEvery { entityToPropertyMapper.map(entityList) } returns itemList
+                coEvery { mapper.map(entityList) } returns itemList
                 // WHEN
                 val testObserver = useCase.getPropertiesOfflineFirst(ORDER_BY_NONE).test(this)
 
@@ -277,7 +270,7 @@ class GetPropertiesUseCaseFlowTest {
                 coVerifySequence {
                     repository.getOrderFilter()
                     repository.getPropertyEntitiesFromLocal()
-                    entityToPropertyMapper.map(entityList)
+                    mapper.map(entityList)
                 }
             }
 
@@ -291,7 +284,7 @@ class GetPropertiesUseCaseFlowTest {
                 coEvery { repository.fetchEntitiesFromRemote() } returns entityList
                 coEvery { repository.deletePropertyEntities() } just runs
                 coEvery { repository.savePropertyEntities(propertyEntities = entityList) } just runs
-                coEvery { entityToPropertyMapper.map(entityList) } returns itemList
+                coEvery { mapper.map(entityList) } returns itemList
                 // WHEN
                 val testObserver = useCase.getPropertiesOfflineFirst(ORDER_BY_NONE).test(this)
 
@@ -310,7 +303,7 @@ class GetPropertiesUseCaseFlowTest {
                     repository.fetchEntitiesFromRemote()
                     repository.deletePropertyEntities()
                     repository.savePropertyEntities(propertyEntities = entityList)
-                    entityToPropertyMapper.map(entityList)
+                    mapper.map(entityList)
                 }
             }
 
@@ -326,7 +319,7 @@ class GetPropertiesUseCaseFlowTest {
                 coEvery { repository.fetchEntitiesFromRemote() } returns entityList
                 coEvery { repository.deletePropertyEntities() } just runs
                 coEvery { repository.savePropertyEntities(propertyEntities = entityList) } just runs
-                coEvery { entityToPropertyMapper.map(entityList) } returns itemList
+                coEvery { mapper.map(entityList) } returns itemList
 
                 // WHEN
                 val testObserver = useCase.getPropertiesOfflineFirst(ORDER_BY_NONE).test(this)
@@ -346,7 +339,7 @@ class GetPropertiesUseCaseFlowTest {
                     repository.fetchEntitiesFromRemote()
                     repository.deletePropertyEntities()
                     repository.savePropertyEntities(propertyEntities = entityList)
-                    entityToPropertyMapper.map(entityList)
+                    mapper.map(entityList)
                 }
             }
 
@@ -362,7 +355,7 @@ class GetPropertiesUseCaseFlowTest {
                     repository.fetchEntitiesFromRemote()
                 } throws Exception("Network Exception")
 
-                coEvery { entityToPropertyMapper.map(entityList) } returns itemList
+                coEvery { mapper.map(entityList) } returns itemList
 
                 // WHEN
                 val testObserver = useCase.getPropertiesOfflineFirst(ORDER_BY_NONE).test(this)
@@ -385,13 +378,13 @@ class GetPropertiesUseCaseFlowTest {
     fun setUp() {
         useCase = GetPropertiesUseCaseFlow(
             repository,
-            entityToPropertyMapper,
+            mapper,
             dispatcherProvider
         )
     }
 
     @AfterEach
     fun tearDown() {
-        clearMocks(repository, entityToPropertyMapper)
+        clearMocks(repository, mapper)
     }
 }
