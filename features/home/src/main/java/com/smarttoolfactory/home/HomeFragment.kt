@@ -1,6 +1,7 @@
 package com.smarttoolfactory.home
 
 import android.app.Dialog
+import android.content.DialogInterface
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
@@ -150,6 +151,9 @@ class SortDialogFragment : DialogFragment() {
 
     private lateinit var viewModel: HomeToolbarVM
 
+    private var currentItem = 0
+    private var checkedItem = currentItem
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProvider(requireActivity()).get(HomeToolbarVM::class.java)
@@ -157,20 +161,35 @@ class SortDialogFragment : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
-        val items = viewModel.sortPropertyList.toTypedArray()
-        items[0] = "Featured"
+        val displayNames = viewModel.sortPropertyList.toTypedArray()
+        currentItem = viewModel.sortPropertyList.indexOf(viewModel.currentSortFilter)
+        checkedItem = currentItem
 
-        val checkedItem = viewModel.sortPropertyList.indexOf(viewModel.currentSortFilter)
+        displayNames[0] = "Featured"
 
         val builder = AlertDialog.Builder(requireActivity())
         builder.setTitle("Sorting")
             .setNegativeButton("CANCEL") { dialog, which ->
                 dismiss()
             }
-            .setSingleChoiceItems(items, checkedItem) { dialog, which ->
-                viewModel.queryBySort.value = Event(viewModel.sortPropertyList[which])
-                dismiss()
+            .setSingleChoiceItems(displayNames, currentItem) { dialog, which ->
+                checkedItem = which
+            }.setOnDismissListener {
+
+                // Alternative 1 works as soon as user changes the option
+//                if (currentItem != checkedItem) {
+//                    viewModel.queryBySort.value = Event(viewModel.sortPropertyList[checkedItem])
+//                }
+//                dismiss()
             }
         return builder.create()
+    }
+
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
+        // Alternative works after dialog is dismissed
+        if (currentItem != checkedItem) {
+            viewModel.queryBySort.value = Event(viewModel.sortPropertyList[checkedItem])
+        }
     }
 }
