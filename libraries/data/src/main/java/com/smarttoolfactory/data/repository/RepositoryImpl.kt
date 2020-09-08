@@ -87,19 +87,31 @@ class PagedPropertyRepositoryImpl @Inject constructor(
     private val mapper: PropertyDTOtoPagedEntityListMapper
 ) : PagedPropertyRepository {
 
-    private var currentPageNumber = 0
+    private var currentPageNumber = 1
 
     override fun getCurrentPageNumber(): Int {
         return currentPageNumber
     }
 
     override suspend fun fetchEntitiesFromRemoteByPage(
-        page: Int,
         orderBy: String
     ): List<PagedPropertyEntity> {
-        currentPageNumber = page
+
         saveSortOrderKey(orderBy)
-        return mapper.map(remoteDataSource.getPropertyDTOsWithPagination(page, orderBy))
+        return mapper.map(
+            remoteDataSource.getPropertyDTOsWithPagination(
+                currentPageNumber++,
+                orderBy
+            )
+        )
+    }
+
+    override suspend fun getPropertyCount(): Int {
+        return localDataSource.getPropertyCount()
+    }
+
+    override fun resetPageCount() {
+        currentPageNumber = 1
     }
 
     override suspend fun getPropertyEntitiesFromLocal(): List<PagedPropertyEntity> {

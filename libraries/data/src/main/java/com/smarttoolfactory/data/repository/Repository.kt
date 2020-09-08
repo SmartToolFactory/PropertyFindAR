@@ -44,14 +44,18 @@ interface PropertyRepositoryRxJava3 {
     fun getSortOrderKey(): Single<String>
 }
 
+// TODO This can be single interface with generic input and output types
 interface PagedPropertyRepository {
 
     fun getCurrentPageNumber(): Int
 
     suspend fun fetchEntitiesFromRemoteByPage(
-        page: Int,
         orderBy: String = ORDER_BY_NONE
     ): List<PagedPropertyEntity>
+
+    suspend fun getPropertyCount(): Int
+
+    fun resetPageCount()
 
     suspend fun getPropertyEntitiesFromLocal(): List<PagedPropertyEntity>
 
