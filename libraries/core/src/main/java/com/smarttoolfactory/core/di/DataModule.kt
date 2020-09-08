@@ -3,11 +3,15 @@ package com.smarttoolfactory.core.di
 import com.smarttoolfactory.data.di.DatabaseModule
 import com.smarttoolfactory.data.di.NetworkModule
 import com.smarttoolfactory.data.mapper.PropertyDTOtoEntityListMapper
+import com.smarttoolfactory.data.repository.PagedPropertyRepository
+import com.smarttoolfactory.data.repository.PagedPropertyRepositoryImpl
 import com.smarttoolfactory.data.repository.PropertyRepositoryCoroutines
 import com.smarttoolfactory.data.repository.PropertyRepositoryImlRxJava3
 import com.smarttoolfactory.data.repository.PropertyRepositoryImplCoroutines
 import com.smarttoolfactory.data.repository.PropertyRepositoryRxJava3
 import com.smarttoolfactory.data.source.LocalDataSourceRxJava3Impl
+import com.smarttoolfactory.data.source.LocalPagedPropertyDataSource
+import com.smarttoolfactory.data.source.LocalPagedPropertySourceImpl
 import com.smarttoolfactory.data.source.LocalPropertyDataSourceCoroutines
 import com.smarttoolfactory.data.source.LocalPropertyDataSourceImpl
 import com.smarttoolfactory.data.source.LocalPropertyDataSourceRxJava3
@@ -43,6 +47,21 @@ interface DataModule {
     @Binds
     fun bindRepositoryCoroutines(repository: PropertyRepositoryImplCoroutines):
         PropertyRepositoryCoroutines
+
+    /*
+        Coroutines + Pagination
+     */
+
+    @Singleton
+    @Binds
+    fun bindPagedLocalDataSource(localDataSource: LocalPagedPropertySourceImpl):
+        LocalPagedPropertyDataSource
+
+    @Singleton
+    @Binds
+    fun bindPagedRepository(repository: PagedPropertyRepositoryImpl):
+        PagedPropertyRepository
+
     /*
         RxJava
      */

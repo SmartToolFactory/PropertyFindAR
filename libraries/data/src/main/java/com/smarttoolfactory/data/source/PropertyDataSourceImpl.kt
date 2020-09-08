@@ -2,10 +2,12 @@ package com.smarttoolfactory.data.source
 
 import com.smarttoolfactory.data.api.PropertyApiCoroutines
 import com.smarttoolfactory.data.api.PropertyApiRxJava
+import com.smarttoolfactory.data.db.PagedPropertyDao
 import com.smarttoolfactory.data.db.PropertyDaoCoroutines
 import com.smarttoolfactory.data.db.PropertyDaoRxJava3
 import com.smarttoolfactory.data.db.SortOrderDaoCoroutines
 import com.smarttoolfactory.data.db.SortOrderDaoRxJava3
+import com.smarttoolfactory.data.model.local.PagedPropertyEntity
 import com.smarttoolfactory.data.model.local.PropertyEntity
 import com.smarttoolfactory.data.model.local.SortOrderEntity
 import com.smarttoolfactory.data.model.remote.PropertyDTO
@@ -98,7 +100,36 @@ class LocalDataSourceRxJava3Impl @Inject constructor(
         return sortDao.insert(SortOrderEntity(orderBy = orderBy))
     }
 
-    override fun getOrderkey(): Single<String> {
+    override fun getOrderKey(): Single<String> {
         return sortDao.getSortOrderSingle()
+    }
+}
+
+/*
+    Paged Local Data Source
+ */
+class LocalPagedPropertySourceImpl @Inject constructor(
+    private val dao: PagedPropertyDao,
+    private val sortDao: SortOrderDaoCoroutines
+) : LocalPagedPropertyDataSource {
+
+    override suspend fun getPropertyEntities(): List<PagedPropertyEntity> {
+        return dao.getPropertyList()
+    }
+
+    override suspend fun saveEntities(properties: List<PagedPropertyEntity>): List<Long> {
+        return dao.insert(properties)
+    }
+
+    override suspend fun deletePropertyEntities() {
+        return dao.deleteAll()
+    }
+
+    override suspend fun saveOrderKey(orderBy: String) {
+        sortDao.insert(SortOrderEntity(orderBy = orderBy))
+    }
+
+    override suspend fun getOrderKey(): String {
+        return sortDao.getSortOrderEntity()
     }
 }
