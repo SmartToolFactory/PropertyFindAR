@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_graph_dfm_home_start"
+        android:icon="@drawable/ic_baseline_home_24"
+        android:title="Home" />
+
+    <item
+        android:id="@+id/nav_graph_dfm_favorites_start"
+        android:icon="@drawable/ic_baseline_favorite_24"
+        android:title="Dashboard" />
+
+    <item
+        android:id="@+id/nav_graph_dfm_notification_start"
+        android:icon="@drawable/ic_baseline_notifications_24"
+        android:title="Notification" />
+
+    <item
+        android:id="@+id/nav_graph_dfm_account_start"
+        android:icon="@drawable/ic_baseline_account_circle_24"
+        android:title="Login" />
+
+</menu>
