@@ -20,9 +20,12 @@ abstract class AbstractPropertyListVM : ViewModel() {
 
     abstract val propertyListViewState: LiveData<ViewState<List<PropertyItem>>>
 
+    /**
+     * Used when fragment is just opened
+     */
     abstract fun getPropertyList()
 
-    abstract fun refreshPropertyList()
+    abstract fun refreshPropertyList(orderBy: String? = null)
 
     abstract fun onClick(propertyItem: PropertyItem)
 }

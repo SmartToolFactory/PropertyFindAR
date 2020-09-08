@@ -1,6 +1,5 @@
 package com.smarttoolfactory.data.repository
 
-import com.smarttoolfactory.data.constant.ORDER_BY_NONE
 import com.smarttoolfactory.data.mapper.PropertyDTOtoEntityListMapper
 import com.smarttoolfactory.data.model.local.PropertyEntity
 import com.smarttoolfactory.data.source.LocalPropertyDataSourceCoroutines
@@ -18,18 +17,13 @@ class PropertyRepositoryImplCoroutines @Inject constructor(
 ) : PropertyRepositoryCoroutines {
 
     private var currentPageNumber = 0
-    private var orderBy = ORDER_BY_NONE
 
     override fun getCurrentPageNumber(): Int {
         return currentPageNumber
     }
 
-    override suspend fun getOrderFilter(): String {
-        return orderBy
-    }
-
     override suspend fun fetchEntitiesFromRemote(orderBy: String): List<PropertyEntity> {
-        this.orderBy = orderBy
+        saveSortOrderKey(orderBy)
         return mapper.map(remoteDataSource.getPropertyDTOs(orderBy))
     }
 
@@ -38,7 +32,7 @@ class PropertyRepositoryImplCoroutines @Inject constructor(
         orderBy: String
     ): List<PropertyEntity> {
         currentPageNumber = page
-        this.orderBy = orderBy
+        saveSortOrderKey(orderBy)
         return mapper.map(remoteDataSource.getPropertyDTOsWithPagination(page, orderBy))
     }
 
@@ -53,6 +47,14 @@ class PropertyRepositoryImplCoroutines @Inject constructor(
     override suspend fun deletePropertyEntities() {
         localDataSource.deletePropertyEntities()
     }
+
+    override suspend fun saveSortOrderKey(orderBy: String) {
+        localDataSource.saveOrderKey(orderBy)
+    }
+
+    override suspend fun getSortOrderKey(): String {
+        return localDataSource.getOrderKey()
+    }
 }
 
 class PropertyRepositoryImlRxJava3 @Inject constructor(
@@ -62,22 +64,18 @@ class PropertyRepositoryImlRxJava3 @Inject constructor(
 ) : PropertyRepositoryRxJava3 {
 
     private var currentPageNumber = 0
-    private var orderBy = ORDER_BY_NONE
 
     override fun getCurrentPageNumber(): Int {
         return currentPageNumber
     }
 
-    override fun getOrderFilter(): String {
-        return orderBy
-    }
-
     override fun fetchEntitiesFromRemote(orderBy: String): Single<List<PropertyEntity>> {
 
-        return remoteDataSource.getPropertyDTOs(orderBy).map {
-            this.orderBy = orderBy
-            mapper.map(it)
-        }
+        return remoteDataSource.getPropertyDTOs(orderBy)
+            .map {
+                saveSortOrderKey(orderBy)
+                mapper.map(it)
+            }
     }
 
     override fun fetchEntitiesFromRemoteByPage(
@@ -86,7 +84,7 @@ class PropertyRepositoryImlRxJava3 @Inject constructor(
     ): Single<List<PropertyEntity>> {
         return remoteDataSource.getPropertyDTOsWithPagination(page, orderBy).map {
             this.currentPageNumber = page
-            this.orderBy = orderBy
+            saveSortOrderKey(orderBy)
             mapper.map(it)
         }
     }
@@ -101,5 +99,13 @@ class PropertyRepositoryImlRxJava3 @Inject constructor(
 
     override fun deletePropertyEntities(): Completable {
         return localDataSource.deletePropertyEntities()
+    }
+
+    override fun saveSortOrderKey(orderBy: String): Completable {
+        return localDataSource.saveOrderKey(orderBy)
+    }
+
+    override fun getSortOrderKey(): Single<String> {
+        return localDataSource.getOrderkey()
     }
 }

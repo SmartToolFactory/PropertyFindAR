@@ -1,4 +1,4 @@
-package com.smarttoolfactory.propertyfindar
+package com.smarttoolfactory.domain
 
 const val ORDER_BY_NONE = com.smarttoolfactory.data.constant.ORDER_BY_NONE
 const val ORDER_BY_PRICE_ASCENDING = com.smarttoolfactory.data.constant.ORDER_BY_PRICE_ASCENDING

@@ -19,4 +19,4 @@ const val ORDER_BY_DES_DESCENDING = "bd"
     DBConstants
  */
 const val DATABASE_NAME = "property.db"
-const val DATABASE_VERSION = 1
+const val DATABASE_VERSION = 2

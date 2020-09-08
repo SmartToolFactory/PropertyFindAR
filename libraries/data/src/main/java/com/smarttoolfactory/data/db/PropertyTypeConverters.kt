@@ -8,22 +8,22 @@ import com.smarttoolfactory.data.model.local.BrokerEntity
 class PropertyTypeConverters {
 
     @TypeConverter
-    fun fromBrokerEntity(data: BrokerEntity): String {
+    fun fromBrokerEntity(data: BrokerEntity?): String? {
         return Gson().toJson(data)
     }
 
     @TypeConverter
-    fun toBrokerEntity(json: String): BrokerEntity {
+    fun toBrokerEntity(json: String?): BrokerEntity? {
         return Gson().fromJson(json, BrokerEntity::class.java)
     }
 
     @TypeConverter
-    fun fromStringList(list: List<String>): String {
+    fun fromStringList(list: List<String?>?): String? {
         return Gson().toJson(list)
     }
 
     @TypeConverter
-    fun toStringList(json: String): List<String> {
+    fun toStringList(json: String?): List<String?>? {
         val listType = object : TypeToken<ArrayList<String>>() {}.type
         return Gson().fromJson(json, listType)
     }
