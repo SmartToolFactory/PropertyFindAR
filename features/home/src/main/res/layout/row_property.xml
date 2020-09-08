@@ -13,7 +13,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="140dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="4dp"
@@ -31,7 +31,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent=".45">
+            app:layout_constraintWidth_percent=".4">
 
             <ImageView
                 imageSrc="@{item.thumbnail}"
@@ -60,10 +60,10 @@
                 android:paddingTop="1dp"
                 android:paddingEnd="8dp"
                 android:paddingBottom="1dp"
-                android:translationZ="5dp"
-                android:textSize="10sp"
                 android:text="VERIFIED"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:textSize="10sp"
+                android:translationZ="5dp" />
         </androidx.cardview.widget.CardView>
 
         <com.google.android.material.textview.MaterialTextView
@@ -103,7 +103,7 @@
             android:layout_height="40dp"
             android:background="#00ffffff"
             android:padding="2dp"
-            android:src="@drawable/ic_baseline_favorite_border_30"
+            android:src="@drawable/ic_baseline_favorite_border_24"
             android:tint="#29B6F6"
             app:layout_constraintBottom_toBottomOf="@+id/tvPrice"
             app:layout_constraintEnd_toEndOf="parent"

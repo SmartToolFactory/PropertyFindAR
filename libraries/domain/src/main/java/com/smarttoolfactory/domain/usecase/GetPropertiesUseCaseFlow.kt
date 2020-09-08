@@ -11,7 +11,6 @@ import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.emitAll
-import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
@@ -48,7 +47,7 @@ class GetPropertiesUseCaseFlow @Inject constructor(
      * * If both network and db don't have any data throw empty set exception
      *
      */
-    fun getPropertiesOfflineLast(orderBy: String = ORDER_BY_NONE): Flow<List<PropertyItem>> {
+    fun getPropertiesOfflineLast(orderBy: String): Flow<List<PropertyItem>> {
         return flow { emit(repository.fetchEntitiesFromRemote(orderBy)) }
             .map {
                 if (it.isNullOrEmpty()) {
@@ -94,43 +93,78 @@ class GetPropertiesUseCaseFlow @Inject constructor(
      */
     fun getPropertiesOfflineFirst(orderBy: String = ORDER_BY_NONE): Flow<List<PropertyItem>> {
 
-        return flow { emit(repository.getOrderFilter() == orderBy) }
-            .flatMapConcat { sameFilter ->
+        return flow {
+            emit(repository.getPropertyEntitiesFromLocal())
+        }
+            .catch { throwable ->
+                emitAll(flowOf(listOf()))
+            }
+            .map {
+                if (it.isEmpty()) {
+                    repository.run {
+                        val data = fetchEntitiesFromRemote()
+                        deletePropertyEntities()
 
-                if (sameFilter) {
-                    flow {
-                        emit(repository.getPropertyEntitiesFromLocal())
+                        // 🔥 Add an insert order since we are not using Room's ORDER BY
+                        data.forEachIndexed { index, propertyEntity ->
+                            propertyEntity.insertOrder = index
+                        }
+
+                        data
                     }
-                        .catch { throwable ->
-                            emitAll(flowOf(listOf()))
-                        }
-                        .map {
-                            if (it.isEmpty()) {
-                                repository.run {
-                                    val data = fetchEntitiesFromRemote()
-                                    deletePropertyEntities()
-
-                                    // 🔥 Add an insert order since we are not using Room's ORDER BY
-                                    data.forEachIndexed { index, propertyEntity ->
-                                        propertyEntity.insertOrder = index
-                                    }
-
-                                    data
-                                }
-                            } else {
-                                it
-                            }
-                        }
-                        .flowOn(dispatcherProvider.ioDispatcher)
-                        .catch { throwable ->
-                            emitAll(flowOf(listOf()))
-                        }
-                        .map {
-                            toPropertyListOrError(it)
-                        }
                 } else {
-                    getPropertiesOfflineLast(orderBy)
+                    it
                 }
+            }
+            .flowOn(dispatcherProvider.ioDispatcher)
+            .catch { throwable ->
+                emitAll(flowOf(listOf()))
+            }
+            .map {
+                toPropertyListOrError(it)
+            }
+
+//        return flow { emit((repository.getSortOrderKey() ?: ORDER_BY_NONE) == orderBy) }
+//            .flatMapConcat { sameFilter ->
+//
+//                if (sameFilter) {
+//                    getOfflineFirstPropertyListFlow()
+//                } else {
+//                    getPropertiesOfflineLast(orderBy)
+//                }
+//            }
+    }
+
+    private fun getOfflineFirstPropertyListFlow(): Flow<List<PropertyItem>> {
+        return flow {
+            emit(repository.getPropertyEntitiesFromLocal())
+        }
+            .catch { throwable ->
+                emitAll(flowOf(listOf()))
+            }
+            .map {
+                if (it.isEmpty()) {
+                    repository.run {
+                        val data = fetchEntitiesFromRemote()
+                        deletePropertyEntities()
+
+                        // 🔥 Add an insert order since we are not using Room's ORDER BY
+                        data.forEachIndexed { index, propertyEntity ->
+                            propertyEntity.insertOrder = index
+                        }
+
+                        data
+                    }
+                } else {
+                    it
+                }
+            }
+            .flowOn(dispatcherProvider.ioDispatcher)
+            .catch { throwable ->
+                emitAll(flowOf(listOf()))
+            }
+            .map {
+                toPropertyListOrError(it)
             }
     }
 
@@ -140,5 +174,12 @@ class GetPropertiesUseCaseFlow @Inject constructor(
         } else {
             throw EmptyDataException("Empty data mapping error!")
         }
+    }
+
+    fun getCurrentSortKey(defaultKey: String = ORDER_BY_NONE): Flow<String> {
+        return flow { emit(repository.getSortOrderKey()) }
+            .catch {
+                emitAll(flowOf(defaultKey))
+            }
     }
 }

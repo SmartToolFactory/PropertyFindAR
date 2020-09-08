@@ -1,0 +1,319 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 2,
+    "identityHash": "1ed43ea4400064af14f785bba752bf91",
+    "entities": [
+      {
+        "tableName": "property",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`insert_order` INTEGER NOT NULL, `id` INTEGER NOT NULL, `update` INTEGER NOT NULL, `category_id` INTEGER NOT NULL, `title` TEXT NOT NULL, `subject` TEXT NOT NULL, `type` TEXT NOT NULL, `type_id` INTEGER NOT NULL, `thumbnail` TEXT, `thumbnail_big` TEXT, `image_count` INTEGER NOT NULL, `price` TEXT NOT NULL, `price_period` TEXT, `price_period_raw` TEXT NOT NULL, `price_label` TEXT, `price_value` TEXT, `price_value_raw` INTEGER NOT NULL, `currency` TEXT NOT NULL, `featured` INTEGER NOT NULL, `location` TEXT NOT NULL, `area` TEXT NOT NULL, `poa` INTEGER NOT NULL, `rera_permit` TEXT, `bathrooms` TEXT NOT NULL, `bedrooms` TEXT NOT NULL, `date_insert` TEXT NOT NULL, `date_update` TEXT NOT NULL, `agent_name` TEXT NOT NULL, `broker_name` TEXT NOT NULL, `agent_license` TEXT, `location_id` INTEGER NOT NULL, `hide_location` INTEGER NOT NULL, `broker` TEXT NOT NULL, `amenities` TEXT NOT NULL, `amenities_keys` TEXT NOT NULL, `latitude` REAL NOT NULL, `longitude` REAL NOT NULL, `premium` INTEGER NOT NULL, `livingrooms` TEXT NOT NULL, `verified` INTEGER NOT NULL, `gallery` TEXT, `phone` TEXT NOT NULL, `lead_email_receivers` TEXT NOT NULL, `reference` TEXT NOT NULL, PRIMARY KEY(`insert_order`))",
+        "fields": [
+          {
+            "fieldPath": "insertOrder",
+            "columnName": "insert_order",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "update",
+            "columnName": "update",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "categoryId",
+            "columnName": "category_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "title",
+            "columnName": "title",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "subject",
+            "columnName": "subject",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "type",
+            "columnName": "type",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "typeId",
+            "columnName": "type_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "thumbnail",
+            "columnName": "thumbnail",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "thumbnailBig",
+            "columnName": "thumbnail_big",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "imageCount",
+            "columnName": "image_count",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "price",
+            "columnName": "price",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "pricePeriod",
+            "columnName": "price_period",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "pricePeriodRaw",
+            "columnName": "price_period_raw",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "priceLabel",
+            "columnName": "price_label",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "priceValue",
+            "columnName": "price_value",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "priceValueRaw",
+            "columnName": "price_value_raw",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "currency",
+            "columnName": "currency",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "featured",
+            "columnName": "featured",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "location",
+            "columnName": "location",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "area",
+            "columnName": "area",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "poa",
+            "columnName": "poa",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "reraPermit",
+            "columnName": "rera_permit",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "bathrooms",
+            "columnName": "bathrooms",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "bedrooms",
+            "columnName": "bedrooms",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dateInsert",
+            "columnName": "date_insert",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dateUpdate",
+            "columnName": "date_update",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "agentName",
+            "columnName": "agent_name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "brokerName",
+            "columnName": "broker_name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "agentLicense",
+            "columnName": "agent_license",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "locationId",
+            "columnName": "location_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "hideLocation",
+            "columnName": "hide_location",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "broker",
+            "columnName": "broker",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "amenities",
+            "columnName": "amenities",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "amenitiesKeys",
+            "columnName": "amenities_keys",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "latitude",
+            "columnName": "latitude",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "longitude",
+            "columnName": "longitude",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "premium",
+            "columnName": "premium",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "livingrooms",
+            "columnName": "livingrooms",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "verified",
+            "columnName": "verified",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "gallery",
+            "columnName": "gallery",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "phone",
+            "columnName": "phone",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "leadEmailReceivers",
+            "columnName": "lead_email_receivers",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "reference",
+            "columnName": "reference",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "insert_order"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "sort_order",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `order_by` TEXT NOT NULL DEFAULT '', PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "orderBy",
+            "columnName": "order_by",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "''"
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '1ed43ea4400064af14f785bba752bf91')"
+    ]
+  }
+}

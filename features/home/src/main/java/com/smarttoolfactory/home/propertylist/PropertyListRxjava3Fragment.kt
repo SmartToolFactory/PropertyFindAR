@@ -62,7 +62,18 @@ class PropertyListRxjava3Fragment : DynamicNavigationFragment<FragmentPropertyLi
             viewModel.refreshPropertyList()
         }
 
+        subscribeViewModelSortChange()
+
         subscribeGoToDetailScreen()
+    }
+
+    /**
+     * When sort key is fetched from database change the one belong to Toolbar
+     */
+    private fun subscribeViewModelSortChange() {
+        viewLifecycleOwner.observe(viewModel.orderKey) {
+            toolbarVM.currentSortFilter = it
+        }
     }
 
     private fun subscribeToolbarSortChange() {
@@ -70,6 +81,7 @@ class PropertyListRxjava3Fragment : DynamicNavigationFragment<FragmentPropertyLi
         viewLifecycleOwner.observe(toolbarVM.queryBySort) {
             it.getContentIfNotHandled()?.let { orderBy ->
                 viewModel.refreshPropertyList(orderBy)
+                toolbarVM.currentSortFilter = orderBy
             }
         }
     }
