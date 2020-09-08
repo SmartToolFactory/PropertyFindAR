@@ -49,6 +49,12 @@ class GetPropertiesUseCaseRxJava3 @Inject constructor(
                     throw EmptyDataException("No Data is available in remote source!")
                 } else {
                     repository.deletePropertyEntities()
+                        .andThen {completableObserver->
+                            it.forEachIndexed { index, propertyEntity ->
+                                propertyEntity.insertOrder = index
+                            }
+                            completableObserver.onComplete()
+                        }
                         .andThen(repository.savePropertyEntities(it))
                         .andThen(repository.getPropertyEntitiesFromLocal())
                 }
@@ -86,6 +92,12 @@ class GetPropertiesUseCaseRxJava3 @Inject constructor(
                         repository.fetchEntitiesFromRemote()
                             .concatMap {
                                 repository.deletePropertyEntities()
+                                    .andThen {completableObserver->
+                                        it.forEachIndexed { index, propertyEntity ->
+                                            propertyEntity.insertOrder = index
+                                        }
+                                        completableObserver.onComplete()
+                                    }
                                     .andThen(repository.savePropertyEntities(it))
                                     .andThen(Single.just(it))
                             }

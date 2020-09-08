@@ -21,6 +21,8 @@ class PropertyListFlowFragment : DynamicNavigationFragment<FragmentPropertyListB
     @Inject
     lateinit var viewModel: PropertyListViewModelFlow
 
+    lateinit var itemListAdapter: PropertyItemListAdapter
+
     /**
      * ViewModel for setting sort filter on top menu and property list fragments
      */
@@ -44,13 +46,13 @@ class PropertyListFlowFragment : DynamicNavigationFragment<FragmentPropertyListB
                 LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
 
             // Set RecyclerViewAdapter
-            this.adapter =
-                PropertyItemListAdapter(
-                    R.layout.row_property,
-                    viewModel::onClick,
-                    viewModel::onLikeButtonClick
+            itemListAdapter = PropertyItemListAdapter(
+                R.layout.row_property,
+                viewModel::onClick,
+                viewModel::onLikeButtonClick
 
-                )
+            )
+            this.adapter = itemListAdapter
         }
 
         val swipeRefreshLayout = dataBinding.swipeRefreshLayout
@@ -61,8 +63,6 @@ class PropertyListFlowFragment : DynamicNavigationFragment<FragmentPropertyListB
         }
 
         subscribeGoToDetailScreen()
-
-        subscribeToolbarSortChange()
     }
 
     private fun subscribeToolbarSortChange() {
@@ -99,5 +99,15 @@ class PropertyListFlowFragment : DynamicNavigationFragment<FragmentPropertyListB
             fragment = this
         )
             .inject(this)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        subscribeToolbarSortChange()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        toolbarVM.queryBySort.removeObservers(viewLifecycleOwner)
     }
 }

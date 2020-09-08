@@ -55,8 +55,15 @@ class GetPropertiesUseCaseFlow @Inject constructor(
                     throw EmptyDataException("No Data is available in Remote source!")
                 } else {
                     repository.run {
+
                         deletePropertyEntities()
+
+                        // 🔥 Add an insert order since we are not using Room's ORDER BY
+                        it.forEachIndexed { index, propertyEntity ->
+                            propertyEntity.insertOrder = index
+                        }
                         savePropertyEntities(it)
+
                         getPropertyEntitiesFromLocal()
                     }
                 }
@@ -102,7 +109,12 @@ class GetPropertiesUseCaseFlow @Inject constructor(
                                 repository.run {
                                     val data = fetchEntitiesFromRemote()
                                     deletePropertyEntities()
-                                    savePropertyEntities(data)
+
+                                    // 🔥 Add an insert order since we are not using Room's ORDER BY
+                                    data.forEachIndexed { index, propertyEntity ->
+                                        propertyEntity.insertOrder = index
+                                    }
+
                                     data
                                 }
                             } else {

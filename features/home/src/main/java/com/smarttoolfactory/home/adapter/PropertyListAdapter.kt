@@ -82,7 +82,7 @@ class PropertyItemDiffCallback : DiffUtil.ItemCallback<PropertyItem>() {
         oldItem: PropertyItem,
         newItem: PropertyItem
     ): Boolean {
-        return oldItem == newItem
+        return oldItem === newItem
     }
 
     override fun areContentsTheSame(

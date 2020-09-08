@@ -12,10 +12,12 @@ import com.smarttoolfactory.data.model.IEntity
  * * Implements [IEntity] marker interface for mapping this database items from REST DTOs or
  * to UI items
  */
-@Entity(tableName = "property")
+@Entity(tableName = "property",primaryKeys = ["insert_order"])
 data class PropertyEntity(
 
-    @PrimaryKey
+    @ColumnInfo(name = "insert_order")
+    var insertOrder:Int = 0,
+
     @ColumnInfo(name = "id")
     val id: Int,
     @ColumnInfo(name = "update")
