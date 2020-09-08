@@ -23,6 +23,8 @@ interface LocalPropertyDataSourceCoroutines : PropertyDataSource {
     suspend fun getPropertyEntities(): List<PropertyEntity>
     suspend fun saveEntities(properties: List<PropertyEntity>): List<Long>
     suspend fun deletePropertyEntities()
+    suspend fun saveOrderKey(orderBy: String)
+    suspend fun getOrderKey(): String
 }
 
 /*
@@ -40,4 +42,6 @@ interface LocalPropertyDataSourceRxJava3 : PropertyDataSource {
     fun getPropertyEntities(): Single<List<PropertyEntity>>
     fun saveEntities(properties: List<PropertyEntity>): Completable
     fun deletePropertyEntities(): Completable
+    fun saveOrderKey(orderBy: String): Completable
+    fun getOrderkey(): Single<String>
 }

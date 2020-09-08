@@ -2,6 +2,7 @@ package com.smarttoolfactory.domain.usecase
 
 import com.smarttoolfactory.data.model.local.PropertyEntity
 import com.smarttoolfactory.data.repository.PropertyRepositoryRxJava3
+import com.smarttoolfactory.domain.ORDER_BY_NONE
 import com.smarttoolfactory.domain.error.EmptyDataException
 import com.smarttoolfactory.domain.mapper.PropertyEntityToItemListMapper
 import com.smarttoolfactory.domain.model.PropertyItem
@@ -49,6 +50,12 @@ class GetPropertiesUseCaseRxJava3 @Inject constructor(
                     throw EmptyDataException("No Data is available in remote source!")
                 } else {
                     repository.deletePropertyEntities()
+                        .andThen { completableObserver ->
+                            it.forEachIndexed { index, propertyEntity ->
+                                propertyEntity.insertOrder = index
+                            }
+                            completableObserver.onComplete()
+                        }
                         .andThen(repository.savePropertyEntities(it))
                         .andThen(repository.getPropertyEntitiesFromLocal())
                 }
@@ -71,33 +78,34 @@ class GetPropertiesUseCaseRxJava3 @Inject constructor(
      *
      */
     fun getPropertiesOfflineFirst(orderBy: String): Single<List<PropertyItem>> {
-
-        return if (repository.getOrderFilter() != orderBy) {
-            getPropertiesOfflineLast(orderBy)
-        } else {
-            return repository.getPropertyEntitiesFromLocal()
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.computation())
-                .onErrorResumeNext { cause ->
-                    Single.just(listOf())
+        return repository.getPropertyEntitiesFromLocal()
+            .subscribeOn(Schedulers.io())
+            .observeOn(Schedulers.computation())
+            .onErrorResumeNext { cause ->
+                Single.just(listOf())
+            }
+            .concatMap { list ->
+                if (list.isNullOrEmpty()) {
+                    repository.fetchEntitiesFromRemote()
+                        .concatMap {
+                            repository.deletePropertyEntities()
+                                .andThen { completableObserver ->
+                                    it.forEachIndexed { index, propertyEntity ->
+                                        propertyEntity.insertOrder = index
+                                    }
+                                    completableObserver.onComplete()
+                                }
+                                .andThen(repository.savePropertyEntities(it))
+                                .andThen(Single.just(it))
+                        }
+                } else {
+                    Single.just(list)
                 }
-                .concatMap { list ->
-                    if (list.isNullOrEmpty()) {
-                        repository.fetchEntitiesFromRemote()
-                            .concatMap {
-                                repository.deletePropertyEntities()
-                                    .andThen(repository.savePropertyEntities(it))
-                                    .andThen(Single.just(it))
-                            }
-                    } else {
-                        Single.just(list)
-                    }
-                }
-                .onErrorResumeNext { cause ->
-                    Single.just(listOf())
-                }
-                .toPropertyListOrError()
-        }
+            }
+            .onErrorResumeNext { cause ->
+                Single.just(listOf())
+            }
+            .toPropertyListOrError()
     }
 
     /**
@@ -111,5 +119,12 @@ class GetPropertiesUseCaseRxJava3 @Inject constructor(
             .switchIfEmpty(
                 Single.error(EmptyDataException("Data is not available in any source!"))
             )
+    }
+
+    fun getCurrentSortKey(defaultKey: String = ORDER_BY_NONE): Single<String> {
+        return repository.getSortOrderKey()
+            .onErrorResumeNext {
+                Single.just(defaultKey)
+            }
     }
 }

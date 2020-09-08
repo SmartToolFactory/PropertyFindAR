@@ -21,6 +21,8 @@ class PropertyListFlowFragment : DynamicNavigationFragment<FragmentPropertyListB
     @Inject
     lateinit var viewModel: PropertyListViewModelFlow
 
+    lateinit var itemListAdapter: PropertyItemListAdapter
+
     /**
      * ViewModel for setting sort filter on top menu and property list fragments
      */
@@ -44,13 +46,13 @@ class PropertyListFlowFragment : DynamicNavigationFragment<FragmentPropertyListB
                 LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
 
             // Set RecyclerViewAdapter
-            this.adapter =
-                PropertyItemListAdapter(
-                    R.layout.row_property,
-                    viewModel::onClick,
-                    viewModel::onLikeButtonClick
+            itemListAdapter = PropertyItemListAdapter(
+                R.layout.row_property,
+                viewModel::onClick,
+                viewModel::onLikeButtonClick
 
-                )
+            )
+            this.adapter = itemListAdapter
         }
 
         val swipeRefreshLayout = dataBinding.swipeRefreshLayout
@@ -60,9 +62,18 @@ class PropertyListFlowFragment : DynamicNavigationFragment<FragmentPropertyListB
             viewModel.refreshPropertyList()
         }
 
-        subscribeGoToDetailScreen()
+        subscribeViewModelSortChange()
 
-        subscribeToolbarSortChange()
+        subscribeGoToDetailScreen()
+    }
+
+    /**
+     * When sort key is fetched from database change the one belong to Toolbar
+     */
+    private fun subscribeViewModelSortChange() {
+        viewLifecycleOwner.observe(viewModel.orderKey) {
+            toolbarVM.currentSortFilter = it
+        }
     }
 
     private fun subscribeToolbarSortChange() {
@@ -70,6 +81,7 @@ class PropertyListFlowFragment : DynamicNavigationFragment<FragmentPropertyListB
         viewLifecycleOwner.observe(toolbarVM.queryBySort) {
             it.getContentIfNotHandled()?.let { orderBy ->
                 viewModel.refreshPropertyList(orderBy)
+                toolbarVM.currentSortFilter = orderBy
             }
         }
     }
@@ -99,5 +111,15 @@ class PropertyListFlowFragment : DynamicNavigationFragment<FragmentPropertyListB
             fragment = this
         )
             .inject(this)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        subscribeToolbarSortChange()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        toolbarVM.queryBySort.removeObservers(viewLifecycleOwner)
     }
 }

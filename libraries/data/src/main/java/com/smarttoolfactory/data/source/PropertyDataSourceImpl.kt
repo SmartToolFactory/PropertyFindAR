@@ -4,7 +4,10 @@ import com.smarttoolfactory.data.api.PropertyApiCoroutines
 import com.smarttoolfactory.data.api.PropertyApiRxJava
 import com.smarttoolfactory.data.db.PropertyDaoCoroutines
 import com.smarttoolfactory.data.db.PropertyDaoRxJava3
+import com.smarttoolfactory.data.db.SortOrderDaoCoroutines
+import com.smarttoolfactory.data.db.SortOrderDaoRxJava3
 import com.smarttoolfactory.data.model.local.PropertyEntity
+import com.smarttoolfactory.data.model.local.SortOrderEntity
 import com.smarttoolfactory.data.model.remote.PropertyDTO
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Single
@@ -29,7 +32,10 @@ class RemotePropertyDataSourceCoroutinesImpl
 }
 
 class LocalPropertyDataSourceImpl
-@Inject constructor(private val dao: PropertyDaoCoroutines) : LocalPropertyDataSourceCoroutines {
+@Inject constructor(
+    private val dao: PropertyDaoCoroutines,
+    private val sortDao: SortOrderDaoCoroutines
+) : LocalPropertyDataSourceCoroutines {
 
     override suspend fun getPropertyEntities(): List<PropertyEntity> {
         return dao.getPropertyList()
@@ -41,6 +47,14 @@ class LocalPropertyDataSourceImpl
 
     override suspend fun deletePropertyEntities() {
         return dao.deleteAll()
+    }
+
+    override suspend fun saveOrderKey(orderBy: String) {
+        sortDao.insert(SortOrderEntity(orderBy = orderBy))
+    }
+
+    override suspend fun getOrderKey(): String {
+        return sortDao.getSortOrderEntity()
     }
 }
 
@@ -62,7 +76,10 @@ class RemoteDataSourceRxJava3Impl @Inject constructor(private val api: PropertyA
     }
 }
 
-class LocalDataSourceRxJava3Impl @Inject constructor(private val dao: PropertyDaoRxJava3) :
+class LocalDataSourceRxJava3Impl @Inject constructor(
+    private val dao: PropertyDaoRxJava3,
+    private val sortDao: SortOrderDaoRxJava3
+) :
     LocalPropertyDataSourceRxJava3 {
 
     override fun getPropertyEntities(): Single<List<PropertyEntity>> {
@@ -75,5 +92,13 @@ class LocalDataSourceRxJava3Impl @Inject constructor(private val dao: PropertyDa
 
     override fun deletePropertyEntities(): Completable {
         return dao.deleteAll()
+    }
+
+    override fun saveOrderKey(orderBy: String): Completable {
+        return sortDao.insert(SortOrderEntity(orderBy = orderBy))
+    }
+
+    override fun getOrderkey(): Single<String> {
+        return sortDao.getSortOrderSingle()
     }
 }

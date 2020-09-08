@@ -11,11 +11,11 @@ data class BrokerEntity(
     val email: String,
 
     val mobile: String?,
-    val agentPhoto: String,
+    val agentPhoto: String?,
     val agentName: String,
 
     val leadEmailReceivers: List<String>,
-    val license: String,
+    val license: String?,
     val agentId: Int,
-    val logo: String
+    val logo: String?
 ) : IEntity

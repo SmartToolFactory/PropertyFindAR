@@ -19,21 +19,21 @@ data class PropertyDTO(
     @SerializedName("type_id")
     val typeId: Int,
     @SerializedName("thumbnail")
-    val thumbnail: String,
+    val thumbnail: String?,
     @SerializedName("thumbnail_big")
-    val thumbnailBig: String,
+    val thumbnailBig: String?,
     @SerializedName("image_count")
     val imageCount: Int,
     @SerializedName("price")
     val price: String,
     @SerializedName("price_period")
-    val pricePeriod: String,
+    val pricePeriod: String?,
     @SerializedName("price_period_raw")
     val pricePeriodRaw: String,
     @SerializedName("price_label")
-    val priceLabel: String,
+    val priceLabel: String?,
     @SerializedName("price_value")
-    val priceValue: String,
+    val priceValue: String?,
     @SerializedName("price_value_raw")
     val priceValueRaw: Int,
     @SerializedName("currency")
@@ -47,7 +47,7 @@ data class PropertyDTO(
     @SerializedName("poa")
     val poa: Boolean,
     @SerializedName("rera_permit")
-    val reraPermit: String,
+    val reraPermit: String?,
     @SerializedName("bathrooms")
     val bathrooms: String,
     @SerializedName("bedrooms")
@@ -61,7 +61,7 @@ data class PropertyDTO(
     @SerializedName("broker_name")
     val brokerName: String,
     @SerializedName("agent_license")
-    val agentLicense: String,
+    val agentLicense: String?,
     @SerializedName("location_id")
     val locationId: Int,
     @SerializedName("hide_location")
@@ -88,7 +88,7 @@ data class PropertyDTO(
     val verified: Boolean,
     @SerializedName("gallery")
 
-    val gallery: List<String>,
+    val gallery: List<String>?,
     @SerializedName("phone")
     val phone: String,
 

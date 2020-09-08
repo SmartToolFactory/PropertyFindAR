@@ -2,7 +2,6 @@ package com.smarttoolfactory.data.model.local
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.PrimaryKey
 import com.smarttoolfactory.data.model.IEntity
 
 /**
@@ -12,10 +11,12 @@ import com.smarttoolfactory.data.model.IEntity
  * * Implements [IEntity] marker interface for mapping this database items from REST DTOs or
  * to UI items
  */
-@Entity(tableName = "property")
+@Entity(tableName = "property", primaryKeys = ["insert_order"])
 data class PropertyEntity(
 
-    @PrimaryKey
+    @ColumnInfo(name = "insert_order")
+    var insertOrder: Int = 0,
+
     @ColumnInfo(name = "id")
     val id: Int,
     @ColumnInfo(name = "update")
@@ -31,21 +32,21 @@ data class PropertyEntity(
     @ColumnInfo(name = "type_id")
     val typeId: Int,
     @ColumnInfo(name = "thumbnail")
-    val thumbnail: String,
+    val thumbnail: String?,
     @ColumnInfo(name = "thumbnail_big")
-    val thumbnailBig: String,
+    val thumbnailBig: String?,
     @ColumnInfo(name = "image_count")
     val imageCount: Int,
     @ColumnInfo(name = "price")
     val price: String,
     @ColumnInfo(name = "price_period")
-    val pricePeriod: String,
+    val pricePeriod: String?,
     @ColumnInfo(name = "price_period_raw")
     val pricePeriodRaw: String,
     @ColumnInfo(name = "price_label")
-    val priceLabel: String,
+    val priceLabel: String?,
     @ColumnInfo(name = "price_value")
-    val priceValue: String,
+    val priceValue: String?,
     @ColumnInfo(name = "price_value_raw")
     val priceValueRaw: Int,
     @ColumnInfo(name = "currency")
@@ -59,7 +60,7 @@ data class PropertyEntity(
     @ColumnInfo(name = "poa")
     val poa: Boolean,
     @ColumnInfo(name = "rera_permit")
-    val reraPermit: String,
+    val reraPermit: String?,
     @ColumnInfo(name = "bathrooms")
     val bathrooms: String,
     @ColumnInfo(name = "bedrooms")
@@ -73,7 +74,7 @@ data class PropertyEntity(
     @ColumnInfo(name = "broker_name")
     val brokerName: String,
     @ColumnInfo(name = "agent_license")
-    val agentLicense: String,
+    val agentLicense: String?,
     @ColumnInfo(name = "location_id")
     val locationId: Int,
     @ColumnInfo(name = "hide_location")
@@ -98,7 +99,7 @@ data class PropertyEntity(
     val verified: Boolean,
 
     @ColumnInfo(name = "gallery")
-    val gallery: List<String>,
+    val gallery: List<String>?,
     @ColumnInfo(name = "phone")
     val phone: String,
 

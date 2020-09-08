@@ -6,6 +6,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.smarttoolfactory.core.di.CoreModuleDependencies
 import com.smarttoolfactory.core.ui.fragment.DynamicNavigationFragment
+import com.smarttoolfactory.core.util.observe
 import com.smarttoolfactory.home.R
 import com.smarttoolfactory.home.adapter.PropertyItemListAdapter
 import com.smarttoolfactory.home.databinding.FragmentPropertyListBinding
@@ -19,6 +20,8 @@ class PropertyListRxjava3Fragment : DynamicNavigationFragment<FragmentPropertyLi
 
     @Inject
     lateinit var viewModel: PropertyListViewModelRxJava3
+
+    lateinit var itemListAdapter: PropertyItemListAdapter
 
     /**
      * ViewModel for setting sort filter on top menu and property list fragments
@@ -43,13 +46,13 @@ class PropertyListRxjava3Fragment : DynamicNavigationFragment<FragmentPropertyLi
                 LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
 
             // Set RecyclerViewAdapter
-            this.adapter =
-                PropertyItemListAdapter(
-                    R.layout.row_property,
-                    viewModel::onClick,
-                    viewModel::onLikeButtonClick
+            itemListAdapter = PropertyItemListAdapter(
+                R.layout.row_property,
+                viewModel::onClick,
+                viewModel::onLikeButtonClick
 
-                )
+            )
+            this.adapter = itemListAdapter
         }
 
         val swipeRefreshLayout = dataBinding.swipeRefreshLayout
@@ -59,7 +62,28 @@ class PropertyListRxjava3Fragment : DynamicNavigationFragment<FragmentPropertyLi
             viewModel.refreshPropertyList()
         }
 
+        subscribeViewModelSortChange()
+
         subscribeGoToDetailScreen()
+    }
+
+    /**
+     * When sort key is fetched from database change the one belong to Toolbar
+     */
+    private fun subscribeViewModelSortChange() {
+        viewLifecycleOwner.observe(viewModel.orderKey) {
+            toolbarVM.currentSortFilter = it
+        }
+    }
+
+    private fun subscribeToolbarSortChange() {
+
+        viewLifecycleOwner.observe(toolbarVM.queryBySort) {
+            it.getContentIfNotHandled()?.let { orderBy ->
+                viewModel.refreshPropertyList(orderBy)
+                toolbarVM.currentSortFilter = orderBy
+            }
+        }
     }
 
     private fun subscribeGoToDetailScreen() {
@@ -87,5 +111,15 @@ class PropertyListRxjava3Fragment : DynamicNavigationFragment<FragmentPropertyLi
             fragment = this
         )
             .inject(this)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        subscribeToolbarSortChange()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        toolbarVM.queryBySort.removeObservers(viewLifecycleOwner)
     }
 }
