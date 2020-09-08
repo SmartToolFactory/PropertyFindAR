@@ -21,8 +21,7 @@ class PropertyListRxjava3Fragment : DynamicNavigationFragment<FragmentPropertyLi
     @Inject
     lateinit var viewModel: PropertyListViewModelRxJava3
 
-    lateinit var itemListAdapter:PropertyItemListAdapter
-
+    lateinit var itemListAdapter: PropertyItemListAdapter
 
     /**
      * ViewModel for setting sort filter on top menu and property list fragments
@@ -47,14 +46,13 @@ class PropertyListRxjava3Fragment : DynamicNavigationFragment<FragmentPropertyLi
                 LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
 
             // Set RecyclerViewAdapter
-            itemListAdapter =  PropertyItemListAdapter(
+            itemListAdapter = PropertyItemListAdapter(
                 R.layout.row_property,
                 viewModel::onClick,
                 viewModel::onLikeButtonClick
 
             )
-            this.adapter =itemListAdapter
-
+            this.adapter = itemListAdapter
         }
 
         val swipeRefreshLayout = dataBinding.swipeRefreshLayout
@@ -65,7 +63,6 @@ class PropertyListRxjava3Fragment : DynamicNavigationFragment<FragmentPropertyLi
         }
 
         subscribeGoToDetailScreen()
-
     }
 
     private fun subscribeToolbarSortChange() {

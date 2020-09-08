@@ -2,7 +2,6 @@ package com.smarttoolfactory.data.model.local
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.PrimaryKey
 import com.smarttoolfactory.data.model.IEntity
 
 /**
@@ -12,11 +11,11 @@ import com.smarttoolfactory.data.model.IEntity
  * * Implements [IEntity] marker interface for mapping this database items from REST DTOs or
  * to UI items
  */
-@Entity(tableName = "property",primaryKeys = ["insert_order"])
+@Entity(tableName = "property", primaryKeys = ["insert_order"])
 data class PropertyEntity(
 
     @ColumnInfo(name = "insert_order")
-    var insertOrder:Int = 0,
+    var insertOrder: Int = 0,
 
     @ColumnInfo(name = "id")
     val id: Int,
