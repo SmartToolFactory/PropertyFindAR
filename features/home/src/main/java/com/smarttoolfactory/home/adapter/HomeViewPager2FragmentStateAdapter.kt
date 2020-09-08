@@ -23,16 +23,20 @@ class HomeViewPager2FragmentStateAdapter(fragmentManager: FragmentManager, lifec
     override fun createFragment(position: Int): Fragment {
 
         return when (position) {
-
-            //  Fragment with Flow
             0 -> NavHostContainerFragment.createNavHostContainerFragment(
                 R.layout.fragment_navhost_property_list_flow,
                 R.id.nested_nav_host_fragment_property_list
             )
 
-            // Fragment with Pagination
-            else -> NavHostContainerFragment.createNavHostContainerFragment(
+            // Fragment with RxJava3
+            1 -> NavHostContainerFragment.createNavHostContainerFragment(
                 R.layout.fragment_navhost_property_list_rxjava3,
+                R.id.nested_nav_host_fragment_property_list
+            )
+
+            //  Fragment with Flow + Pagination
+            else -> NavHostContainerFragment.createNavHostContainerFragment(
+                R.layout.fragment_navhost_property_list_paged,
                 R.id.nested_nav_host_fragment_property_list
             )
         }

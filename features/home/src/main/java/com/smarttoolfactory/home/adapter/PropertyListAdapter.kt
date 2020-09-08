@@ -78,17 +78,11 @@ class PropertyItemListAdapter(
  */
 class PropertyItemDiffCallback : DiffUtil.ItemCallback<PropertyItem>() {
 
-    override fun areItemsTheSame(
-        oldItem: PropertyItem,
-        newItem: PropertyItem
-    ): Boolean {
-        return oldItem === newItem
+    override fun areItemsTheSame(oldItem: PropertyItem, newItem: PropertyItem): Boolean {
+        return oldItem.id == newItem.id
     }
 
-    override fun areContentsTheSame(
-        oldItem: PropertyItem,
-        newItem: PropertyItem
-    ): Boolean {
-        return oldItem.id == newItem.id
+    override fun areContentsTheSame(oldItem: PropertyItem, newItem: PropertyItem): Boolean {
+        return oldItem == newItem
     }
 }

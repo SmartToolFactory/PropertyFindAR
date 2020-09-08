@@ -19,13 +19,13 @@ interface PagedPropertyDao {
     @Delete
     suspend fun deletePagedPropertyEntity(entity: PagedPropertyEntity): Int
 
-    @Query("DELETE FROM property")
+    @Query("DELETE FROM paged_property")
     suspend fun deleteAll()
 
     /**
      * Get number of properties in db
      */
-    @Query("SELECT COUNT(*) FROM property")
+    @Query("SELECT COUNT(*) FROM paged_property")
     suspend fun getPropertyCount(): Int
 
     /**
@@ -33,6 +33,6 @@ interface PagedPropertyDao {
      *
      * *If database is empty returns empty list []
      */
-    @Query("SELECT * FROM property")
+    @Query("SELECT * FROM paged_property")
     suspend fun getPropertyList(): List<PagedPropertyEntity>
 }
