@@ -40,7 +40,7 @@ class GetPropertiesUseCasePaged @Inject constructor(
                 } else {
                     repository.run {
 
-                        deletePropertyEntities()
+//                        deletePropertyEntities()
 
                         val propertyCount = repository.getPropertyCount()
 
@@ -49,8 +49,8 @@ class GetPropertiesUseCasePaged @Inject constructor(
                             propertyEntity.insertOrder = propertyCount + index
                         }
                         savePropertyEntities(it)
-
-                        getPropertyEntitiesFromLocal()
+                        val data = getPropertyEntitiesFromLocal()
+                        data
                     }
                 }
             }
