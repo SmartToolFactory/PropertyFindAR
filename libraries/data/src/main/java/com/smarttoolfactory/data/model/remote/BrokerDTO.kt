@@ -21,16 +21,16 @@ data class BrokerDTO(
     val mobile: String?,
 
     @SerializedName("agent_photo")
-    val agentPhoto: String,
+    val agentPhoto: String?,
     @SerializedName("agent_name")
     val agentName: String,
 
     @SerializedName("lead_email_receivers")
     val leadEmailReceivers: List<String>,
     @SerializedName("license")
-    val license: String,
+    val license: String?,
     @SerializedName("agent_id")
     val agentId: Int,
     @SerializedName("logo")
-    val logo: String
+    val logo: String?
 ) : DataTransferObject
