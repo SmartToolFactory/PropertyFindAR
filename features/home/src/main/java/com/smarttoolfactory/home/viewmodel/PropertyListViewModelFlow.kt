@@ -9,7 +9,6 @@ import com.smarttoolfactory.core.viewstate.Status
 import com.smarttoolfactory.core.viewstate.ViewState
 import com.smarttoolfactory.domain.model.PropertyItem
 import com.smarttoolfactory.domain.usecase.GetPropertiesUseCaseFlow
-import com.smarttoolfactory.propertyfindar.ORDER_BY_NONE
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -41,9 +40,9 @@ class PropertyListViewModelFlow @ViewModelInject constructor(
      * * If both network and db don't have any data throw empty set exception
      *
      */
-    override fun getPropertyList() {
+    override fun getPropertyList(orderBy: String) {
 
-        getPropertiesUseCase.getPropertiesOfflineFirst(orderBy = ORDER_BY_NONE)
+        getPropertiesUseCase.getPropertiesOfflineFirst(orderBy)
             .convertToFlowViewState()
             .onStart {
                 _propertyViewState.value = ViewState(status = Status.LOADING)
@@ -54,8 +53,8 @@ class PropertyListViewModelFlow @ViewModelInject constructor(
             .launchIn(coroutineScope)
     }
 
-    override fun refreshPropertyList() {
-        getPropertiesUseCase.getPropertiesOfflineLast("")
+    override fun refreshPropertyList(orderBy: String) {
+        getPropertiesUseCase.getPropertiesOfflineLast(orderBy)
             .convertToFlowViewState()
             .onStart {
                 _propertyViewState.value = ViewState(status = Status.LOADING)

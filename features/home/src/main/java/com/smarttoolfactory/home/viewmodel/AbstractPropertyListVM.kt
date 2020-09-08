@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.smarttoolfactory.core.util.Event
 import com.smarttoolfactory.core.viewstate.ViewState
+import com.smarttoolfactory.domain.ORDER_BY_NONE
 import com.smarttoolfactory.domain.model.PropertyItem
 
 /**
@@ -20,9 +21,9 @@ abstract class AbstractPropertyListVM : ViewModel() {
 
     abstract val propertyListViewState: LiveData<ViewState<List<PropertyItem>>>
 
-    abstract fun getPropertyList()
+    abstract fun getPropertyList(orderBy: String = ORDER_BY_NONE)
 
-    abstract fun refreshPropertyList()
+    abstract fun refreshPropertyList(orderBy: String = ORDER_BY_NONE)
 
     abstract fun onClick(propertyItem: PropertyItem)
 }

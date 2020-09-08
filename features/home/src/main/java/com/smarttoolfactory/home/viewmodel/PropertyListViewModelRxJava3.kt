@@ -9,7 +9,6 @@ import com.smarttoolfactory.core.viewstate.Status
 import com.smarttoolfactory.core.viewstate.ViewState
 import com.smarttoolfactory.domain.model.PropertyItem
 import com.smarttoolfactory.domain.usecase.GetPropertiesUseCaseRxJava3
-import com.smarttoolfactory.propertyfindar.ORDER_BY_NONE
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 
 class PropertyListViewModelRxJava3 @ViewModelInject constructor(
@@ -26,8 +25,8 @@ class PropertyListViewModelRxJava3 @ViewModelInject constructor(
     override val propertyListViewState: LiveData<ViewState<List<PropertyItem>>>
         get() = _propertyListViewState
 
-    override fun getPropertyList() {
-        getPropertiesUseCase.getPropertiesOfflineFirst((ORDER_BY_NONE))
+    override fun getPropertyList(orderBy: String) {
+        getPropertiesUseCase.getPropertiesOfflineFirst((orderBy))
             .convertFromSingleToObservableViewStateWithLoading()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
@@ -40,8 +39,8 @@ class PropertyListViewModelRxJava3 @ViewModelInject constructor(
             )
     }
 
-    override fun refreshPropertyList() {
-        getPropertiesUseCase.getPropertiesOfflineLast(ORDER_BY_NONE)
+    override fun refreshPropertyList(orderBy: String) {
+        getPropertiesUseCase.getPropertiesOfflineLast(orderBy)
             .convertFromSingleToObservableViewStateWithLoading()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(

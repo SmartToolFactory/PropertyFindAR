@@ -1,9 +1,13 @@
 package com.smarttoolfactory.home
 
-import android.widget.Toast
+import android.app.Dialog
+import android.os.Bundle
+import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
@@ -16,6 +20,7 @@ import com.smarttoolfactory.core.util.Event
 import com.smarttoolfactory.core.viewmodel.NavControllerViewModel
 import com.smarttoolfactory.home.adapter.HomeViewPager2FragmentStateAdapter
 import com.smarttoolfactory.home.databinding.FragmentHomeBinding
+import com.smarttoolfactory.home.viewmodel.HomeToolbarVM
 
 /**
  * Fragment that contains [ViewPager2] and [TabLayout].
@@ -37,7 +42,15 @@ class HomeFragment : DynamicNavigationFragment<FragmentHomeBinding>() {
 
     override fun getLayoutRes(): Int = R.layout.fragment_home
 
+    /**
+     * ViwModel for getting [NavController] for setting Toolbar navigation
+     */
     private val navControllerViewModel by activityViewModels<NavControllerViewModel>()
+
+    /**
+     * ViewModel for setting sort filter on top menu and property list fragments
+     */
+    private val toolbarVM by activityViewModels<HomeToolbarVM>()
 
     override fun bindViews() {
 
@@ -59,19 +72,26 @@ class HomeFragment : DynamicNavigationFragment<FragmentHomeBinding>() {
 
         dataBinding!!.toolbar.inflateMenu(R.menu.menu_home)
 
+        // Bind tabs and viewpager
+        TabLayoutMediator(tabLayout, viewPager, tabConfigurationStrategy).attach()
+
+        setToolbarMenuItemListener()
+
+        subscribeAppbarNavigation()
+    }
+
+    private fun setToolbarMenuItemListener() {
         dataBinding!!.toolbar.setOnMenuItemClickListener {
             if (it.itemId == R.id.menu_item_sort) {
-                Toast.makeText(requireContext(), "Toast", Toast.LENGTH_SHORT).show()
+                val dialogFragment = SortDialogFragment().show(
+                    requireActivity().supportFragmentManager,
+                    "sort-dialog"
+                )
                 true
             }
 
             false
         }
-
-        // Bind tabs and viewpager
-        TabLayoutMediator(tabLayout, viewPager, tabConfigurationStrategy).attach()
-
-        subscribeAppbarNavigation()
     }
 
     private fun subscribeAppbarNavigation() {
@@ -124,4 +144,33 @@ class HomeFragment : DynamicNavigationFragment<FragmentHomeBinding>() {
                 else -> tab.text = "Flow+Pagination"
             }
         }
+}
+
+class SortDialogFragment : DialogFragment() {
+
+    private lateinit var viewModel: HomeToolbarVM
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel = ViewModelProvider(requireActivity()).get(HomeToolbarVM::class.java)
+    }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+
+        val items = viewModel.sortPropertyList.toTypedArray()
+        items[0] = "Featured"
+
+        val checkedItem = viewModel.sortPropertyList.indexOf(viewModel.currentSortFilter)
+
+        val builder = AlertDialog.Builder(requireActivity())
+        builder.setTitle("Sorting")
+            .setNegativeButton("CANCEL") { dialog, which ->
+                dismiss()
+            }
+            .setSingleChoiceItems(items, checkedItem) { dialog, which ->
+                viewModel.queryBySort.value = Event(viewModel.sortPropertyList[which])
+                dismiss()
+            }
+        return builder.create()
+    }
 }
