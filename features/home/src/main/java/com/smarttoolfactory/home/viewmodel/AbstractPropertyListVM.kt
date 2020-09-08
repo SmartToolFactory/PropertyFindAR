@@ -14,12 +14,6 @@ abstract class AbstractPropertyListVM : ViewModel() {
     companion object {
         const val PROPERTY_LIST = "PROPERTY_LIST"
         const val PROPERTY_DETAIL = "PROPERTY_DETAIL"
-
-        const val ORDER_BY_NONE = ""
-        const val ORDER_BY_PRICE_ASCENDING = "pa"
-        const val ORDER_BY_PRICE_DESCENDING = "pd"
-        const val ORDER_BY_BEDS_ASCENDING = "ba"
-        const val ORDER_BY_DES_DESCENDING = "bd"
     }
 
     abstract val goToDetailScreen: LiveData<Event<PropertyItem>>

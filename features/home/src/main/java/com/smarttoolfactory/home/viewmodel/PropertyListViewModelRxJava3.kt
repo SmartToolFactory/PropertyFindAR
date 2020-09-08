@@ -9,6 +9,7 @@ import com.smarttoolfactory.core.viewstate.Status
 import com.smarttoolfactory.core.viewstate.ViewState
 import com.smarttoolfactory.domain.model.PropertyItem
 import com.smarttoolfactory.domain.usecase.GetPropertiesUseCaseRxJava3
+import com.smarttoolfactory.propertyfindar.ORDER_BY_NONE
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 
 class PropertyListViewModelRxJava3 @ViewModelInject constructor(
@@ -26,7 +27,7 @@ class PropertyListViewModelRxJava3 @ViewModelInject constructor(
         get() = _propertyListViewState
 
     override fun getPropertyList() {
-        getPropertiesUseCase.getPropertiesOfflineFirst(ORDER_BY_NONE)
+        getPropertiesUseCase.getPropertiesOfflineFirst((ORDER_BY_NONE))
             .convertFromSingleToObservableViewStateWithLoading()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
@@ -55,5 +56,9 @@ class PropertyListViewModelRxJava3 @ViewModelInject constructor(
 
     override fun onClick(item: PropertyItem) {
         _goToDetailScreen.value = Event(item)
+    }
+
+    fun onLikeButtonClick(item: PropertyItem) {
+        println("🔥 Like: $item")
     }
 }
