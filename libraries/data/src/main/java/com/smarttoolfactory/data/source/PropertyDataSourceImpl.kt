@@ -125,6 +125,10 @@ class LocalPagedPropertySourceImpl @Inject constructor(
         return dao.deleteAll()
     }
 
+    override suspend fun getPropertyCount(): Int {
+        return dao.getPropertyCount()
+    }
+
     override suspend fun saveOrderKey(orderBy: String) {
         sortDao.insert(SortOrderEntity(orderBy = orderBy))
     }

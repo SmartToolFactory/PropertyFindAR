@@ -28,10 +28,14 @@ interface LocalPropertyDataSourceCoroutines : PropertyDataSource {
     suspend fun getOrderKey(): String
 }
 
+/*
+    Pagination + Coroutines
+ */
 interface LocalPagedPropertyDataSource : PropertyDataSource {
     suspend fun getPropertyEntities(): List<PagedPropertyEntity>
     suspend fun saveEntities(properties: List<PagedPropertyEntity>): List<Long>
     suspend fun deletePropertyEntities()
+    suspend fun getPropertyCount(): Int
     suspend fun saveOrderKey(orderBy: String)
     suspend fun getOrderKey(): String
 }
