@@ -2,7 +2,6 @@ package com.smarttoolfactory.domain.usecase
 
 import com.smarttoolfactory.data.constant.ORDER_BY_NONE
 import com.smarttoolfactory.data.model.local.PagedPropertyEntity
-import com.smarttoolfactory.data.model.local.PropertyEntity
 import com.smarttoolfactory.data.repository.PagedPropertyRepository
 import com.smarttoolfactory.domain.dispatcher.UseCaseDispatchers
 import com.smarttoolfactory.domain.error.EmptyDataException
@@ -76,7 +75,6 @@ class GetPropertiesUseCasePaged @Inject constructor(
                 getPagedOfflineLast(orderBy)
             }
     }
-
 
     private fun toPropertyListOrError(entityList: List<PagedPropertyEntity>): List<PropertyItem> {
         return if (!entityList.isNullOrEmpty()) {
