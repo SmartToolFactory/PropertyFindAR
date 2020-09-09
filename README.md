@@ -3,7 +3,6 @@
 [![ktlint](https://img.shields.io/badge/code%20style-%E2%9D%A4-FF4081.svg)](https://ktlint.github.io/)
 [![Kotlin Version](https://img.shields.io/badge/kotlin-1.4.0-blue.svg)](https://kotlinlang.org)
 [![API](https://img.shields.io/badge/API-21%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=21)
-[![codecov](https://codecov.io/gh/andremion/Theatre/graph/badge.svg)](https://codecov.io/gh/andremion/Theatre)
 
 
 ## About
@@ -72,6 +71,8 @@ Some of the popular libraries and MVVM clean architecture used with offline-firs
 Uses both library modules and dynamic feature modules
 
 ## Architecture
+
+<img src="./docs/android-final-architecture.png"/>
 
 Uses concepts of clean architecture
 
