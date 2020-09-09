@@ -1,8 +1,11 @@
 package com.smarttoolfactory.property_detail
 
 import android.os.Bundle
+import androidx.fragment.app.activityViewModels
+import androidx.navigation.NavController
 import com.smarttoolfactory.core.di.CoreModuleDependencies
 import com.smarttoolfactory.core.ui.fragment.DynamicNavigationFragment
+import com.smarttoolfactory.core.viewmodel.NavControllerViewModel
 import com.smarttoolfactory.domain.model.PropertyItem
 import com.smarttoolfactory.property_detail.databinding.FragmentPropertyDetailBinding
 import com.smarttoolfactory.property_detail.di.DaggerPropertyDetailComponent
@@ -15,6 +18,11 @@ class PropertyDetailFragment : DynamicNavigationFragment<FragmentPropertyDetailB
 
     @Inject
     lateinit var viewModel: PropertyDetailViewModel
+
+    /**
+     * ViwModel for getting [NavController] for setting Toolbar navigation
+     */
+    private val navControllerViewModel by activityViewModels<NavControllerViewModel>()
 
     override fun bindViews() {
         // Get Post from navigation component arguments

@@ -183,6 +183,7 @@ class SortDialogFragment : DialogFragment() {
 
     private var currentItem = 0
     private var checkedItem = currentItem
+    private var canceled = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -193,10 +194,12 @@ class SortDialogFragment : DialogFragment() {
 
         currentItem = viewModel.sortPropertyList.indexOf(viewModel.currentSortFilter)
         checkedItem = currentItem
+        canceled = false
 
         val builder = AlertDialog.Builder(requireActivity())
         builder.setTitle("Sorting")
             .setNegativeButton("CANCEL") { dialog, which ->
+                canceled = true
                 dismiss()
             }
             .setSingleChoiceItems(
@@ -204,13 +207,11 @@ class SortDialogFragment : DialogFragment() {
                 currentItem
             ) { dialog, which ->
                 checkedItem = which
-            }.setOnDismissListener {
 
                 // Alternative 1 works as soon as user changes the option
-//                if (currentItem != checkedItem) {
+                //                if (currentItem != checkedItem) {
 //                    viewModel.queryBySort.value = Event(viewModel.sortPropertyList[checkedItem])
 //                }
-//                dismiss()
             }
         return builder.create()
     }
@@ -218,7 +219,7 @@ class SortDialogFragment : DialogFragment() {
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
         // Alternative works after dialog is dismissed
-        if (currentItem != checkedItem) {
+        if (currentItem != checkedItem && !canceled) {
             viewModel.queryBySort.value = Event(viewModel.sortPropertyList[checkedItem])
         }
     }
