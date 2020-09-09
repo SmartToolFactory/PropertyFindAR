@@ -9,7 +9,13 @@
         android:id="@+id/mainFragment"
         android:name="com.smarttoolfactory.propertyfindar.MainFragment"
         android:label="MainFragment"
-        tools:layout="@layout/fragment_main" />
+        tools:layout="@layout/fragment_main">
+
+        <action
+            android:id="@+id/action_mainFragment_to_propertyDetailFragment"
+            app:destination="@id/nav_graph_property_detail" />
+
+    </fragment>
 
 
     <!-- Property Detail  dynamic feature module -->

@@ -10,5 +10,23 @@
         android:id="@+id/homeFragment"
         android:name="com.smarttoolfactory.home.HomeFragment"
         android:label="HomeFragment"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home">
+
+        <action
+            android:id="@+id/action_home_dest_to_propertyDetailFragment"
+            app:destination="@id/nav_graph_property_detail" />
+
+    </fragment>
+
+    <include-dynamic
+        android:id="@id/nav_graph_property_detail"
+        android:name="com.smarttoolfactory.property_detail"
+        app:graphResName="nav_graph_property_detail"
+        app:moduleName="property_detail">
+
+        <argument
+            android:name="property"
+            app:argType="com.smarttoolfactory.domain.model.PropertyItem" />
+
+    </include-dynamic>
 </navigation>

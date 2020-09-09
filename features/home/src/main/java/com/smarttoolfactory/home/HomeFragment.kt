@@ -4,21 +4,26 @@ import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
+import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.smarttoolfactory.core.ui.fragment.DynamicNavigationFragment
 import com.smarttoolfactory.core.util.Event
+import com.smarttoolfactory.core.util.observe
 import com.smarttoolfactory.core.viewmodel.NavControllerViewModel
+import com.smarttoolfactory.core.viewmodel.PropertyDetailNavigationVM
 import com.smarttoolfactory.home.adapter.HomeViewPager2FragmentStateAdapter
 import com.smarttoolfactory.home.databinding.FragmentHomeBinding
 import com.smarttoolfactory.home.viewmodel.HomeToolbarVM
@@ -53,6 +58,11 @@ class HomeFragment : DynamicNavigationFragment<FragmentHomeBinding>() {
      */
     private val toolbarVM by activityViewModels<HomeToolbarVM>()
 
+    /**
+     * ViewModel for navigating to property detail screen from Home Fragment
+     */
+    private val propertyDetailNavigationVM by activityViewModels<PropertyDetailNavigationVM>()
+
     override fun bindViews() {
 
         // ViewPager2
@@ -79,6 +89,27 @@ class HomeFragment : DynamicNavigationFragment<FragmentHomeBinding>() {
         setToolbarMenuItemListener()
 
         subscribeAppbarNavigation()
+
+        subscribePropertyDetailNavigation()
+    }
+
+    /**
+     * Navigates to Property Detail fragment from this fragment that replacing main fragment
+     * that contains [BottomNavigationView]
+     */
+    private fun subscribePropertyDetailNavigation() {
+        viewLifecycleOwner.observe(propertyDetailNavigationVM.goToPropertyDetailFromHome) {
+
+            it.getContentIfNotHandled()?.let { propertyItem ->
+                val bundle = bundleOf("property" to propertyItem)
+
+                findNavController()
+                    .navigate(
+                        R.id.action_home_dest_to_propertyDetailFragment,
+                        bundle
+                    )
+            }
+        }
     }
 
     private fun setToolbarMenuItemListener() {
