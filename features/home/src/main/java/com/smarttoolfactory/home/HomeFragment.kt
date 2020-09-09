@@ -8,7 +8,6 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
@@ -129,7 +128,7 @@ class HomeFragment : DynamicNavigationFragment<FragmentHomeBinding>() {
     private fun subscribeAppbarNavigation() {
         navControllerViewModel.currentNavController.observe(
             viewLifecycleOwner,
-            Observer { it ->
+            { it ->
 
                 it?.let { event: Event<NavController?> ->
                     event.getContentIfNotHandled()?.let { navController ->
@@ -192,18 +191,18 @@ class SortDialogFragment : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
-        val displayNames = viewModel.sortPropertyList.toTypedArray()
         currentItem = viewModel.sortPropertyList.indexOf(viewModel.currentSortFilter)
         checkedItem = currentItem
-
-        displayNames[0] = "Featured"
 
         val builder = AlertDialog.Builder(requireActivity())
         builder.setTitle("Sorting")
             .setNegativeButton("CANCEL") { dialog, which ->
                 dismiss()
             }
-            .setSingleChoiceItems(displayNames, currentItem) { dialog, which ->
+            .setSingleChoiceItems(
+                viewModel.sortFilterNames.toTypedArray(),
+                currentItem
+            ) { dialog, which ->
                 checkedItem = which
             }.setOnDismissListener {
 

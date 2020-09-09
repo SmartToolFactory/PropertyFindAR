@@ -22,5 +22,13 @@ class HomeToolbarVM @ViewModelInject constructor() : ViewModel() {
         ORDER_BY_DES_DESCENDING
     )
 
+    val sortFilterNames = listOf(
+        "Featured",
+        "Price Ascending",
+        "Price Descending",
+        "Beds Ascending",
+        "Beds Descending"
+    )
+
     val queryBySort = MutableLiveData<Event<String>>()
 }

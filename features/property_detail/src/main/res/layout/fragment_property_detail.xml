@@ -12,18 +12,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <!--
-        OUTLINE
-        <CoordinatorLayout>
-            <AppbarLayout>
-                   <CollapsingToolbarLayout>
-                        <Header/>
-                     <Toolbar/>
-                </CollapsingToolbarLayout>
-            </ AppbarLayout >
-            <Scrollable View.../>
-        </CoordinatorLayout>
-        -->
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appbar"
@@ -39,13 +27,6 @@
                 app:expandedTitleMarginStart="48dp"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-                <ImageView
-                    android:id="@+id/headerImage"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/mock_property"
-                    app:layout_collapseMode="parallax" />
 
                 <androidx.appcompat.widget.Toolbar
                     android:id="@+id/toolbar"
