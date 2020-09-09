@@ -9,8 +9,6 @@ import com.smarttoolfactory.data.model.remote.PropertyResponse
 import com.smarttoolfactory.data.source.LocalPropertyDataSourceCoroutines
 import com.smarttoolfactory.data.source.RemotePropertyDataSourceCoroutines
 import com.smarttoolfactory.test_utils.RESPONSE_JSON_PATH
-import com.smarttoolfactory.test_utils.RESPONSE_JSON_PATH_PAGE_1
-import com.smarttoolfactory.test_utils.RESPONSE_JSON_PATH_PAGE_2
 import com.smarttoolfactory.test_utils.util.convertToObjectFromJson
 import com.smarttoolfactory.test_utils.util.getResourceAsText
 import io.mockk.clearMocks
@@ -21,6 +19,7 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
+import io.mockk.slot
 import io.mockk.verify
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.jupiter.api.AfterEach
@@ -54,35 +53,6 @@ internal class PropertyRepositoryCoroutinesTest {
         private val entityList =
             MapperFactory.createListMapper<PropertyDTOtoEntityListMapper>()
                 .map(propertyDTOList)
-
-        // FIXME Cannot convert from Json to Entity even with wrapper, check out Moshi or Jackson
-
-        private val propertyResponsePage1 = convertToObjectFromJson<PropertyResponse>(
-            getResourceAsText(RESPONSE_JSON_PATH_PAGE_1)
-        )!!
-
-        private val propertyResponsePage2 = convertToObjectFromJson<PropertyResponse>(
-            getResourceAsText(RESPONSE_JSON_PATH_PAGE_2)
-        )!!
-
-        private val propertyDTOListPage1 = propertyResponsePage1.res
-        private val propertyDTOListPage2 = propertyResponsePage2.res
-
-        private val entityListPage1 =
-            MapperFactory.createListMapper<PropertyDTOtoEntityListMapper>()
-                .map(
-                    convertToObjectFromJson<PropertyResponse>(
-                        getResourceAsText(RESPONSE_JSON_PATH_PAGE_1)
-                    )!!.res
-                )
-
-        private val entityListPage2 =
-            MapperFactory.createListMapper<PropertyDTOtoEntityListMapper>()
-                .map(
-                    convertToObjectFromJson<PropertyResponse>(
-                        getResourceAsText(RESPONSE_JSON_PATH_PAGE_1)
-                    )!!.res
-                )
     }
 
     @Test
@@ -110,66 +80,24 @@ internal class PropertyRepositoryCoroutinesTest {
         runBlockingTest {
 
             // GIVEN
+            val slot = slot<String>()
+
             val actual = entityList
             coEvery { remoteDataSource.getPropertyDTOs() } returns propertyDTOList
             every { mapper.map(propertyDTOList) } returns entityList
+            coEvery { localDataSource.saveOrderKey(capture(slot)) } just runs
 
             // WHEN
             val expected = repository.fetchEntitiesFromRemote()
 
             // THEN
             Truth.assertThat(expected).isEqualTo(actual)
+            Truth.assertThat(slot.captured).isEqualTo(ORDER_BY_NONE)
+
             coVerifyOrder {
                 remoteDataSource.getPropertyDTOs()
+                localDataSource.saveOrderKey(ORDER_BY_NONE)
                 mapper.map(propertyDTOList)
-            }
-        }
-
-    @Test
-    fun `given page 2 returned data returned should have current page number 2 with Pagination`() =
-        runBlockingTest {
-
-            // GIVEN
-
-            // Page 1 Pagination
-            val page1DTO = propertyDTOListPage1
-            val page1Data = entityListPage1
-
-            coEvery {
-                remoteDataSource.getPropertyDTOsWithPagination(1)
-            } returns page1DTO
-
-            every { mapper.map(page1DTO) } returns page1Data
-
-            // Page 2 Pagination
-            val page2DTO = propertyDTOListPage2
-            val page2Data = entityListPage2
-
-            coEvery {
-                remoteDataSource.getPropertyDTOsWithPagination(2)
-            } returns page2DTO
-
-            every { mapper.map(page2DTO) } returns page2Data
-
-            // WHEN
-            val expected1 = repository.fetchEntitiesFromRemoteByPage(1)
-            val page1 = repository.getCurrentPageNumber()
-
-            val expected2 = repository.fetchEntitiesFromRemoteByPage(2)
-            val page2 = repository.getCurrentPageNumber()
-
-            // THEN
-            Truth.assertThat(expected1).isEqualTo(page1Data)
-            Truth.assertThat(page1).isEqualTo(1)
-
-            Truth.assertThat(expected2).isEqualTo(page2Data)
-            Truth.assertThat(page2).isEqualTo(2)
-
-            coVerifyOrder {
-                remoteDataSource.getPropertyDTOsWithPagination(1)
-                mapper.map(page1DTO)
-                remoteDataSource.getPropertyDTOsWithPagination(2)
-                mapper.map(page2DTO)
             }
         }
 

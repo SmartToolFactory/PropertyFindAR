@@ -12,6 +12,9 @@ import com.smarttoolfactory.domain.model.PropertyItem
 import com.smarttoolfactory.domain.usecase.GetPropertiesUseCasePaged
 import com.smarttoolfactory.home.propertylist.AbstractPropertyListVM
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
@@ -35,22 +38,26 @@ class PagedPropertyListViewModel @ViewModelInject constructor(
 
     var orderKey = MutableLiveData<String>().apply { value = _orderByKey }
 
-    init {
-        updateOrderByKey()
-    }
-
-    fun updateOrderByKey() {
-        getPropertiesUseCase.getCurrentSortKey()
+    private fun getOrderByKey(): Flow<String?> {
+        return getPropertiesUseCase.getCurrentSortKey()
             .onEach {
-                _orderByKey = it
-                orderKey.value = _orderByKey
+                println("🍏 AbstractPropertyListVM init orderKey: $it")
+                _orderByKey = it ?: _orderByKey
+                orderKey.postValue(_orderByKey)
             }
-            .launchIn(coroutineScope)
+            .catch {
+                orderKey.postValue(_orderByKey)
+                println("❌ AbstractPropertyListVM init error: $it")
+            }
     }
 
     override fun getPropertyList() {
 
-        getPropertiesUseCase.getPagedOfflineLast(_orderByKey)
+        getOrderByKey()
+            .flatMapConcat {
+                println("🔥 refreshPropertyList: $it")
+                getPropertiesUseCase.getPagedOfflineLast(_orderByKey)
+            }
             .convertToFlowViewState()
             .onStart {
                 _propertyViewState.value = ViewState(status = Status.LOADING)
@@ -63,7 +70,11 @@ class PagedPropertyListViewModel @ViewModelInject constructor(
 
     override fun refreshPropertyList(orderBy: String?) {
 
-        getPropertiesUseCase.refreshData(orderBy ?: _orderByKey)
+        getOrderByKey()
+            .flatMapConcat {
+                println("🔥 refreshPropertyList: $it")
+                getPropertiesUseCase.refreshData(orderBy ?: _orderByKey)
+            }
             .convertToFlowViewState()
             .onStart {
                 _propertyViewState.value = ViewState(status = Status.LOADING)
