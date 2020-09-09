@@ -9,6 +9,23 @@
         android:id="@+id/propertyListFragment"
         android:name="com.smarttoolfactory.home.propertylist.paged.PagedPropertyListFragment"
         android:label="Flow + Pagination"
-        tools:layout="@layout/fragment_property_list_paged" />
+        tools:layout="@layout/fragment_property_list_paged">
+
+        <action
+            android:id="@+id/action_propertyListFragment_to_nav_graph_property_detail"
+            app:destination="@id/nav_graph_property_detail" />
+    </fragment>
+
+    <include-dynamic
+        android:id="@id/nav_graph_property_detail"
+        android:name="com.smarttoolfactory.property_detail"
+        app:graphResName="nav_graph_property_detail"
+        app:moduleName="property_detail">
+
+        <argument
+            android:name="property"
+            app:argType="com.smarttoolfactory.domain.model.PropertyItem" />
+
+    </include-dynamic>
 
 </navigation>

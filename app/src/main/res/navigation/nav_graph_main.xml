@@ -11,4 +11,17 @@
         android:label="MainFragment"
         tools:layout="@layout/fragment_main" />
 
+
+    <!-- Property Detail  dynamic feature module -->
+    <include-dynamic
+        android:id="@+id/nav_graph_property_detail"
+        android:name="com.smarttoolfactory.property_detail"
+        app:graphResName="nav_graph_property_detail"
+        app:moduleName="property_detail">
+
+        <argument
+            android:name="property"
+            app:argType="com.smarttoolfactory.domain.model.PropertyItem" />
+
+    </include-dynamic>
 </navigation>
