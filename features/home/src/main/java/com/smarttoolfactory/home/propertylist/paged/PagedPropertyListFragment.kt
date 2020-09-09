@@ -3,11 +3,13 @@ package com.smarttoolfactory.home.propertylist.paged
 import android.os.Bundle
 import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.smarttoolfactory.core.di.CoreModuleDependencies
 import com.smarttoolfactory.core.ui.fragment.DynamicNavigationFragment
 import com.smarttoolfactory.core.util.EndlessScrollListener
 import com.smarttoolfactory.core.util.observe
+import com.smarttoolfactory.core.viewmodel.PropertyDetailNavigationVM
 import com.smarttoolfactory.home.R
 import com.smarttoolfactory.home.adapter.PropertyItemListAdapter
 import com.smarttoolfactory.home.databinding.FragmentPropertyListPagedBinding
@@ -22,6 +24,8 @@ class PagedPropertyListFragment :
 
     @Inject
     lateinit var viewModel: PagedPropertyListViewModel
+
+    private val propertyDetailNavigationVM by activityViewModels<PropertyDetailNavigationVM>()
 
     lateinit var itemListAdapter: PropertyItemListAdapter
 
@@ -110,6 +114,10 @@ class PagedPropertyListFragment :
 
                 it.getContentIfNotHandled()?.let { propertyItem ->
                     val bundle = bundleOf("property" to propertyItem)
+                    findNavController().navigate(
+                        R.id.action_propertyListFragment_to_nav_graph_property_detail,
+                        bundle
+                    )
                 }
             }
         )

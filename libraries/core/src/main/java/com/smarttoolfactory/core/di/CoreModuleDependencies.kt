@@ -3,6 +3,7 @@ package com.smarttoolfactory.core.di
 import com.smarttoolfactory.domain.usecase.GetPropertiesUseCaseFlow
 import com.smarttoolfactory.domain.usecase.GetPropertiesUseCasePaged
 import com.smarttoolfactory.domain.usecase.GetPropertiesUseCaseRxJava3
+import com.smarttoolfactory.domain.usecase.SetPropertyStatusUseCase
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ApplicationComponent
@@ -20,4 +21,7 @@ interface CoreModuleDependencies {
     fun getPropertiesUseCaseFlow(): GetPropertiesUseCaseFlow
     fun getPropertiesUseCaseRxJava3(): GetPropertiesUseCaseRxJava3
     fun getPropertiesUseCasePaged(): GetPropertiesUseCasePaged
+
+    // Set property like or view status
+    fun setPropertyStatusUseCase(): SetPropertyStatusUseCase
 }
