@@ -2,7 +2,6 @@ package com.smarttoolfactory.propertyfindar
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.dynamicfeatures.fragment.DynamicNavHostFragment
@@ -34,7 +33,6 @@ class MainFragmentBottomNav : DynamicNavigationFragment<FragmentMainBottomNavBin
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Toast.makeText(requireContext(), "MainFragmentBottomNav", Toast.LENGTH_SHORT).show()
         if (savedInstanceState == null) {
             setupBottomNavigationBar()
         } // Else, need to wait for onRestoreInstanceState
