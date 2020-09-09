@@ -3,6 +3,8 @@
 [![ktlint](https://img.shields.io/badge/code%20style-%E2%9D%A4-FF4081.svg)](https://ktlint.github.io/)
 [![Kotlin Version](https://img.shields.io/badge/kotlin-1.4.0-blue.svg)](https://kotlinlang.org)
 [![API](https://img.shields.io/badge/API-21%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=21)
+[![codecov](https://codecov.io/gh/andremion/Theatre/graph/badge.svg)](https://codecov.io/gh/andremion/Theatre)
+
 
 ## About
 
@@ -23,7 +25,8 @@ Unit tests are written with JUnit4, JUnit5, MockK, Truth, MockWebServer.
 * In core module dagger hilt dependencies and ```@EntryPoint``` is created
 * Data module uses Retrofit and Room to provide Local and Remote data sources
 * Repository provides offline and remote fetch function with mapping and local save, delete and fetch functions
-* Pagination with database
+* Domain module uses useCase classes to implment business logic to fetch and forward data
+* ViewModel uses LiveData with data-binding to display LOADING, and ERROR or SUCCESS states.
 
 ## Built With 🛠
 
@@ -54,11 +57,22 @@ Some of the popular libraries and MVVM clean architecture used with offline-firs
     * Offline first/last with Room an Retrofit
     * [Dynamic feature modules](https://developer.android.com/studio/projects/dynamic-delivery)
 * Tests
-    * [Unit Tests](https://en.wikipedia.org/wiki/Unit_testing) ([JUnit](https://junit.org/junit4/))
-    * [Mockk](https://mockk.io/)
-    *
+    * [Unit Tests](https://en.wikipedia.org/wiki/Unit_testing) ([JUnit5](https://junit.org/junit5/)) ([JUnit4](https://junit.org/junit4/))
+    * [MockWebServer](https://github.com/square/okhttp/tree/master/mockwebserver) Mock server for testing Api requests with OkHttp and Retrofit
+    * [Mockk](https://mockk.io/) Mockking library for Kotlin
+    * [Truth](https://truth.dev) Assertion library
 * Gradle
     * [Gradle Kotlin DSL](https://docs.gradle.org/current/userguide/kotlin_dsl.html)
     * Custom tasks
-    * Plugins ([Ktlint](https://github.com/JLLeitschuh/ktlint-gradle), [Detekt](https://github.com/arturbosch/detekt#with-gradle), [SafeArgs](https://developer.android.com/guide/navigation/navigation-pass-data#Safe-args))
+    * Plugins ([Ktlint](https://github.com/JLLeitschuh/ktlint-gradle), [Detekt](https://github.com/arturbosch/detekt#with-gradle), [SafeArgs](https://developer.android.com/guide/navigation/navigation-pass-data#Safe-args)), [Git Hooks](https://githooks.com)
+
+
+### Modularaization, Library and Feature Modules
+
+Uses both library modules and dynamic feature modules
+
+## Architecture
+
+Uses concepts of clean architecture
+
 
