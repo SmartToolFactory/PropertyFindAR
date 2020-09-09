@@ -3,6 +3,7 @@ package com.smarttoolfactory.home.viewmodel
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.google.common.truth.Truth
 import com.smarttoolfactory.core.viewstate.Status
+import com.smarttoolfactory.domain.ORDER_BY_NONE
 import com.smarttoolfactory.domain.model.PropertyItem
 import com.smarttoolfactory.domain.usecase.GetPropertiesUseCaseFlow
 import com.smarttoolfactory.home.propertylist.flow.PropertyListViewModelFlow
@@ -21,6 +22,9 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
+/**
+ * ❌ FIXME Either [LiveDataTestObserver] or Flow is bugged with tests, solve the issue
+ */
 class PropertyListViewModelFlowTest {
 
     // Run tasks synchronously
@@ -73,12 +77,20 @@ class PropertyListViewModelFlowTest {
                 emit(throw Exception("Network Exception"))
             }
 
+            every {
+                useCase.getCurrentSortKey()
+            } returns flow {
+                emit((ORDER_BY_NONE))
+            }
+
             val testObserver = viewModel.propertyListViewState.test()
 
             // WHEN
+
             viewModel.getPropertyList()
 
             // THEN
+            println("💀 THEN")
             testObserver
                 .assertValue { states ->
                     (
@@ -93,9 +105,6 @@ class PropertyListViewModelFlowTest {
             verify(atMost = 1) { useCase.getPropertiesOfflineFirst() }
         }
 
-    /**
-     * ❌ FIXME This test is flaky, find out the cause, sometimes null is returned
-     */
     @Test
     fun `given useCase fetched data, should have ViewState SUCCESS and data offlineFirst`() =
         testCoroutineRule.runBlockingTest {
@@ -105,14 +114,19 @@ class PropertyListViewModelFlowTest {
                 emit(itemList)
             }
 
+            every {
+                useCase.getCurrentSortKey()
+            } returns flow<String> {
+                emit((ORDER_BY_NONE))
+            }
+
             val testObserver = viewModel.propertyListViewState.test()
 
             // WHEN
             viewModel.getPropertyList()
 
-            advanceUntilIdle()
-
             // THEN
+            println("💀 THEN")
             val viewStates = testObserver.values()
             Truth.assertThat(viewStates.first().status).isEqualTo(Status.LOADING)
 
@@ -129,7 +143,7 @@ class PropertyListViewModelFlowTest {
 
             // GIVEN
             every {
-                useCase.getPropertiesOfflineLast()
+                useCase.getPropertiesOfflineLast(ORDER_BY_NONE)
             } returns flow<List<PropertyItem>> {
                 emit(throw Exception("Network Exception"))
             }
@@ -138,6 +152,7 @@ class PropertyListViewModelFlowTest {
 
             // WHEN
             viewModel.refreshPropertyList()
+            advanceUntilIdle()
 
             // THEN
             testObserver
@@ -152,7 +167,7 @@ class PropertyListViewModelFlowTest {
             val finalState = testObserver.values()[1]
             Truth.assertThat(finalState.error?.message).isEqualTo("Network Exception")
             Truth.assertThat(finalState.error).isInstanceOf(Exception::class.java)
-            verify(atMost = 1) { useCase.getPropertiesOfflineLast() }
+            verify(atMost = 1) { useCase.getPropertiesOfflineLast(ORDER_BY_NONE) }
         }
 
     /**
@@ -164,7 +179,7 @@ class PropertyListViewModelFlowTest {
 
             // GIVEN
             every {
-                useCase.getPropertiesOfflineLast()
+                useCase.getPropertiesOfflineLast(ORDER_BY_NONE)
             } returns flow {
                 emit(itemList)
             }
@@ -173,6 +188,7 @@ class PropertyListViewModelFlowTest {
 
             // WHEN
             viewModel.refreshPropertyList()
+            advanceUntilIdle()
 
             // THEN
             val viewStates = testObserver.values()
@@ -180,7 +196,7 @@ class PropertyListViewModelFlowTest {
 
             val actual = viewStates.last().data
             Truth.assertThat(actual?.size).isEqualTo(itemList.size)
-            verify(exactly = 1) { useCase.getPropertiesOfflineLast() }
+            verify(exactly = 1) { useCase.getPropertiesOfflineLast(ORDER_BY_NONE) }
             testObserver.dispose()
         }
 

@@ -3,9 +3,9 @@ package com.smarttoolfactory.home.viewmodel
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.google.common.truth.Truth
 import com.smarttoolfactory.core.viewstate.Status
+import com.smarttoolfactory.domain.ORDER_BY_NONE
 import com.smarttoolfactory.domain.model.PropertyItem
 import com.smarttoolfactory.domain.usecase.GetPropertiesUseCaseRxJava3
-import com.smarttoolfactory.home.propertylist.AbstractPropertyListVM.Companion.ORDER_BY_NONE
 import com.smarttoolfactory.home.propertylist.rxjava.PropertyListViewModelRxJava3
 import com.smarttoolfactory.test_utils.RESPONSE_JSON_PATH
 import com.smarttoolfactory.test_utils.rule.RxImmediateSchedulerRule
@@ -72,6 +72,10 @@ class PropertyListViewModelRxJava3Test {
             useCase.getPropertiesOfflineFirst(ORDER_BY_NONE)
         } returns Single.error(Exception("Network Exception"))
 
+        every {
+            useCase.getCurrentSortKey()
+        } returns Single.just(ORDER_BY_NONE)
+
         val testObserver = viewModel.propertyListViewState.test()
 
         // WHEN
@@ -97,6 +101,9 @@ class PropertyListViewModelRxJava3Test {
 
         // GIVEN
         every { useCase.getPropertiesOfflineFirst(ORDER_BY_NONE) } returns Single.just(itemList)
+        every {
+            useCase.getCurrentSortKey()
+        } returns Single.just(ORDER_BY_NONE)
 
         val testObserver = viewModel.propertyListViewState.test()
 
@@ -115,7 +122,9 @@ class PropertyListViewModelRxJava3Test {
         val finalState = testObserver.values()[1]
         val actual = finalState.data
         Truth.assertThat(actual?.size).isEqualTo(itemList.size)
+
         verify(exactly = 1) { useCase.getPropertiesOfflineFirst(ORDER_BY_NONE) }
+        verify(exactly = 1) { useCase.getCurrentSortKey(ORDER_BY_NONE) }
         testObserver.dispose()
     }
 

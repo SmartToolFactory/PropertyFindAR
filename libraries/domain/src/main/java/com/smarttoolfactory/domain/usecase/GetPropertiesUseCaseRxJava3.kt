@@ -124,7 +124,7 @@ class GetPropertiesUseCaseRxJava3 @Inject constructor(
     /**
      * Get current sort key from db
      */
-    fun getCurrentSortKey(defaultKey: String = ORDER_BY_NONE): Single<String> {
+    fun getCurrentSortKey(defaultKey: String = ORDER_BY_NONE): Single<String?> {
         return repository.getSortOrderKey()
             .onErrorResumeNext {
                 Single.just(defaultKey)

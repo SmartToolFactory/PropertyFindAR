@@ -137,7 +137,7 @@ class GetPropertiesUseCaseFlow @Inject constructor(
     /**
      * Get current sort key from db
      */
-    fun getCurrentSortKey(defaultKey: String = ORDER_BY_NONE): Flow<String> {
+    fun getCurrentSortKey(defaultKey: String = ORDER_BY_NONE): Flow<String?> {
         return flow { emit(repository.getSortOrderKey()) }
             .catch {
                 emitAll(flowOf(defaultKey))
