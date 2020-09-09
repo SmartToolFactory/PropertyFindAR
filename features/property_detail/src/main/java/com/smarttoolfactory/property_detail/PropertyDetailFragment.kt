@@ -1,18 +1,43 @@
 package com.smarttoolfactory.property_detail
 
 import android.os.Bundle
-import android.view.View
-import android.widget.Toast
+import com.smarttoolfactory.core.di.CoreModuleDependencies
 import com.smarttoolfactory.core.ui.fragment.DynamicNavigationFragment
+import com.smarttoolfactory.domain.model.PropertyItem
 import com.smarttoolfactory.property_detail.databinding.FragmentPropertyDetailBinding
+import com.smarttoolfactory.property_detail.di.DaggerPropertyDetailComponent
+import dagger.hilt.android.EntryPointAccessors
+import javax.inject.Inject
 
 class PropertyDetailFragment : DynamicNavigationFragment<FragmentPropertyDetailBinding>() {
 
     override fun getLayoutRes(): Int = R.layout.fragment_property_detail
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    @Inject
+    lateinit var viewModel: PropertyDetailViewModel
 
-        Toast.makeText(requireContext(), "Property DFM Module Fragment", Toast.LENGTH_SHORT).show()
+    override fun bindViews() {
+        // Get Post from navigation component arguments
+        val property = arguments?.get("property") as PropertyItem
+        dataBinding.item = property
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        initCoreDependentInjection()
+        super.onCreate(savedInstanceState)
+    }
+
+    private fun initCoreDependentInjection() {
+
+        val coreModuleDependencies = EntryPointAccessors.fromApplication(
+            requireActivity().applicationContext,
+            CoreModuleDependencies::class.java
+        )
+
+        DaggerPropertyDetailComponent.factory().create(
+            dependentModule = coreModuleDependencies,
+            fragment = this
+        )
+            .inject(this)
     }
 }
