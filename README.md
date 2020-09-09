@@ -11,10 +11,9 @@ Sample project that build with MVVM clean architure and various cool techs inclu
 
 Unit tests are written with JUnit4, JUnit5, MockK, Truth, MockWebServer.
 
-| Flow      | RxJava3   | Pagination
-| ------------------|-------------| -----|--------------|
+| Flow      | RxJava3   | Pagination |
+| ------------------|-------------| -----|
 | <img src="./screenshots/property_flow.png"/> | <img src="./screenshots/property_rxjava3.png"/> | <img src="./screenshots/property_pagination.png"/> |
-
 
 ## Overview
 * Gradle Kotlin DSL is used for setting up gradle files with ```buildSrc``` folder and extensions.
@@ -26,6 +25,8 @@ Unit tests are written with JUnit4, JUnit5, MockK, Truth, MockWebServer.
 * Repository provides offline and remote fetch function with mapping and local save, delete and fetch functions
 * Domain module uses useCase classes to implment business logic to fetch and forward data
 * ViewModel uses LiveData with data-binding to display LOADING, and ERROR or SUCCESS states.
+
+<img src="/./screenshots/property.gif" align="right" width="32%"/>
 
 ## Built With 🛠
 
