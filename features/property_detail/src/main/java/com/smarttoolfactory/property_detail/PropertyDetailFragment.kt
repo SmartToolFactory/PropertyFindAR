@@ -27,7 +27,7 @@ class PropertyDetailFragment : DynamicNavigationFragment<FragmentPropertyDetailB
     override fun bindViews() {
         // Get Post from navigation component arguments
         val property = arguments?.get("property") as PropertyItem
-        dataBinding.item = property
+        dataBinding!!.item = property
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

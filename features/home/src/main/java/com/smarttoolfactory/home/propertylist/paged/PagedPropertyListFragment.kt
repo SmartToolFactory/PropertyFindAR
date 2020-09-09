@@ -48,9 +48,9 @@ class PagedPropertyListFragment :
     }
 
     override fun bindViews() {
-        dataBinding.viewModel = viewModel
+        dataBinding!!.viewModel = viewModel
 
-        dataBinding.recyclerView.apply {
+        dataBinding!!.recyclerView.apply {
 
             // Set Layout manager
             val linearLayoutManager =
@@ -75,7 +75,7 @@ class PagedPropertyListFragment :
             this.addOnScrollListener(endlessScrollListener)
         }
 
-        val swipeRefreshLayout = dataBinding.swipeRefreshLayout
+        val swipeRefreshLayout = dataBinding!!.swipeRefreshLayout
 
         swipeRefreshLayout.setOnRefreshListener {
             swipeRefreshLayout.isRefreshing = false
@@ -149,5 +149,10 @@ class PagedPropertyListFragment :
 
     override fun onScrollToBottom() {
         viewModel.getPropertyList()
+    }
+
+    override fun onDestroyView() {
+        dataBinding!!.swipeRefreshLayout.setOnRefreshListener(null)
+        super.onDestroyView()
     }
 }
