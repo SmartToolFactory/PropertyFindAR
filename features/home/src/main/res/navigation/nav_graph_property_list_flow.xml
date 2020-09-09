@@ -10,6 +10,26 @@
         android:name="com.smarttoolfactory.home.propertylist.flow.PropertyListFlowFragment"
         android:label="Properties with Flow"
         tools:layout="@layout/fragment_property_list">
+
+        <action
+            android:id="@+id/action_propertyListFragment_to_nav_graph_property_detail"
+            app:destination="@id/nav_graph_property_detail"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
+
+    <include-dynamic
+        android:id="@id/nav_graph_property_detail"
+        android:name="com.smarttoolfactory.property_detail"
+        app:graphResName="nav_graph_property_detail"
+        app:moduleName="property_detail">
+
+        <argument
+            android:name="property"
+            app:argType="com.smarttoolfactory.domain.model.PropertyItem" />
+
+    </include-dynamic>
 
 </navigation>

@@ -2,11 +2,22 @@ package com.smarttoolfactory.propertyfindar
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.os.bundleOf
+import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.smarttoolfactory.core.ui.fragment.DynamicNavigationFragment
+import com.smarttoolfactory.core.util.observe
+import com.smarttoolfactory.core.viewmodel.PropertyDetailNavigationVM
 import com.smarttoolfactory.propertyfindar.databinding.FragmentMainBinding
 import com.smarttoolfactory.propertyfindar.ui.BottomNavigationFragmentStateAdapter
 
 class MainFragment : DynamicNavigationFragment<FragmentMainBinding>() {
+
+    /**
+     * ViewModel for navigating to property detail screen from Main Fragment
+     */
+    private val propertyDetailNavigationVM by activityViewModels<PropertyDetailNavigationVM>()
 
     override fun getLayoutRes(): Int = R.layout.fragment_main
 
@@ -51,7 +62,26 @@ class MainFragment : DynamicNavigationFragment<FragmentMainBinding>() {
                 }
             }
         }
-        false
+        subscribePropertyDetailNavigation()
+    }
+
+    /**
+     * Navigates to Property Detail fragment from this fragment that replacing main fragment
+     * that contains [BottomNavigationView]
+     */
+    private fun subscribePropertyDetailNavigation() {
+        viewLifecycleOwner.observe(propertyDetailNavigationVM.goToPropertyDetailFromMain) {
+
+            it.getContentIfNotHandled()?.let { propertyItem ->
+                val bundle = bundleOf("property" to propertyItem)
+
+                findNavController()
+                    .navigate(
+                        R.id.action_mainFragment_to_propertyDetailFragment,
+                        bundle
+                    )
+            }
+        }
     }
 
     override fun onDestroyView() {

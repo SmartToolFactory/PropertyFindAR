@@ -11,9 +11,9 @@ Sample project that build with MVVM clean architure and various cool techs inclu
 
 Unit tests are written with JUnit4, JUnit5, MockK, Truth, MockWebServer.
 
-| Flow      | RxJava3   | Pagination | Favorites
+| Flow      | RxJava3   | Pagination
 | ------------------|-------------| -----|--------------|
-| <img src="./screenshots/property_flow.png"/> | <img src="./screenshots/property_rxjava3.png"/> | <img src="./screenshots/property_pagination.png"/> |<img src="./screenshots/favorites.png"/> |
+| <img src="./screenshots/property_flow.png"/> | <img src="./screenshots/property_rxjava3.png"/> | <img src="./screenshots/property_pagination.png"/> |
 
 
 ## Overview
