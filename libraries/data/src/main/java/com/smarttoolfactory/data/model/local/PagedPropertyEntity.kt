@@ -5,17 +5,14 @@ import androidx.room.Entity
 import com.smarttoolfactory.data.model.IEntity
 
 /**
- * Properties retrieved via REST is converted to [PropertyEntity] to store
- * in database for offline-first or online-first.
+ * Properties for PAGING which are retrieved via REST is converted
+ * to [PagedPropertyEntity] to store in database for offline-first or online-first.
  *
  * * Implements [IEntity] marker interface for mapping this database items from REST DTOs or
  * to UI items
- *
- * * Insert order is required for getting data same order they are inserted since ordering is
- * done in server side.
  */
-@Entity(tableName = "property", primaryKeys = ["insert_order"])
-data class PropertyEntity(
+@Entity(tableName = "paged_property", primaryKeys = ["insert_order"])
+data class PagedPropertyEntity(
 
     @ColumnInfo(name = "insert_order")
     var insertOrder: Int = 0,

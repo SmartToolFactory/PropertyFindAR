@@ -1,4 +1,4 @@
-package com.smarttoolfactory.home.viewmodel
+package com.smarttoolfactory.home.propertylist.rxjava
 
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
@@ -10,7 +10,9 @@ import com.smarttoolfactory.core.viewstate.ViewState
 import com.smarttoolfactory.domain.ORDER_BY_NONE
 import com.smarttoolfactory.domain.model.PropertyItem
 import com.smarttoolfactory.domain.usecase.GetPropertiesUseCaseRxJava3
+import com.smarttoolfactory.home.propertylist.AbstractPropertyListVM
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
 
 class PropertyListViewModelRxJava3 @ViewModelInject constructor(
@@ -31,28 +33,25 @@ class PropertyListViewModelRxJava3 @ViewModelInject constructor(
 
     var orderKey = MutableLiveData<String>().apply { value = _orderByKey }
 
-    init {
-        updateOrderByKey()
-    }
-
-    private fun updateOrderByKey() {
-        getPropertiesUseCase.getCurrentSortKey()
+    private fun getOrderByKey(): Single<String?> {
+        return getPropertiesUseCase.getCurrentSortKey()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                {
-                    _orderByKey = it
-
-                    orderKey.value = _orderByKey
-                },
-                {
-                    println("PropertyListViewModelRxJava3 init error: $it")
-                }
-            )
+            .doOnSuccess {
+                _orderByKey = it ?: _orderByKey
+                orderKey.postValue(_orderByKey)
+            }
+            .onErrorResumeNext {
+                Single.just(_orderByKey)
+            }
     }
 
     override fun getPropertyList() {
-        getPropertiesUseCase.getPropertiesOfflineFirst(_orderByKey)
+
+        getOrderByKey()
+            .flatMap {
+                getPropertiesUseCase.getPropertiesOfflineFirst(_orderByKey)
+            }
             .convertFromSingleToObservableViewStateWithLoading()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(

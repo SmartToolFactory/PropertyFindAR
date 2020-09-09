@@ -109,49 +109,7 @@ class GetPropertiesUseCaseFlow @Inject constructor(
                         data.forEachIndexed { index, propertyEntity ->
                             propertyEntity.insertOrder = index
                         }
-
-                        data
-                    }
-                } else {
-                    it
-                }
-            }
-            .flowOn(dispatcherProvider.ioDispatcher)
-            .catch { throwable ->
-                emitAll(flowOf(listOf()))
-            }
-            .map {
-                toPropertyListOrError(it)
-            }
-
-//        return flow { emit((repository.getSortOrderKey() ?: ORDER_BY_NONE) == orderBy) }
-//            .flatMapConcat { sameFilter ->
-//
-//                if (sameFilter) {
-//                    getOfflineFirstPropertyListFlow()
-//                } else {
-//                    getPropertiesOfflineLast(orderBy)
-//                }
-//            }
-    }
-
-    private fun getOfflineFirstPropertyListFlow(): Flow<List<PropertyItem>> {
-        return flow {
-            emit(repository.getPropertyEntitiesFromLocal())
-        }
-            .catch { throwable ->
-                emitAll(flowOf(listOf()))
-            }
-            .map {
-                if (it.isEmpty()) {
-                    repository.run {
-                        val data = fetchEntitiesFromRemote()
-                        deletePropertyEntities()
-
-                        // 🔥 Add an insert order since we are not using Room's ORDER BY
-                        data.forEachIndexed { index, propertyEntity ->
-                            propertyEntity.insertOrder = index
-                        }
+                        savePropertyEntities(data)
 
                         data
                     }
@@ -176,7 +134,10 @@ class GetPropertiesUseCaseFlow @Inject constructor(
         }
     }
 
-    fun getCurrentSortKey(defaultKey: String = ORDER_BY_NONE): Flow<String> {
+    /**
+     * Get current sort key from db
+     */
+    fun getCurrentSortKey(defaultKey: String = ORDER_BY_NONE): Flow<String?> {
         return flow { emit(repository.getSortOrderKey()) }
             .catch {
                 emitAll(flowOf(defaultKey))

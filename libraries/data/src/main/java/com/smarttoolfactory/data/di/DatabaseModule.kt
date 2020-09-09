@@ -4,6 +4,8 @@ import android.app.Application
 import androidx.room.Room
 import com.smarttoolfactory.data.constant.DATABASE_NAME
 import com.smarttoolfactory.data.db.MIGRATION_1_2
+import com.smarttoolfactory.data.db.MIGRATION_2_3
+import com.smarttoolfactory.data.db.PagedPropertyDao
 import com.smarttoolfactory.data.db.PropertyDaoCoroutines
 import com.smarttoolfactory.data.db.PropertyDaoRxJava3
 import com.smarttoolfactory.data.db.PropertyDatabase
@@ -27,7 +29,7 @@ class DatabaseModule {
             PropertyDatabase::class.java,
             DATABASE_NAME
         )
-            .addMigrations(MIGRATION_1_2)
+            .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
             .build()
     }
 
@@ -50,4 +52,9 @@ class DatabaseModule {
     @Provides
     fun provideSortOrderDaoRxJava3(appDatabase: PropertyDatabase): SortOrderDaoRxJava3 =
         appDatabase.propertySortDaoRxJava()
+
+    @Singleton
+    @Provides
+    fun providePagedPropertyDao(appDatabase: PropertyDatabase): PagedPropertyDao =
+        appDatabase.pagedPropertyDao()
 }

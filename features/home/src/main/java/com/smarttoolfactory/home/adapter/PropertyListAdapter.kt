@@ -1,5 +1,6 @@
 package com.smarttoolfactory.home.adapter
 
+import android.graphics.Color
 import android.widget.ImageButton
 import androidx.annotation.LayoutRes
 import androidx.databinding.ViewDataBinding
@@ -57,12 +58,15 @@ class PropertyItemListAdapter(
                         onLikeButtonClick(this)
 
                         // Set image source of like button
+                        val likeImageButton = (likeButton as? ImageButton)
                         val imageResource = if (isFavorite) {
-                            R.drawable.ic_baseline_favorite_24
+                            likeImageButton?.setColorFilter(Color.rgb(244, 81, 30))
+                            R.drawable.ic_baseline_favorite_30
                         } else {
-                            R.drawable.ic_baseline_favorite_border_24
+                            likeImageButton?.setColorFilter(Color.rgb(41, 182, 246))
+                            R.drawable.ic_baseline_favorite_border_30
                         }
-                        (likeButton as? ImageButton)?.setImageResource(imageResource)
+                        likeImageButton?.setImageResource(imageResource)
                     }
                 }
             }
@@ -78,17 +82,11 @@ class PropertyItemListAdapter(
  */
 class PropertyItemDiffCallback : DiffUtil.ItemCallback<PropertyItem>() {
 
-    override fun areItemsTheSame(
-        oldItem: PropertyItem,
-        newItem: PropertyItem
-    ): Boolean {
-        return oldItem === newItem
+    override fun areItemsTheSame(oldItem: PropertyItem, newItem: PropertyItem): Boolean {
+        return oldItem.id == newItem.id
     }
 
-    override fun areContentsTheSame(
-        oldItem: PropertyItem,
-        newItem: PropertyItem
-    ): Boolean {
-        return oldItem.id == newItem.id
+    override fun areContentsTheSame(oldItem: PropertyItem, newItem: PropertyItem): Boolean {
+        return oldItem == newItem
     }
 }

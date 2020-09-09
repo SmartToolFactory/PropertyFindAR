@@ -7,9 +7,8 @@
 
     <fragment
         android:id="@+id/propertyListFragment"
-        android:name="com.smarttoolfactory.home.propertylist.flow.PropertyListFlowFragment"
-        android:label="Properties with Flow"
-        tools:layout="@layout/fragment_property_list">
-    </fragment>
+        android:name="com.smarttoolfactory.home.propertylist.paged.PagedPropertyListFragment"
+        android:label="Flow + Pagination"
+        tools:layout="@layout/fragment_property_list_paged" />
 
 </navigation>

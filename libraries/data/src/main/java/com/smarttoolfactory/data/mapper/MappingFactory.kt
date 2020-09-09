@@ -3,6 +3,7 @@ package com.smarttoolfactory.data.mapper
 import com.smarttoolfactory.data.model.IEntity
 import com.smarttoolfactory.data.model.Mappable
 import com.smarttoolfactory.data.model.local.BrokerEntity
+import com.smarttoolfactory.data.model.local.PagedPropertyEntity
 import com.smarttoolfactory.data.model.local.PropertyEntity
 import com.smarttoolfactory.data.model.remote.BrokerDTO
 import com.smarttoolfactory.data.model.remote.PropertyDTO
@@ -53,6 +54,70 @@ class PropertyDTOtoEntityListMapper @Inject constructor() :
         return input.map { input ->
 
             PropertyEntity(
+                id = input.id,
+                update = input.update,
+                categoryId = input.categoryId,
+                title = input.title,
+                subject = input.subject,
+                type = input.type,
+                typeId = input.typeId,
+                thumbnail = input.thumbnail,
+                thumbnailBig = input.thumbnailBig,
+                imageCount = input.imageCount,
+                price = input.price,
+                pricePeriod = input.pricePeriod,
+                pricePeriodRaw = input.pricePeriodRaw,
+                priceLabel = input.priceLabel,
+                priceValue = input.priceValue,
+                priceValueRaw = input.priceValueRaw,
+                currency = input.currency,
+                featured = input.featured,
+                location = input.location,
+                area = input.area,
+                poa = input.poa,
+                reraPermit = input.reraPermit,
+                bathrooms = input.bathrooms,
+                bedrooms = input.bedrooms,
+                dateInsert = input.dateInsert,
+                dateUpdate = input.dateUpdate,
+                agentName = input.agentName,
+                brokerName = input.brokerName,
+                agentLicense = input.agentLicense,
+                locationId = input.locationId,
+                hideLocation = input.hideLocation,
+
+                // Maps BrokerEntity
+                broker =
+                    MapperFactory.createMapper<BrokerDTOtoEntityMapper>().map(input.broker),
+                // Maps List<String>
+                amenities = input.amenities,
+                amenitiesKeys = input.amenitiesKeys,
+
+                latitude = input.lat,
+                longitude = input.long,
+                premium = input.premium,
+                livingrooms = input.livingrooms,
+                verified = input.verified,
+
+                // Maps List<String>
+                gallery = input.gallery,
+                phone = input.phone,
+
+                // Maps List<String>
+                leadEmailReceivers = input.leadEmailReceivers,
+                reference = input.reference,
+            )
+        }
+    }
+}
+
+class PropertyDTOtoPagedEntityListMapper @Inject constructor() :
+    ListMapper<PropertyDTO, PagedPropertyEntity> {
+
+    override fun map(input: List<PropertyDTO>): List<PagedPropertyEntity> {
+
+        return input.map { input ->
+            PagedPropertyEntity(
                 id = input.id,
                 update = input.update,
                 categoryId = input.categoryId,

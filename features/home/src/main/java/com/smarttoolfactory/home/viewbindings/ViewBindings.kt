@@ -1,5 +1,6 @@
 package com.smarttoolfactory.home.viewbindings
 
+import android.graphics.Color
 import android.view.View
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -63,6 +64,12 @@ fun View.visibilityBasedOn(condition: Boolean) {
 
 @BindingAdapter("favoriteImageSrc")
 fun ImageButton.setFavoriteImageSrc(favorite: Boolean) {
+
+    if (favorite) {
+        setColorFilter(Color.rgb(244, 81, 30))
+    } else {
+        setColorFilter(Color.rgb(41, 182, 246))
+    }
 
     val imageResource = if (favorite) R.drawable.ic_baseline_favorite_30
     else R.drawable.ic_baseline_favorite_border_30

@@ -1,7 +1,10 @@
 package com.smarttoolfactory.data.repository
 
 import com.smarttoolfactory.data.mapper.PropertyDTOtoEntityListMapper
+import com.smarttoolfactory.data.mapper.PropertyDTOtoPagedEntityListMapper
+import com.smarttoolfactory.data.model.local.PagedPropertyEntity
 import com.smarttoolfactory.data.model.local.PropertyEntity
+import com.smarttoolfactory.data.source.LocalPagedPropertyDataSource
 import com.smarttoolfactory.data.source.LocalPropertyDataSourceCoroutines
 import com.smarttoolfactory.data.source.LocalPropertyDataSourceRxJava3
 import com.smarttoolfactory.data.source.RemotePropertyDataSourceCoroutines
@@ -16,24 +19,10 @@ class PropertyRepositoryImplCoroutines @Inject constructor(
     private val mapper: PropertyDTOtoEntityListMapper
 ) : PropertyRepositoryCoroutines {
 
-    private var currentPageNumber = 0
-
-    override fun getCurrentPageNumber(): Int {
-        return currentPageNumber
-    }
-
     override suspend fun fetchEntitiesFromRemote(orderBy: String): List<PropertyEntity> {
+        val data = remoteDataSource.getPropertyDTOs(orderBy)
         saveSortOrderKey(orderBy)
-        return mapper.map(remoteDataSource.getPropertyDTOs(orderBy))
-    }
-
-    override suspend fun fetchEntitiesFromRemoteByPage(
-        page: Int,
-        orderBy: String
-    ): List<PropertyEntity> {
-        currentPageNumber = page
-        saveSortOrderKey(orderBy)
-        return mapper.map(remoteDataSource.getPropertyDTOsWithPagination(page, orderBy))
+        return mapper.map(data)
     }
 
     override suspend fun getPropertyEntitiesFromLocal(): List<PropertyEntity> {
@@ -63,12 +52,6 @@ class PropertyRepositoryImlRxJava3 @Inject constructor(
     private val mapper: PropertyDTOtoEntityListMapper
 ) : PropertyRepositoryRxJava3 {
 
-    private var currentPageNumber = 0
-
-    override fun getCurrentPageNumber(): Int {
-        return currentPageNumber
-    }
-
     override fun fetchEntitiesFromRemote(orderBy: String): Single<List<PropertyEntity>> {
 
         return remoteDataSource.getPropertyDTOs(orderBy)
@@ -76,17 +59,6 @@ class PropertyRepositoryImlRxJava3 @Inject constructor(
                 saveSortOrderKey(orderBy)
                 mapper.map(it)
             }
-    }
-
-    override fun fetchEntitiesFromRemoteByPage(
-        page: Int,
-        orderBy: String
-    ): Single<List<PropertyEntity>> {
-        return remoteDataSource.getPropertyDTOsWithPagination(page, orderBy).map {
-            this.currentPageNumber = page
-            saveSortOrderKey(orderBy)
-            mapper.map(it)
-        }
     }
 
     override fun getPropertyEntitiesFromLocal(): Single<List<PropertyEntity>> {
@@ -106,6 +78,59 @@ class PropertyRepositoryImlRxJava3 @Inject constructor(
     }
 
     override fun getSortOrderKey(): Single<String> {
-        return localDataSource.getOrderkey()
+        return localDataSource.getOrderKey()
+    }
+}
+
+class PagedPropertyRepositoryImpl @Inject constructor(
+    private val localDataSource: LocalPagedPropertyDataSource,
+    private val remoteDataSource: RemotePropertyDataSourceCoroutines,
+    private val mapper: PropertyDTOtoPagedEntityListMapper
+) : PagedPropertyRepository {
+
+    private var currentPageNumber = 1
+
+    override fun getCurrentPageNumber(): Int {
+        return currentPageNumber
+    }
+
+    override suspend fun fetchEntitiesFromRemoteByPage(
+        orderBy: String
+    ): List<PagedPropertyEntity> {
+
+        val data = remoteDataSource.getPropertyDTOsWithPagination(
+            currentPageNumber++,
+            orderBy
+        )
+        saveSortOrderKey(orderBy)
+        return mapper.map(data)
+    }
+
+    override suspend fun getPropertyCount(): Int {
+        return localDataSource.getPropertyCount()
+    }
+
+    override fun resetPageCount() {
+        currentPageNumber = 1
+    }
+
+    override suspend fun getPropertyEntitiesFromLocal(): List<PagedPropertyEntity> {
+        return localDataSource.getPropertyEntities()
+    }
+
+    override suspend fun savePropertyEntities(propertyEntities: List<PagedPropertyEntity>) {
+        localDataSource.saveEntities(propertyEntities)
+    }
+
+    override suspend fun deletePropertyEntities() {
+        localDataSource.deletePropertyEntities()
+    }
+
+    override suspend fun saveSortOrderKey(orderBy: String) {
+        localDataSource.saveOrderKey(orderBy)
+    }
+
+    override suspend fun getSortOrderKey(): String {
+        return localDataSource.getOrderKey()
     }
 }

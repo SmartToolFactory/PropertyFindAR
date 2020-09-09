@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/propertyListFragment"
-        android:name="com.smarttoolfactory.home.propertylist.PropertyListRxjava3Fragment"
+        android:name="com.smarttoolfactory.home.propertylist.rxjava.PropertyListRxjava3Fragment"
         android:label="Properties with RxJava3"
         tools:layout="@layout/fragment_property_list">
     </fragment>
