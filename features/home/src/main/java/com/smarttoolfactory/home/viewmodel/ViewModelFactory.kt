@@ -5,6 +5,9 @@ import androidx.lifecycle.ViewModelProvider
 import com.smarttoolfactory.domain.usecase.GetPropertiesUseCaseFlow
 import com.smarttoolfactory.domain.usecase.GetPropertiesUseCasePaged
 import com.smarttoolfactory.domain.usecase.GetPropertiesUseCaseRxJava3
+import com.smarttoolfactory.home.propertylist.flow.PropertyListViewModelFlow
+import com.smarttoolfactory.home.propertylist.paged.PagedPropertyListViewModel
+import com.smarttoolfactory.home.propertylist.rxjava.PropertyListViewModelRxJava3
 import javax.inject.Inject
 import kotlinx.coroutines.CoroutineScope
 

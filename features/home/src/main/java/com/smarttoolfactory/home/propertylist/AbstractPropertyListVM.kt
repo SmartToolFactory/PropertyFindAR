@@ -1,4 +1,4 @@
-package com.smarttoolfactory.home.viewmodel
+package com.smarttoolfactory.home.propertylist
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel

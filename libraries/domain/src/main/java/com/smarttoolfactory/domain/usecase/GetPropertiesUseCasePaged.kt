@@ -49,8 +49,7 @@ class GetPropertiesUseCasePaged @Inject constructor(
                             propertyEntity.insertOrder = propertyCount + index
                         }
                         savePropertyEntities(it)
-                        val data = getPropertyEntitiesFromLocal()
-                        data
+                        getPropertyEntitiesFromLocal()
                     }
                 }
             }

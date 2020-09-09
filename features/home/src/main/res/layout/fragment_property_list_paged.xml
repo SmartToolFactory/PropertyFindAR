@@ -9,7 +9,7 @@
 
         <variable
             name="viewModel"
-            type="com.smarttoolfactory.home.viewmodel.PagedPropertyListViewModel" />
+            type="com.smarttoolfactory.home.propertylist.paged.PagedPropertyListViewModel" />
     </data>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
