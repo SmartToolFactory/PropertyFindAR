@@ -60,4 +60,4 @@ data class PropertyItem(
 
     var displayCount: Int = 0,
     var isFavorite: Boolean = false
-) : Parcelable
+) : Parcelable, Item

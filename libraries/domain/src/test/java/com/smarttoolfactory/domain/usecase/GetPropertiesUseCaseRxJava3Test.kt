@@ -211,7 +211,6 @@ class GetPropertiesUseCaseRxJava3Test {
         fun `given Local source has data, should return data`() {
 
             // GIVEN
-            every { repository.getOrderFilter() } returns ORDER_BY_NONE
             every { repository.getPropertyEntitiesFromLocal() } returns Single.just(entityList)
             every { mapper.map(entityList) } returns itemList
 
@@ -228,7 +227,6 @@ class GetPropertiesUseCaseRxJava3Test {
                 .dispose()
 
             verifySequence {
-                repository.getOrderFilter()
                 repository.getPropertyEntitiesFromLocal()
                 mapper.map(entityList)
             }
@@ -238,7 +236,6 @@ class GetPropertiesUseCaseRxJava3Test {
         fun `given Local source is empty, should fetch data from Remote`() {
 
             // GIVEN
-            every { repository.getOrderFilter() } returns ORDER_BY_NONE
             every { repository.getPropertyEntitiesFromLocal() } returns Single.just(listOf())
             every { repository.fetchEntitiesFromRemote() } returns Single.just(entityList)
             every { repository.deletePropertyEntities() } returns Completable.complete()
@@ -260,7 +257,6 @@ class GetPropertiesUseCaseRxJava3Test {
                 .dispose()
 
             verifySequence {
-                repository.getOrderFilter()
                 repository.getPropertyEntitiesFromLocal()
                 repository.fetchEntitiesFromRemote()
                 repository.deletePropertyEntities()
@@ -273,7 +269,6 @@ class GetPropertiesUseCaseRxJava3Test {
         fun `given exception returned from Local source should fetch data from Remote`() {
 
             // GIVEN
-            every { repository.getOrderFilter() } returns ORDER_BY_NONE
             every {
                 repository.getPropertyEntitiesFromLocal()
             } returns Single.error(SQLException("Database Exception"))
@@ -297,7 +292,6 @@ class GetPropertiesUseCaseRxJava3Test {
                 .dispose()
 
             verifySequence {
-                repository.getOrderFilter()
                 repository.getPropertyEntitiesFromLocal()
                 repository.fetchEntitiesFromRemote()
                 repository.deletePropertyEntities()
@@ -310,7 +304,6 @@ class GetPropertiesUseCaseRxJava3Test {
         fun `given Local source is empty and Remote returned error, should throw exception`() {
 
             // GIVEN
-            every { repository.getOrderFilter() } returns ORDER_BY_NONE
             every { repository.getPropertyEntitiesFromLocal() } returns Single.just(listOf())
 
             every {
@@ -329,7 +322,6 @@ class GetPropertiesUseCaseRxJava3Test {
                 .dispose()
 
             verifySequence {
-                repository.getOrderFilter()
                 repository.getPropertyEntitiesFromLocal()
                 repository.fetchEntitiesFromRemote()
             }

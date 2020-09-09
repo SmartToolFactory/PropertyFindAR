@@ -20,8 +20,9 @@ class PropertyRepositoryImplCoroutines @Inject constructor(
 ) : PropertyRepositoryCoroutines {
 
     override suspend fun fetchEntitiesFromRemote(orderBy: String): List<PropertyEntity> {
+        val data = remoteDataSource.getPropertyDTOs(orderBy)
         saveSortOrderKey(orderBy)
-        return mapper.map(remoteDataSource.getPropertyDTOs(orderBy))
+        return mapper.map(data)
     }
 
     override suspend fun getPropertyEntitiesFromLocal(): List<PropertyEntity> {
@@ -97,13 +98,12 @@ class PagedPropertyRepositoryImpl @Inject constructor(
         orderBy: String
     ): List<PagedPropertyEntity> {
 
-        saveSortOrderKey(orderBy)
-        return mapper.map(
-            remoteDataSource.getPropertyDTOsWithPagination(
-                currentPageNumber++,
-                orderBy
-            )
+        val data = remoteDataSource.getPropertyDTOsWithPagination(
+            currentPageNumber++,
+            orderBy
         )
+        saveSortOrderKey(orderBy)
+        return mapper.map(data)
     }
 
     override suspend fun getPropertyCount(): Int {

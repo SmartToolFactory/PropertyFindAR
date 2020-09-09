@@ -3,6 +3,7 @@ package com.smarttoolfactory.data.source
 import com.google.common.truth.Truth
 import com.smarttoolfactory.data.api.PropertyApiCoroutines
 import com.smarttoolfactory.data.db.PropertyDaoCoroutines
+import com.smarttoolfactory.data.db.SortOrderDaoCoroutines
 import com.smarttoolfactory.data.mapper.MapperFactory
 import com.smarttoolfactory.data.mapper.PropertyDTOtoEntityListMapper
 import com.smarttoolfactory.data.model.local.PropertyEntity
@@ -100,6 +101,7 @@ class PropertyDataSourceCoroutinesTest {
         private val dao = mockk<PropertyDaoCoroutines>()
 
         private lateinit var localDataSource: LocalPropertyDataSourceCoroutines
+        private val sortDao = mockk<SortOrderDaoCoroutines>()
 
         @Test
         fun `given DB is empty should return an empty list`() = runBlockingTest {
@@ -163,12 +165,12 @@ class PropertyDataSourceCoroutinesTest {
 
         @BeforeEach
         fun setUp() {
-            localDataSource = LocalPropertyDataSourceImpl(dao)
+            localDataSource = LocalPropertyDataSourceImpl(dao, sortDao)
         }
 
         @AfterEach
         fun tearDown() {
-            clearMocks(dao)
+            clearMocks(dao, sortDao)
         }
     }
 }

@@ -3,6 +3,7 @@ package com.smarttoolfactory.data.source
 import com.google.common.truth.Truth
 import com.smarttoolfactory.data.api.PropertyApiRxJava
 import com.smarttoolfactory.data.db.PropertyDaoRxJava3
+import com.smarttoolfactory.data.db.SortOrderDaoRxJava3
 import com.smarttoolfactory.data.mapper.MapperFactory
 import com.smarttoolfactory.data.mapper.PropertyDTOtoEntityListMapper
 import com.smarttoolfactory.data.model.local.PropertyEntity
@@ -100,6 +101,7 @@ class PropertyDataSourceRxJava3Test {
     inner class LocalDataSourceTest {
 
         private val dao = mockk<PropertyDaoRxJava3>()
+        private val sortDao = mockk<SortOrderDaoRxJava3>()
 
         private lateinit var localDataSource: LocalDataSourceRxJava3Impl
 
@@ -167,12 +169,12 @@ class PropertyDataSourceRxJava3Test {
 
         @BeforeEach
         fun setUp() {
-            localDataSource = LocalDataSourceRxJava3Impl(dao)
+            localDataSource = LocalDataSourceRxJava3Impl(dao, sortDao)
         }
 
         @AfterEach
         fun tearDown() {
-            clearMocks(dao)
+            clearMocks(dao, sortDao)
         }
     }
 }

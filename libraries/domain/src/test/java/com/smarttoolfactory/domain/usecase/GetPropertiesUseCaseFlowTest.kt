@@ -252,7 +252,6 @@ class GetPropertiesUseCaseFlowTest {
             testCoroutineExtension.runBlockingTest {
 
                 // GIVEN
-                coEvery { repository.getOrderFilter() } returns ORDER_BY_NONE
                 coEvery { repository.getPropertyEntitiesFromLocal() } returns entityList
                 coEvery { mapper.map(entityList) } returns itemList
                 // WHEN
@@ -268,7 +267,6 @@ class GetPropertiesUseCaseFlowTest {
                     .dispose()
 
                 coVerifySequence {
-                    repository.getOrderFilter()
                     repository.getPropertyEntitiesFromLocal()
                     mapper.map(entityList)
                 }
@@ -279,7 +277,6 @@ class GetPropertiesUseCaseFlowTest {
             testCoroutineExtension.runBlockingTest {
 
                 // GIVEN
-                coEvery { repository.getOrderFilter() } returns ORDER_BY_NONE
                 coEvery { repository.getPropertyEntitiesFromLocal() } returns listOf()
                 coEvery { repository.fetchEntitiesFromRemote() } returns entityList
                 coEvery { repository.deletePropertyEntities() } just runs
@@ -298,7 +295,6 @@ class GetPropertiesUseCaseFlowTest {
                     .dispose()
 
                 coVerifySequence {
-                    repository.getOrderFilter()
                     repository.getPropertyEntitiesFromLocal()
                     repository.fetchEntitiesFromRemote()
                     repository.deletePropertyEntities()
@@ -312,7 +308,6 @@ class GetPropertiesUseCaseFlowTest {
             testCoroutineExtension.runBlockingTest {
 
                 // GIVEN
-                coEvery { repository.getOrderFilter() } returns ORDER_BY_NONE
                 coEvery {
                     repository.getPropertyEntitiesFromLocal()
                 } throws SQLException("Database Exception")
@@ -334,7 +329,6 @@ class GetPropertiesUseCaseFlowTest {
                     .dispose()
 
                 coVerifySequence {
-                    repository.getOrderFilter()
                     repository.getPropertyEntitiesFromLocal()
                     repository.fetchEntitiesFromRemote()
                     repository.deletePropertyEntities()
@@ -348,7 +342,6 @@ class GetPropertiesUseCaseFlowTest {
             testCoroutineExtension.runBlockingTest {
 
                 // GIVEN
-                coEvery { repository.getOrderFilter() } returns ORDER_BY_NONE
                 coEvery { repository.getPropertyEntitiesFromLocal() } returns listOf()
 
                 coEvery {
@@ -367,7 +360,6 @@ class GetPropertiesUseCaseFlowTest {
                     .dispose()
 
                 coVerifySequence {
-                    repository.getOrderFilter()
                     repository.getPropertyEntitiesFromLocal()
                     repository.fetchEntitiesFromRemote()
                 }
