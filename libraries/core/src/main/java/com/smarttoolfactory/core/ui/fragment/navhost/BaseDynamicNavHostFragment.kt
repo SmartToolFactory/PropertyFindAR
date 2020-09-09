@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.annotation.NavigationRes
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.dynamicfeatures.fragment.DynamicNavHostFragment
-import androidx.navigation.fragment.NavHostFragment
 import com.smarttoolfactory.core.error.NavigationException
 import com.smarttoolfactory.core.util.Event
 import com.smarttoolfactory.core.viewmodel.NavControllerViewModel
@@ -14,7 +13,7 @@ import com.smarttoolfactory.core.viewmodel.NavControllerViewModel
  * uses [BaseDynamicNavHostFragment.createDynamicNavHostFragment] function with navigation graph
  * parameter
  */
-class BaseDynamicNavHostFragment : NavHostFragment() {
+class BaseDynamicNavHostFragment : DynamicNavHostFragment() {
 
     private val navControllerViewModel by activityViewModels<NavControllerViewModel>()
 
