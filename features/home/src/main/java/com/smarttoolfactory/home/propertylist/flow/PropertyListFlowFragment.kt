@@ -40,9 +40,9 @@ class PropertyListFlowFragment : DynamicNavigationFragment<FragmentPropertyListB
     }
 
     override fun bindViews() {
-        dataBinding.viewModel = viewModel
+        dataBinding!!.viewModel = viewModel
 
-        dataBinding.recyclerView.apply {
+        dataBinding!!.recyclerView.apply {
 
             // Set Layout manager
             this.layoutManager =
@@ -58,7 +58,7 @@ class PropertyListFlowFragment : DynamicNavigationFragment<FragmentPropertyListB
             this.adapter = itemListAdapter
         }
 
-        val swipeRefreshLayout = dataBinding.swipeRefreshLayout
+        val swipeRefreshLayout = dataBinding!!.swipeRefreshLayout
 
         swipeRefreshLayout.setOnRefreshListener {
             swipeRefreshLayout.isRefreshing = false
@@ -149,5 +149,10 @@ class PropertyListFlowFragment : DynamicNavigationFragment<FragmentPropertyListB
     override fun onPause() {
         super.onPause()
         toolbarVM.queryBySort.removeObservers(viewLifecycleOwner)
+    }
+
+    override fun onDestroyView() {
+        dataBinding!!.swipeRefreshLayout.setOnRefreshListener(null)
+        super.onDestroyView()
     }
 }

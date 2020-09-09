@@ -33,7 +33,7 @@ abstract class BaseDataBindingFragment<ViewBinding : ViewDataBinding> : Fragment
 
     private var _dataBinding: ViewBinding? = null
 
-    lateinit var dataBinding: ViewBinding
+    var dataBinding: ViewBinding? = null
 
     /**
      * This method gets the layout id from the derived fragment to bind to that layout via data-binding
@@ -67,9 +67,9 @@ abstract class BaseDataBindingFragment<ViewBinding : ViewDataBinding> : Fragment
          *   again, and when onDestroyView is called removes this binding to liveData
          *   since it's bound to View instead of Fragment(this).
          */
-        dataBinding.lifecycleOwner = viewLifecycleOwner
+        dataBinding!!.lifecycleOwner = viewLifecycleOwner
 
-        val rootView = dataBinding.root
+        val rootView = dataBinding!!.root
 
         // Get width and height of the fragment
         rootView.post {
