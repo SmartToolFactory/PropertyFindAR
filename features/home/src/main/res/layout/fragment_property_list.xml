@@ -9,7 +9,7 @@
 
         <variable
             name="viewModel"
-            type="com.smarttoolfactory.home.viewmodel.AbstractPropertyListVM" />
+            type="com.smarttoolfactory.home.propertylist.AbstractPropertyListVM" />
     </data>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout

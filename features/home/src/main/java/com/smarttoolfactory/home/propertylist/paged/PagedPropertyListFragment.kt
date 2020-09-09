@@ -1,7 +1,6 @@
-package com.smarttoolfactory.home.propertylist
+package com.smarttoolfactory.home.propertylist.paged
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,7 +13,6 @@ import com.smarttoolfactory.home.adapter.PropertyItemListAdapter
 import com.smarttoolfactory.home.databinding.FragmentPropertyListPagedBinding
 import com.smarttoolfactory.home.di.DaggerHomeComponent
 import com.smarttoolfactory.home.viewmodel.HomeToolbarVM
-import com.smarttoolfactory.home.viewmodel.PagedPropertyListViewModel
 import dagger.hilt.android.EntryPointAccessors
 import javax.inject.Inject
 
@@ -143,6 +141,5 @@ class PagedPropertyListFragment :
 
     override fun onScrollToBottom() {
         viewModel.getPropertyList()
-        Toast.makeText(requireContext(), "BOTTOM SCROLL", Toast.LENGTH_SHORT).show()
     }
 }

@@ -2,9 +2,9 @@ package com.smarttoolfactory.home.di
 
 import androidx.fragment.app.Fragment
 import com.smarttoolfactory.core.di.CoreModuleDependencies
-import com.smarttoolfactory.home.propertylist.PagedPropertyListFragment
-import com.smarttoolfactory.home.propertylist.PropertyListFlowFragment
-import com.smarttoolfactory.home.propertylist.PropertyListRxjava3Fragment
+import com.smarttoolfactory.home.propertylist.flow.PropertyListFlowFragment
+import com.smarttoolfactory.home.propertylist.paged.PagedPropertyListFragment
+import com.smarttoolfactory.home.propertylist.rxjava.PropertyListRxjava3Fragment
 import dagger.BindsInstance
 import dagger.Component
 

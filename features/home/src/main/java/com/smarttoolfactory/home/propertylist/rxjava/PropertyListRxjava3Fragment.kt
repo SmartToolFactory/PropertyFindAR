@@ -1,4 +1,4 @@
-package com.smarttoolfactory.home.propertylist
+package com.smarttoolfactory.home.propertylist.rxjava
 
 import android.os.Bundle
 import androidx.core.os.bundleOf
@@ -12,7 +12,6 @@ import com.smarttoolfactory.home.adapter.PropertyItemListAdapter
 import com.smarttoolfactory.home.databinding.FragmentPropertyListBinding
 import com.smarttoolfactory.home.di.DaggerHomeComponent
 import com.smarttoolfactory.home.viewmodel.HomeToolbarVM
-import com.smarttoolfactory.home.viewmodel.PropertyListViewModelRxJava3
 import dagger.hilt.android.EntryPointAccessors
 import javax.inject.Inject
 

@@ -10,6 +10,9 @@ import com.smarttoolfactory.data.model.IEntity
  *
  * * Implements [IEntity] marker interface for mapping this database items from REST DTOs or
  * to UI items
+ *
+ * * Insert order is required for getting data same order they are inserted since ordering is
+ * done in server side.
  */
 @Entity(tableName = "property", primaryKeys = ["insert_order"])
 data class PropertyEntity(

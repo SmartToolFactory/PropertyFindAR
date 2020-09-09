@@ -2,12 +2,12 @@ package com.smarttoolfactory.home.di
 
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.smarttoolfactory.home.viewmodel.PagedPropertyListViewModel
+import com.smarttoolfactory.home.propertylist.flow.PropertyListViewModelFlow
+import com.smarttoolfactory.home.propertylist.paged.PagedPropertyListViewModel
+import com.smarttoolfactory.home.propertylist.rxjava.PropertyListViewModelRxJava3
 import com.smarttoolfactory.home.viewmodel.PagedPropertyListViewModelFactory
 import com.smarttoolfactory.home.viewmodel.PropertyListFlowViewModelFactory
 import com.smarttoolfactory.home.viewmodel.PropertyListRxJava3ViewModelFactory
-import com.smarttoolfactory.home.viewmodel.PropertyListViewModelFlow
-import com.smarttoolfactory.home.viewmodel.PropertyListViewModelRxJava3
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

@@ -1,4 +1,4 @@
-package com.smarttoolfactory.home.viewmodel
+package com.smarttoolfactory.home.propertylist.flow
 
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
@@ -9,15 +9,16 @@ import com.smarttoolfactory.core.viewstate.Status
 import com.smarttoolfactory.core.viewstate.ViewState
 import com.smarttoolfactory.domain.ORDER_BY_NONE
 import com.smarttoolfactory.domain.model.PropertyItem
-import com.smarttoolfactory.domain.usecase.GetPropertiesUseCasePaged
+import com.smarttoolfactory.domain.usecase.GetPropertiesUseCaseFlow
+import com.smarttoolfactory.home.propertylist.AbstractPropertyListVM
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 
-class PagedPropertyListViewModel @ViewModelInject constructor(
+class PropertyListViewModelFlow @ViewModelInject constructor(
     private val coroutineScope: CoroutineScope,
-    private val getPropertiesUseCase: GetPropertiesUseCasePaged
+    private val getPropertiesUseCase: GetPropertiesUseCaseFlow
 ) : AbstractPropertyListVM() {
 
     private val _goToDetailScreen = MutableLiveData<Event<PropertyItem>>()
@@ -47,9 +48,20 @@ class PagedPropertyListViewModel @ViewModelInject constructor(
             .launchIn(coroutineScope)
     }
 
+    /**
+     * Function to retrieve data from repository with offline-first which checks
+     * local data source first.
+     *
+     * * Check out Local Source first
+     * * If empty data or null returned throw empty set exception
+     * * If error occurred while fetching data from remote: Try to fetch data from db
+     * * If data is fetched from remote source: delete old data, save new data and return new data
+     * * If both network and db don't have any data throw empty set exception
+     *
+     */
     override fun getPropertyList() {
 
-        getPropertiesUseCase.getPagedOfflineLast(_orderByKey)
+        getPropertiesUseCase.getPropertiesOfflineFirst(_orderByKey)
             .convertToFlowViewState()
             .onStart {
                 _propertyViewState.value = ViewState(status = Status.LOADING)
@@ -62,7 +74,7 @@ class PagedPropertyListViewModel @ViewModelInject constructor(
 
     override fun refreshPropertyList(orderBy: String?) {
 
-        getPropertiesUseCase.refreshData(orderBy ?: _orderByKey)
+        getPropertiesUseCase.getPropertiesOfflineLast(orderBy ?: _orderByKey)
             .convertToFlowViewState()
             .onStart {
                 _propertyViewState.value = ViewState(status = Status.LOADING)

@@ -1,4 +1,4 @@
-package com.smarttoolfactory.home.viewmodel
+package com.smarttoolfactory.home.propertylist.rxjava
 
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
@@ -10,6 +10,7 @@ import com.smarttoolfactory.core.viewstate.ViewState
 import com.smarttoolfactory.domain.ORDER_BY_NONE
 import com.smarttoolfactory.domain.model.PropertyItem
 import com.smarttoolfactory.domain.usecase.GetPropertiesUseCaseRxJava3
+import com.smarttoolfactory.home.propertylist.AbstractPropertyListVM
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers
 
