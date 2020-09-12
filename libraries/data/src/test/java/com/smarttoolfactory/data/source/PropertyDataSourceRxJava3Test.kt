@@ -2,8 +2,8 @@ package com.smarttoolfactory.data.source
 
 import com.google.common.truth.Truth
 import com.smarttoolfactory.data.api.PropertyApiRxJava
-import com.smarttoolfactory.data.db.PropertyDaoRxJava3
-import com.smarttoolfactory.data.db.SortOrderDaoRxJava3
+import com.smarttoolfactory.data.db.dao.PropertyDaoRxJava3
+import com.smarttoolfactory.data.db.dao.SortOrderDaoRxJava3
 import com.smarttoolfactory.data.mapper.MapperFactory
 import com.smarttoolfactory.data.mapper.PropertyDTOtoEntityListMapper
 import com.smarttoolfactory.data.model.local.PropertyEntity

@@ -4,8 +4,8 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import com.google.common.truth.Truth
-import com.smarttoolfactory.data.db.PropertyDaoRxJava3
 import com.smarttoolfactory.data.db.PropertyDatabase
+import com.smarttoolfactory.data.db.dao.PropertyDaoRxJava3
 import com.smarttoolfactory.data.mapper.MapperFactory
 import com.smarttoolfactory.data.mapper.PropertyDTOtoEntityListMapper
 import com.smarttoolfactory.data.model.local.PropertyEntity

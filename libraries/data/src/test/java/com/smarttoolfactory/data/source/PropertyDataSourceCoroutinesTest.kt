@@ -2,8 +2,8 @@ package com.smarttoolfactory.data.source
 
 import com.google.common.truth.Truth
 import com.smarttoolfactory.data.api.PropertyApiCoroutines
-import com.smarttoolfactory.data.db.PropertyDaoCoroutines
-import com.smarttoolfactory.data.db.SortOrderDaoCoroutines
+import com.smarttoolfactory.data.db.dao.PropertyDaoCoroutines
+import com.smarttoolfactory.data.db.dao.SortOrderDaoCoroutines
 import com.smarttoolfactory.data.mapper.MapperFactory
 import com.smarttoolfactory.data.mapper.PropertyDTOtoEntityListMapper
 import com.smarttoolfactory.data.model.local.PropertyEntity
