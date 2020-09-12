@@ -1,4 +1,4 @@
-package com.smarttoolfactory.data.db
+package com.smarttoolfactory.data.db.dao
 
 import androidx.room.Dao
 import androidx.room.Delete
@@ -12,7 +12,7 @@ import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
 
 @Dao
-interface PropertyDaoRxJava3 {
+interface PropertyDaoRxJava3 : BaseRxDao<PropertyEntity> {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(propertyEntity: PropertyEntity): Completable

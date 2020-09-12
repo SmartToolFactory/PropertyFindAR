@@ -1,20 +1,12 @@
-package com.smarttoolfactory.data.db
+package com.smarttoolfactory.data.db.dao
 
 import androidx.room.Dao
 import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.smarttoolfactory.data.model.local.PropertyEntity
 
 @Dao
-interface PropertyDaoCoroutines {
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(entity: PropertyEntity): Long
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(entities: List<PropertyEntity>): List<Long>
+interface PropertyDaoCoroutines : BaseCoroutinesDao<PropertyEntity> {
 
     @Delete
     suspend fun deletePropertyEntity(entity: PropertyEntity): Int

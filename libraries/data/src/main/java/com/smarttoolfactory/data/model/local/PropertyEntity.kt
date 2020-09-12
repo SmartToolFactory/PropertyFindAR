@@ -86,7 +86,9 @@ data class PropertyEntity(
 
     val broker: BrokerEntity,
     @ColumnInfo(name = "amenities")
+
     val amenities: List<String>,
+
     @ColumnInfo(name = "amenities_keys")
     val amenitiesKeys: List<String>,
 

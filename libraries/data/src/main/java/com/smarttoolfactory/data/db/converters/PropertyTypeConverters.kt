@@ -1,4 +1,4 @@
-package com.smarttoolfactory.data.db
+package com.smarttoolfactory.data.db.converters
 
 import androidx.room.TypeConverter
 import com.google.gson.Gson

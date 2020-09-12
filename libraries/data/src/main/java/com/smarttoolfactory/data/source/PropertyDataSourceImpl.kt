@@ -2,11 +2,11 @@ package com.smarttoolfactory.data.source
 
 import com.smarttoolfactory.data.api.PropertyApiCoroutines
 import com.smarttoolfactory.data.api.PropertyApiRxJava
-import com.smarttoolfactory.data.db.PagedPropertyDao
-import com.smarttoolfactory.data.db.PropertyDaoCoroutines
-import com.smarttoolfactory.data.db.PropertyDaoRxJava3
-import com.smarttoolfactory.data.db.SortOrderDaoCoroutines
-import com.smarttoolfactory.data.db.SortOrderDaoRxJava3
+import com.smarttoolfactory.data.db.dao.PagedPropertyDao
+import com.smarttoolfactory.data.db.dao.PropertyDaoCoroutines
+import com.smarttoolfactory.data.db.dao.PropertyDaoRxJava3
+import com.smarttoolfactory.data.db.dao.SortOrderDaoCoroutines
+import com.smarttoolfactory.data.db.dao.SortOrderDaoRxJava3
 import com.smarttoolfactory.data.model.local.PagedPropertyEntity
 import com.smarttoolfactory.data.model.local.PropertyEntity
 import com.smarttoolfactory.data.model.local.SortOrderEntity

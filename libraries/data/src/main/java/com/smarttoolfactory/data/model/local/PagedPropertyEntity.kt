@@ -79,11 +79,13 @@ data class PagedPropertyEntity(
     val locationId: Int,
     @ColumnInfo(name = "hide_location")
     val hideLocation: Boolean,
-    @ColumnInfo(name = "broker")
 
+    @ColumnInfo(name = "broker")
     val broker: BrokerEntity,
+
     @ColumnInfo(name = "amenities")
     val amenities: List<String>,
+
     @ColumnInfo(name = "amenities_keys")
     val amenitiesKeys: List<String>,
 

@@ -1,4 +1,4 @@
-package com.smarttoolfactory.data.db
+package com.smarttoolfactory.data.db.dao
 
 import androidx.room.Dao
 import androidx.room.Insert

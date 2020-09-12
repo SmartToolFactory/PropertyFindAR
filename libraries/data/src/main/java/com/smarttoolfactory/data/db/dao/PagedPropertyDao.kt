@@ -1,20 +1,12 @@
-package com.smarttoolfactory.data.db
+package com.smarttoolfactory.data.db.dao
 
 import androidx.room.Dao
 import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.smarttoolfactory.data.model.local.PagedPropertyEntity
 
 @Dao
-interface PagedPropertyDao {
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(entity: PagedPropertyEntity): Long
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(entities: List<PagedPropertyEntity>): List<Long>
+interface PagedPropertyDao : BaseCoroutinesDao<PagedPropertyEntity> {
 
     @Delete
     suspend fun deletePagedPropertyEntity(entity: PagedPropertyEntity): Int

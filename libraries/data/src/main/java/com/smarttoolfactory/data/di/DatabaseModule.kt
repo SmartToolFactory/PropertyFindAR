@@ -5,12 +5,12 @@ import androidx.room.Room
 import com.smarttoolfactory.data.constant.DATABASE_NAME
 import com.smarttoolfactory.data.db.MIGRATION_1_2
 import com.smarttoolfactory.data.db.MIGRATION_2_3
-import com.smarttoolfactory.data.db.PagedPropertyDao
-import com.smarttoolfactory.data.db.PropertyDaoCoroutines
-import com.smarttoolfactory.data.db.PropertyDaoRxJava3
 import com.smarttoolfactory.data.db.PropertyDatabase
-import com.smarttoolfactory.data.db.SortOrderDaoCoroutines
-import com.smarttoolfactory.data.db.SortOrderDaoRxJava3
+import com.smarttoolfactory.data.db.dao.PagedPropertyDao
+import com.smarttoolfactory.data.db.dao.PropertyDaoCoroutines
+import com.smarttoolfactory.data.db.dao.PropertyDaoRxJava3
+import com.smarttoolfactory.data.db.dao.SortOrderDaoCoroutines
+import com.smarttoolfactory.data.db.dao.SortOrderDaoRxJava3
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
