@@ -5,6 +5,7 @@ import androidx.room.Room
 import com.smarttoolfactory.data.constant.DATABASE_NAME
 import com.smarttoolfactory.data.db.MIGRATION_1_2
 import com.smarttoolfactory.data.db.MIGRATION_2_3
+import com.smarttoolfactory.data.db.MIGRATION_3_4
 import com.smarttoolfactory.data.db.PropertyDatabase
 import com.smarttoolfactory.data.db.dao.PagedPropertyDao
 import com.smarttoolfactory.data.db.dao.PropertyDaoCoroutines
@@ -29,7 +30,7 @@ class DatabaseModule {
             PropertyDatabase::class.java,
             DATABASE_NAME
         )
-            .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
+            .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4)
             .build()
     }
 

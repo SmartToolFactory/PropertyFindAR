@@ -1,12 +1,13 @@
 package com.smarttoolfactory.data.model.local
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 
-@Entity(tableName = "favorite", primaryKeys = ["id"])
+@Entity(
+    tableName = "favorite",
+    primaryKeys = ["id"],
+)
 data class FavoritePropertyEntity(
-
-//    @ColumnInfo(name = "insert_order")
-//    var insertOrder: Int,
 
     override val id: Int,
     override val update: Int,
@@ -59,6 +60,10 @@ data class FavoritePropertyEntity(
     override val reference: String,
 
     // Property like and display status
+    @ColumnInfo(name = "insert_date")
+    val insertDate: Long = System.currentTimeMillis(),
+    @ColumnInfo(name = "display_count")
     var displayCount: Int = 0,
-    var isFavorite: Boolean = false
+    @ColumnInfo(name = "favorite")
+    var favorite: Boolean = false
 ) : BasePropertyEntity()

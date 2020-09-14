@@ -146,4 +146,5 @@ dependencies {
 
     addInstrumentationTestDependencies()
     androidTestImplementation(project(Modules.AndroidLibrary.TEST_UTILS))
+    implementation(kotlin("reflect"))
 }

@@ -3,7 +3,6 @@ package com.smarttoolfactory.data.model.local
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.ForeignKey
-import androidx.room.Index
 import androidx.room.Junction
 import androidx.room.Relation
 import com.smarttoolfactory.data.model.IEntity
@@ -14,7 +13,8 @@ import com.smarttoolfactory.data.model.IEntity
  * user's id [UserEntity.userId] to [userAccountId], and
  * favorite property's id [FavoritePropertyEntity.id] to [propertyId]
  *
- * * RAW STATEMENT: "CREATE TABLE IF NOT EXISTS `UserFavoriteJunction`
+ * * RAW STATEMENT:
+ * "CREATE TABLE IF NOT EXISTS `UserFavoriteJunction`
  * (`userAccountId` INTEGER NOT NULL, `propertyId` INTEGER NOT NULL,
  * PRIMARY KEY(`userAccountId`, `propertyId`),
  * FOREIGN KEY(`userAccountId`) REFERENCES `user`(`userId`) ON UPDATE NO ACTION ON DELETE CASCADE ,
@@ -22,8 +22,8 @@ import com.smarttoolfactory.data.model.IEntity
  *
  */
 @Entity(
+    tableName = "user_favorite_junction",
     primaryKeys = ["userAccountId", "propertyId"],
-    indices = [Index(value = ["userAccountId"])],
     // Foreign Keys
     foreignKeys = [
         ForeignKey(

@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
+import androidx.room.Transaction
 import androidx.room.Update
 import com.smarttoolfactory.data.model.IEntity
 import io.reactivex.rxjava3.core.Completable
@@ -78,6 +79,7 @@ interface BaseRxDao<T : IEntity> {
     /*
         Insert Multiple entities
      */
+    @Transaction
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertCompletable(entities: List<T>): Completable
 
@@ -118,6 +120,7 @@ interface BaseCoroutinesDao<T : IEntity> {
     /*
          Insert Multiple entities
      */
+    @Transaction
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(entities: List<T>): List<Long>
 

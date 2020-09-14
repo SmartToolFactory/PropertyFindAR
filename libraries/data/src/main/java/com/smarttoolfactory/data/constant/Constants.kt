@@ -22,4 +22,4 @@ const val NO_ACCOUNT = -1L
     DBConstants
  */
 const val DATABASE_NAME = "property.db"
-const val DATABASE_VERSION = 3
+const val DATABASE_VERSION = 4

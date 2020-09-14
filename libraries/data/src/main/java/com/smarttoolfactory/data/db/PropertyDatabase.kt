@@ -123,3 +123,92 @@ val MIGRATION_2_3: Migration = object : Migration(2, 3) {
         )
     }
 }
+
+/**
+ *
+ * Contents of this migration are
+ *
+ * * Add new Property table for favorite properties [FavoritePropertyEntity].
+ *
+ * * Add user table for managing login, register and accounts table with [UserEntity]
+ *
+ * * Add junction table for connecting User with his/her favorite items
+ */
+val MIGRATION_3_4: Migration = object : Migration(3, 4) {
+
+    override fun migrate(database: SupportSQLiteDatabase) {
+
+        database.execSQL(STATEMENT_FAVORITE_PROPERTIES)
+
+        database.execSQL(
+            "CREATE TABLE IF NOT EXISTS `user` (" +
+                "`userId` INTEGER NOT NULL, " +
+                "`firstName` TEXT NOT NULL, " +
+                "`lastName` TEXT NOT NULL, " +
+                "`email` TEXT NOT NULL, " +
+                "`password` TEXT NOT NULL, PRIMARY KEY(`userId`))"
+        )
+
+        database.execSQL(
+            "CREATE TABLE IF NOT EXISTS `user_favorite_junction` (" +
+                "`userAccountId` INTEGER NOT NULL, " +
+                "`propertyId` INTEGER NOT NULL, " +
+                "PRIMARY KEY(`userAccountId`, `propertyId`), " +
+                "FOREIGN KEY(`userAccountId`) REFERENCES `user`(`userId`) " +
+                "ON UPDATE NO ACTION ON DELETE CASCADE , " +
+                "FOREIGN KEY(`propertyId`) REFERENCES `favorite`(`id`) " +
+                "ON UPDATE NO ACTION ON DELETE CASCADE )"
+        )
+    }
+}
+/*
+    Changed to String because detekt has 60 lines limit for methods
+ */
+const val STATEMENT_FAVORITE_PROPERTIES = "CREATE TABLE IF NOT EXISTS `favorite` (" +
+        "`id` INTEGER NOT NULL, " +
+        "`update` INTEGER NOT NULL, " +
+        "`categoryId` INTEGER NOT NULL, " +
+        "`title` TEXT NOT NULL, " +
+        "`subject` TEXT NOT NULL, `" +
+        "type` TEXT NOT NULL, " +
+        "`typeId` INTEGER NOT NULL, " +
+        "`thumbnail` TEXT, " +
+        "`thumbnailBig` TEXT, " +
+        "`imageCount` INTEGER NOT NULL, " +
+        "`price` TEXT NOT NULL, " +
+        "`pricePeriod` TEXT, " +
+        "`pricePeriodRaw` TEXT NOT NULL, " +
+        "`priceLabel` TEXT, " +
+        "`priceValue` TEXT, " +
+        "`priceValueRaw` INTEGER NOT NULL, " +
+        "`currency` TEXT NOT NULL, " +
+        "`featured` INTEGER NOT NULL, " +
+        "`location` TEXT NOT NULL, " +
+        "`area` TEXT NOT NULL, " +
+        "`poa` INTEGER NOT NULL, " +
+        "`reraPermit` TEXT, " +
+        "`bathrooms` TEXT NOT NULL, " +
+        "`bedrooms` TEXT NOT NULL, " +
+        "`dateInsert` TEXT NOT NULL, " +
+        "`dateUpdate` TEXT NOT NULL, " +
+        "`agentName` TEXT NOT NULL, " +
+        "`brokerName` TEXT NOT NULL, " +
+        "`agentLicense` TEXT, " +
+        "`locationId` INTEGER NOT NULL, " +
+        "`hideLocation` INTEGER NOT NULL, " +
+        "`broker` TEXT NOT NULL, " +
+        "`amenities` TEXT NOT NULL, " +
+        "`amenitiesKeys` TEXT NOT NULL, " +
+        "`latitude` REAL NOT NULL, " +
+        "`longitude` REAL NOT NULL, " +
+        "`premium` INTEGER NOT NULL, " +
+        "`livingrooms` TEXT NOT NULL, " +
+        "`verified` INTEGER NOT NULL, " +
+        "`gallery` TEXT, " +
+        "`phone` TEXT NOT NULL, " +
+        "`leadEmailReceivers` TEXT NOT NULL, " +
+        "`reference` TEXT NOT NULL, " +
+        "`insert_date` INTEGER NOT NULL, " +
+        "`display_count` INTEGER NOT NULL, " +
+        "`favorite` INTEGER NOT NULL, " +
+        "PRIMARY KEY(`id`))"
