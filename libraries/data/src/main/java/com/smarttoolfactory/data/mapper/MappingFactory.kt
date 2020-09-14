@@ -90,7 +90,7 @@ class PropertyDTOtoEntityListMapper @Inject constructor() :
 
                 // Maps BrokerEntity
                 broker =
-                MapperFactory.createMapper<BrokerDTOtoEntityMapper>().map(input.broker),
+                    MapperFactory.createMapper<BrokerDTOtoEntityMapper>().map(input.broker),
                 // Maps List<String>
                 amenities = input.amenities,
                 amenitiesKeys = input.amenitiesKeys,
@@ -154,7 +154,7 @@ class PropertyDTOtoPagedEntityListMapper @Inject constructor() :
 
                 // Maps BrokerEntity
                 broker =
-                MapperFactory.createMapper<BrokerDTOtoEntityMapper>().map(input.broker),
+                    MapperFactory.createMapper<BrokerDTOtoEntityMapper>().map(input.broker),
                 // Maps List<String>
                 amenities = input.amenities,
                 amenitiesKeys = input.amenitiesKeys,
@@ -218,7 +218,7 @@ class PropertyDTOtoFavoriteEntityListMapper @Inject constructor() :
 
                 // Maps BrokerEntity
                 broker =
-                MapperFactory.createMapper<BrokerDTOtoEntityMapper>().map(input.broker),
+                    MapperFactory.createMapper<BrokerDTOtoEntityMapper>().map(input.broker),
                 // Maps List<String>
                 amenities = input.amenities,
                 amenitiesKeys = input.amenitiesKeys,

@@ -165,50 +165,50 @@ val MIGRATION_3_4: Migration = object : Migration(3, 4) {
     Changed to String because detekt has 60 lines limit for methods
  */
 const val STATEMENT_FAVORITE_PROPERTIES = "CREATE TABLE IF NOT EXISTS `favorite` (" +
-        "`id` INTEGER NOT NULL, " +
-        "`update` INTEGER NOT NULL, " +
-        "`categoryId` INTEGER NOT NULL, " +
-        "`title` TEXT NOT NULL, " +
-        "`subject` TEXT NOT NULL, `" +
-        "type` TEXT NOT NULL, " +
-        "`typeId` INTEGER NOT NULL, " +
-        "`thumbnail` TEXT, " +
-        "`thumbnailBig` TEXT, " +
-        "`imageCount` INTEGER NOT NULL, " +
-        "`price` TEXT NOT NULL, " +
-        "`pricePeriod` TEXT, " +
-        "`pricePeriodRaw` TEXT NOT NULL, " +
-        "`priceLabel` TEXT, " +
-        "`priceValue` TEXT, " +
-        "`priceValueRaw` INTEGER NOT NULL, " +
-        "`currency` TEXT NOT NULL, " +
-        "`featured` INTEGER NOT NULL, " +
-        "`location` TEXT NOT NULL, " +
-        "`area` TEXT NOT NULL, " +
-        "`poa` INTEGER NOT NULL, " +
-        "`reraPermit` TEXT, " +
-        "`bathrooms` TEXT NOT NULL, " +
-        "`bedrooms` TEXT NOT NULL, " +
-        "`dateInsert` TEXT NOT NULL, " +
-        "`dateUpdate` TEXT NOT NULL, " +
-        "`agentName` TEXT NOT NULL, " +
-        "`brokerName` TEXT NOT NULL, " +
-        "`agentLicense` TEXT, " +
-        "`locationId` INTEGER NOT NULL, " +
-        "`hideLocation` INTEGER NOT NULL, " +
-        "`broker` TEXT NOT NULL, " +
-        "`amenities` TEXT NOT NULL, " +
-        "`amenitiesKeys` TEXT NOT NULL, " +
-        "`latitude` REAL NOT NULL, " +
-        "`longitude` REAL NOT NULL, " +
-        "`premium` INTEGER NOT NULL, " +
-        "`livingrooms` TEXT NOT NULL, " +
-        "`verified` INTEGER NOT NULL, " +
-        "`gallery` TEXT, " +
-        "`phone` TEXT NOT NULL, " +
-        "`leadEmailReceivers` TEXT NOT NULL, " +
-        "`reference` TEXT NOT NULL, " +
-        "`insert_date` INTEGER NOT NULL, " +
-        "`display_count` INTEGER NOT NULL, " +
-        "`favorite` INTEGER NOT NULL, " +
-        "PRIMARY KEY(`id`))"
+    "`id` INTEGER NOT NULL, " +
+    "`update` INTEGER NOT NULL, " +
+    "`categoryId` INTEGER NOT NULL, " +
+    "`title` TEXT NOT NULL, " +
+    "`subject` TEXT NOT NULL, `" +
+    "type` TEXT NOT NULL, " +
+    "`typeId` INTEGER NOT NULL, " +
+    "`thumbnail` TEXT, " +
+    "`thumbnailBig` TEXT, " +
+    "`imageCount` INTEGER NOT NULL, " +
+    "`price` TEXT NOT NULL, " +
+    "`pricePeriod` TEXT, " +
+    "`pricePeriodRaw` TEXT NOT NULL, " +
+    "`priceLabel` TEXT, " +
+    "`priceValue` TEXT, " +
+    "`priceValueRaw` INTEGER NOT NULL, " +
+    "`currency` TEXT NOT NULL, " +
+    "`featured` INTEGER NOT NULL, " +
+    "`location` TEXT NOT NULL, " +
+    "`area` TEXT NOT NULL, " +
+    "`poa` INTEGER NOT NULL, " +
+    "`reraPermit` TEXT, " +
+    "`bathrooms` TEXT NOT NULL, " +
+    "`bedrooms` TEXT NOT NULL, " +
+    "`dateInsert` TEXT NOT NULL, " +
+    "`dateUpdate` TEXT NOT NULL, " +
+    "`agentName` TEXT NOT NULL, " +
+    "`brokerName` TEXT NOT NULL, " +
+    "`agentLicense` TEXT, " +
+    "`locationId` INTEGER NOT NULL, " +
+    "`hideLocation` INTEGER NOT NULL, " +
+    "`broker` TEXT NOT NULL, " +
+    "`amenities` TEXT NOT NULL, " +
+    "`amenitiesKeys` TEXT NOT NULL, " +
+    "`latitude` REAL NOT NULL, " +
+    "`longitude` REAL NOT NULL, " +
+    "`premium` INTEGER NOT NULL, " +
+    "`livingrooms` TEXT NOT NULL, " +
+    "`verified` INTEGER NOT NULL, " +
+    "`gallery` TEXT, " +
+    "`phone` TEXT NOT NULL, " +
+    "`leadEmailReceivers` TEXT NOT NULL, " +
+    "`reference` TEXT NOT NULL, " +
+    "`insert_date` INTEGER NOT NULL, " +
+    "`display_count` INTEGER NOT NULL, " +
+    "`favorite` INTEGER NOT NULL, " +
+    "PRIMARY KEY(`id`))"
