@@ -3,11 +3,21 @@ package com.smarttoolfactory.data.model.local
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 
+/**
+ * [PropertyEntity] that user had any interaction with either by displaying it's details or
+ * setting it as favorite. This table is used when displaying details of this property is required
+ * when user interacts with list of properties in favorites/dashboard section.
+ *
+ * This table is a substitution for [PropertyEntity] since it's used for offline-first and
+ * a property user had interacted might not apper in next data fetch but must be present in
+ * dashboard or favorites section
+ *
+ */
 @Entity(
-    tableName = "favorite",
+    tableName = "property_interactive",
     primaryKeys = ["id"],
 )
-data class FavoritePropertyEntity(
+data class InteractivePropertyEntity(
 
     override val id: Int,
     override val update: Int,
@@ -62,8 +72,4 @@ data class FavoritePropertyEntity(
     // Property like and display status
     @ColumnInfo(name = "insert_date")
     val insertDate: Long = System.currentTimeMillis(),
-    @ColumnInfo(name = "display_count")
-    var displayCount: Int = 0,
-    @ColumnInfo(name = "favorite")
-    var favorite: Boolean = false
 ) : BasePropertyEntity()

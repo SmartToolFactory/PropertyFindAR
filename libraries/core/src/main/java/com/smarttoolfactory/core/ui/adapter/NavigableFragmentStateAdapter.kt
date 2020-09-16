@@ -9,8 +9,8 @@ import androidx.viewpager2.adapter.FragmentStateAdapter.FragmentTransactionCallb
 
 /**
  * FragmentStateAdapter to add ability to set primary navigation fragment
- * which let's active fragment to be navigable when back button is pressed using
- * [FragmentStateAdapter.FragmentTransactionCallback] to [ViewPager2].
+ * which lets fragment visible to be navigable when back button is pressed using
+ * [FragmentStateAdapter.FragmentTransactionCallback] in [ViewPager2].
  *
  * * 🔥 Create FragmentStateAdapter with viewLifeCycleOwner instead of Fragment to make sure
  * that it lives between [Fragment.onCreateView] and [Fragment.onDestroyView] while [View] is alive

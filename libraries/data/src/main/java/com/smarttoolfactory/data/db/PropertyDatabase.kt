@@ -14,7 +14,7 @@ import com.smarttoolfactory.data.db.dao.PropertyDaoRxJava3
 import com.smarttoolfactory.data.db.dao.SortOrderDaoCoroutines
 import com.smarttoolfactory.data.db.dao.SortOrderDaoRxJava3
 import com.smarttoolfactory.data.db.dao.UserDao
-import com.smarttoolfactory.data.model.local.FavoritePropertyEntity
+import com.smarttoolfactory.data.model.local.InteractivePropertyEntity
 import com.smarttoolfactory.data.model.local.PagedPropertyEntity
 import com.smarttoolfactory.data.model.local.PropertyEntity
 import com.smarttoolfactory.data.model.local.SortOrderEntity
@@ -26,7 +26,7 @@ import com.smarttoolfactory.data.model.local.UserFavoriteJunction
         PropertyEntity::class,
         PagedPropertyEntity::class,
         SortOrderEntity::class,
-        FavoritePropertyEntity::class,
+        InteractivePropertyEntity::class,
         UserEntity::class,
         UserFavoriteJunction::class
     ],
@@ -128,7 +128,7 @@ val MIGRATION_2_3: Migration = object : Migration(2, 3) {
  *
  * Contents of this migration are
  *
- * * Add new Property table for favorite properties [FavoritePropertyEntity].
+ * * Add new Property table for favorite properties [InteractivePropertyEntity].
  *
  * * Add user table for managing login, register and accounts table with [UserEntity]
  *

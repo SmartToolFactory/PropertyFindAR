@@ -30,6 +30,7 @@ open class AbstractDaoTest(
                 PropertyDatabase::class.java,
                 "test.db"
             )
+                .fallbackToDestructiveMigration()
         }
             // 🔥🔥🔥 Without this Coroutines tests with @Transaction get stuck
             .setTransactionExecutor(Executors.newSingleThreadExecutor())

@@ -7,11 +7,13 @@ import com.smarttoolfactory.data.db.MIGRATION_1_2
 import com.smarttoolfactory.data.db.MIGRATION_2_3
 import com.smarttoolfactory.data.db.MIGRATION_3_4
 import com.smarttoolfactory.data.db.PropertyDatabase
+import com.smarttoolfactory.data.db.dao.FavoritesDao
 import com.smarttoolfactory.data.db.dao.PagedPropertyDao
 import com.smarttoolfactory.data.db.dao.PropertyDaoCoroutines
 import com.smarttoolfactory.data.db.dao.PropertyDaoRxJava3
 import com.smarttoolfactory.data.db.dao.SortOrderDaoCoroutines
 import com.smarttoolfactory.data.db.dao.SortOrderDaoRxJava3
+import com.smarttoolfactory.data.db.dao.UserDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -58,4 +60,12 @@ class DatabaseModule {
     @Provides
     fun providePagedPropertyDao(appDatabase: PropertyDatabase): PagedPropertyDao =
         appDatabase.pagedPropertyDao()
+
+    @Provides
+    fun provideUserDao(appDatabase: PropertyDatabase): UserDao =
+        appDatabase.userDao()
+
+    @Provides
+    fun provideFavoritesDao(appDatabase: PropertyDatabase): FavoritesDao =
+        appDatabase.favoritesDao()
 }

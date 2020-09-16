@@ -4,7 +4,7 @@ import com.smarttoolfactory.data.model.IEntity
 import com.smarttoolfactory.data.model.Mappable
 import com.smarttoolfactory.data.model.local.BasePropertyEntity
 import com.smarttoolfactory.data.model.local.BrokerEntity
-import com.smarttoolfactory.data.model.local.FavoritePropertyEntity
+import com.smarttoolfactory.data.model.local.InteractivePropertyEntity
 import com.smarttoolfactory.data.model.local.PagedPropertyEntity
 import com.smarttoolfactory.data.model.local.PropertyEntity
 import com.smarttoolfactory.data.model.remote.BrokerDTO
@@ -178,12 +178,12 @@ class PropertyDTOtoPagedEntityListMapper @Inject constructor() :
 }
 
 class PropertyDTOtoFavoriteEntityListMapper @Inject constructor() :
-    ListMapper<PropertyDTO, FavoritePropertyEntity> {
+    ListMapper<PropertyDTO, InteractivePropertyEntity> {
 
-    override fun map(input: List<PropertyDTO>): List<FavoritePropertyEntity> {
+    override fun map(input: List<PropertyDTO>): List<InteractivePropertyEntity> {
 
         return input.map { input ->
-            FavoritePropertyEntity(
+            InteractivePropertyEntity(
                 id = input.id,
                 update = input.update,
                 categoryId = input.categoryId,

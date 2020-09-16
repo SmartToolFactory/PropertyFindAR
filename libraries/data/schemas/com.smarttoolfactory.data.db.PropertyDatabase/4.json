@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 4,
-    "identityHash": "edf157a9692bf6c05a1ed21496ec9c74",
+    "identityHash": "be0ca4c3cc9bce9c3cce46838635ed89",
     "entities": [
       {
         "tableName": "property",
@@ -588,8 +588,8 @@
         "foreignKeys": []
       },
       {
-        "tableName": "favorite",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `update` INTEGER NOT NULL, `categoryId` INTEGER NOT NULL, `title` TEXT NOT NULL, `subject` TEXT NOT NULL, `type` TEXT NOT NULL, `typeId` INTEGER NOT NULL, `thumbnail` TEXT, `thumbnailBig` TEXT, `imageCount` INTEGER NOT NULL, `price` TEXT NOT NULL, `pricePeriod` TEXT, `pricePeriodRaw` TEXT NOT NULL, `priceLabel` TEXT, `priceValue` TEXT, `priceValueRaw` INTEGER NOT NULL, `currency` TEXT NOT NULL, `featured` INTEGER NOT NULL, `location` TEXT NOT NULL, `area` TEXT NOT NULL, `poa` INTEGER NOT NULL, `reraPermit` TEXT, `bathrooms` TEXT NOT NULL, `bedrooms` TEXT NOT NULL, `dateInsert` TEXT NOT NULL, `dateUpdate` TEXT NOT NULL, `agentName` TEXT NOT NULL, `brokerName` TEXT NOT NULL, `agentLicense` TEXT, `locationId` INTEGER NOT NULL, `hideLocation` INTEGER NOT NULL, `broker` TEXT NOT NULL, `amenities` TEXT NOT NULL, `amenitiesKeys` TEXT NOT NULL, `latitude` REAL NOT NULL, `longitude` REAL NOT NULL, `premium` INTEGER NOT NULL, `livingrooms` TEXT NOT NULL, `verified` INTEGER NOT NULL, `gallery` TEXT, `phone` TEXT NOT NULL, `leadEmailReceivers` TEXT NOT NULL, `reference` TEXT NOT NULL, `insert_date` INTEGER NOT NULL, `display_count` INTEGER NOT NULL, `favorite` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "tableName": "property_interactive",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `update` INTEGER NOT NULL, `categoryId` INTEGER NOT NULL, `title` TEXT NOT NULL, `subject` TEXT NOT NULL, `type` TEXT NOT NULL, `typeId` INTEGER NOT NULL, `thumbnail` TEXT, `thumbnailBig` TEXT, `imageCount` INTEGER NOT NULL, `price` TEXT NOT NULL, `pricePeriod` TEXT, `pricePeriodRaw` TEXT NOT NULL, `priceLabel` TEXT, `priceValue` TEXT, `priceValueRaw` INTEGER NOT NULL, `currency` TEXT NOT NULL, `featured` INTEGER NOT NULL, `location` TEXT NOT NULL, `area` TEXT NOT NULL, `poa` INTEGER NOT NULL, `reraPermit` TEXT, `bathrooms` TEXT NOT NULL, `bedrooms` TEXT NOT NULL, `dateInsert` TEXT NOT NULL, `dateUpdate` TEXT NOT NULL, `agentName` TEXT NOT NULL, `brokerName` TEXT NOT NULL, `agentLicense` TEXT, `locationId` INTEGER NOT NULL, `hideLocation` INTEGER NOT NULL, `broker` TEXT NOT NULL, `amenities` TEXT NOT NULL, `amenitiesKeys` TEXT NOT NULL, `latitude` REAL NOT NULL, `longitude` REAL NOT NULL, `premium` INTEGER NOT NULL, `livingrooms` TEXT NOT NULL, `verified` INTEGER NOT NULL, `gallery` TEXT, `phone` TEXT NOT NULL, `leadEmailReceivers` TEXT NOT NULL, `reference` TEXT NOT NULL, `insert_date` INTEGER NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -854,18 +854,6 @@
             "columnName": "insert_date",
             "affinity": "INTEGER",
             "notNull": true
-          },
-          {
-            "fieldPath": "displayCount",
-            "columnName": "display_count",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "favorite",
-            "columnName": "favorite",
-            "affinity": "INTEGER",
-            "notNull": true
           }
         ],
         "primaryKey": {
@@ -923,7 +911,7 @@
       },
       {
         "tableName": "user_favorite_junction",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`userAccountId` INTEGER NOT NULL, `propertyId` INTEGER NOT NULL, PRIMARY KEY(`userAccountId`, `propertyId`), FOREIGN KEY(`userAccountId`) REFERENCES `user`(`userId`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`propertyId`) REFERENCES `favorite`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`userAccountId` INTEGER NOT NULL, `propertyId` INTEGER NOT NULL, `viewCount` INTEGER NOT NULL, `liked` INTEGER NOT NULL, PRIMARY KEY(`userAccountId`, `propertyId`), FOREIGN KEY(`userAccountId`) REFERENCES `user`(`userId`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`propertyId`) REFERENCES `property_interactive`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "userAccountId",
@@ -934,6 +922,18 @@
           {
             "fieldPath": "propertyId",
             "columnName": "propertyId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "viewCount",
+            "columnName": "viewCount",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "liked",
+            "columnName": "liked",
             "affinity": "INTEGER",
             "notNull": true
           }
@@ -959,7 +959,7 @@
             ]
           },
           {
-            "table": "favorite",
+            "table": "property_interactive",
             "onDelete": "CASCADE",
             "onUpdate": "NO ACTION",
             "columns": [
@@ -975,7 +975,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'edf157a9692bf6c05a1ed21496ec9c74')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'be0ca4c3cc9bce9c3cce46838635ed89')"
     ]
   }
 }
