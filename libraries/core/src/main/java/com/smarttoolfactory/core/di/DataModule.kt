@@ -85,6 +85,7 @@ interface DataModule {
         FavoritesRepository
 }
 
+@Module
 @InstallIn(ApplicationComponent::class)
 interface DataModuleRxJava3 {
 
