@@ -26,8 +26,9 @@ interface FavoritePropertyDataSource {
     suspend fun deleteFavoriteEntityForUser(userId: Long, propertyId: Int)
 }
 
-class FavoritePropertyDataSourceImpl @Inject constructor(private val favoritesDao: FavoritesCoroutinesDao) :
-    FavoritePropertyDataSource {
+class FavoritePropertyDataSourceImpl @Inject constructor(
+    private val favoritesDao: FavoritesCoroutinesDao
+) : FavoritePropertyDataSource {
 
     override suspend fun insertOrUpdateFavorite(
         userId: Long,
