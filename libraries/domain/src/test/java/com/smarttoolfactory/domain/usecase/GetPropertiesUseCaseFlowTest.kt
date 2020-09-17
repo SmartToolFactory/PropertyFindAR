@@ -2,10 +2,11 @@ package com.smarttoolfactory.domain.usecase
 
 import android.database.SQLException
 import com.smarttoolfactory.data.constant.ORDER_BY_NONE
-import com.smarttoolfactory.data.repository.PropertyRepositoryCoroutines
+import com.smarttoolfactory.data.repository.PropertyRepository
 import com.smarttoolfactory.domain.dispatcher.UseCaseDispatchers
 import com.smarttoolfactory.domain.error.EmptyDataException
 import com.smarttoolfactory.domain.mapper.PropertyEntityToItemListMapper
+import com.smarttoolfactory.domain.usecase.property.GetPropertiesUseCaseFlow
 import com.smarttoolfactory.test_utils.extension.TestCoroutineExtension
 import com.smarttoolfactory.test_utils.test_observer.test
 import io.mockk.clearMocks
@@ -35,7 +36,7 @@ import org.junit.jupiter.api.extension.RegisterExtension
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class GetPropertiesUseCaseFlowTest {
 
-    private val repository: PropertyRepositoryCoroutines = mockk()
+    private val repository: PropertyRepository = mockk()
     private val mapper: PropertyEntityToItemListMapper = mockk()
 
     private val dispatcherProvider: UseCaseDispatchers =

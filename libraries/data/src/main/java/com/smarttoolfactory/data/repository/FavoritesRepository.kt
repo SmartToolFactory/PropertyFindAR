@@ -6,7 +6,7 @@ import com.smarttoolfactory.data.model.local.UserFavoriteJunction
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Single
 
-interface FavoritesRepositoryCoroutines {
+interface FavoritesRepository {
 
     suspend fun insertOrUpdateFavorite(
         userId: Long,

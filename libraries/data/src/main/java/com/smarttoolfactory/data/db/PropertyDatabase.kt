@@ -8,6 +8,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.smarttoolfactory.data.constant.DATABASE_VERSION
 import com.smarttoolfactory.data.db.converters.PropertyTypeConverters
 import com.smarttoolfactory.data.db.dao.FavoritesCoroutinesDao
+import com.smarttoolfactory.data.db.dao.FavoritesRxJava3Dao
 import com.smarttoolfactory.data.db.dao.PagedPropertyDao
 import com.smarttoolfactory.data.db.dao.PropertyCoroutinesDao
 import com.smarttoolfactory.data.db.dao.PropertyRxJava3Dao
@@ -49,6 +50,7 @@ abstract class PropertyDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
 
     abstract fun favoritesDao(): FavoritesCoroutinesDao
+    abstract fun favoritesDaoRxJava3(): FavoritesRxJava3Dao
 }
 
 /**
@@ -161,6 +163,7 @@ val MIGRATION_3_4: Migration = object : Migration(3, 4) {
         )
     }
 }
+
 /*
     Changed to String because detekt has 60 lines limit for methods
  */

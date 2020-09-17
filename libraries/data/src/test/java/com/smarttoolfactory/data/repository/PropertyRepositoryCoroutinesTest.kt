@@ -6,8 +6,8 @@ import com.smarttoolfactory.data.mapper.MapperFactory
 import com.smarttoolfactory.data.mapper.PropertyDTOtoEntityListMapper
 import com.smarttoolfactory.data.model.local.PropertyEntity
 import com.smarttoolfactory.data.model.remote.PropertyResponse
-import com.smarttoolfactory.data.source.LocalPropertyDataSourceCoroutines
-import com.smarttoolfactory.data.source.RemotePropertyDataSourceCoroutines
+import com.smarttoolfactory.data.source.LocalPropertyDataSource
+import com.smarttoolfactory.data.source.RemotePropertyDataSource
 import com.smarttoolfactory.test_utils.RESPONSE_JSON_PATH
 import com.smarttoolfactory.test_utils.util.convertToObjectFromJson
 import com.smarttoolfactory.test_utils.util.getResourceAsText
@@ -36,10 +36,10 @@ import org.junit.jupiter.api.TestInstance
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 internal class PropertyRepositoryCoroutinesTest {
 
-    private lateinit var repository: PropertyRepositoryCoroutines
+    private lateinit var repository: PropertyRepository
 
-    private val localDataSource: LocalPropertyDataSourceCoroutines = mockk()
-    private val remoteDataSource: RemotePropertyDataSourceCoroutines = mockk()
+    private val localDataSource: LocalPropertyDataSource = mockk()
+    private val remoteDataSource: RemotePropertyDataSource = mockk()
     private val mapper: PropertyDTOtoEntityListMapper = mockk()
 
     companion object {
@@ -167,7 +167,7 @@ internal class PropertyRepositoryCoroutinesTest {
 
     @BeforeEach
     fun setUp() {
-        repository = PropertyRepositoryImplCoroutines(localDataSource, remoteDataSource, mapper)
+        repository = PropertyRepositoryImpl(localDataSource, remoteDataSource, mapper)
     }
 
     @AfterEach

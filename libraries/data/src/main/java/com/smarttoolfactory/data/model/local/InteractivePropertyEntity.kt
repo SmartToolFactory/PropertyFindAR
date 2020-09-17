@@ -69,7 +69,7 @@ data class InteractivePropertyEntity(
     override val leadEmailReceivers: List<String>,
     override val reference: String,
 
-    // Property like and display status
+    // Property insert date
     @ColumnInfo(name = "insert_date")
     val insertDate: Long = System.currentTimeMillis(),
 ) : BasePropertyEntity()

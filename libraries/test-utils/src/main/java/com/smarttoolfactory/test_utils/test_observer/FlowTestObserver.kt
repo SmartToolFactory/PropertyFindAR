@@ -295,7 +295,7 @@ class FlowTestObserver<T>(
  *
  * ###  Note: waiting for delay with a channel that sends values throw TimeoutCancellationException,
  * don't use timeout with channel
- * TODO Fix channel issue
+ *
  */
 suspend fun <T> Flow<T>.test(
     scope: CoroutineScope,

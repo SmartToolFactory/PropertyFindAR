@@ -8,6 +8,7 @@ import com.smarttoolfactory.data.db.MIGRATION_2_3
 import com.smarttoolfactory.data.db.MIGRATION_3_4
 import com.smarttoolfactory.data.db.PropertyDatabase
 import com.smarttoolfactory.data.db.dao.FavoritesCoroutinesDao
+import com.smarttoolfactory.data.db.dao.FavoritesRxJava3Dao
 import com.smarttoolfactory.data.db.dao.PagedPropertyDao
 import com.smarttoolfactory.data.db.dao.PropertyCoroutinesDao
 import com.smarttoolfactory.data.db.dao.PropertyRxJava3Dao
@@ -66,6 +67,10 @@ class DatabaseModule {
         appDatabase.userDao()
 
     @Provides
-    fun provideFavoritesDao(appDatabase: PropertyDatabase): FavoritesCoroutinesDao =
+    fun provideFavoritesDaoCoroutines(appDatabase: PropertyDatabase): FavoritesCoroutinesDao =
         appDatabase.favoritesDao()
+
+    @Provides
+    fun provideFavoritesDaoRxJava3(appDatabase: PropertyDatabase): FavoritesRxJava3Dao =
+        appDatabase.favoritesDaoRxJava3()
 }

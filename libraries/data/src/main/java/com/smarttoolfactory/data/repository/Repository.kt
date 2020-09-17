@@ -11,7 +11,7 @@ import io.reactivex.rxjava3.core.Single
  *
  * All business logic for creating offline-first or offline-last approach is moved to UseCase
  */
-interface PropertyRepositoryCoroutines {
+interface PropertyRepository {
 
     suspend fun fetchEntitiesFromRemote(orderBy: String = ORDER_BY_NONE): List<PropertyEntity>
 
@@ -44,7 +44,6 @@ interface PropertyRepositoryRxJava3 {
     fun getSortOrderKey(): Single<String>
 }
 
-// TODO This can be single interface with generic input and output types
 interface PagedPropertyRepository {
 
     fun getCurrentPageNumber(): Int

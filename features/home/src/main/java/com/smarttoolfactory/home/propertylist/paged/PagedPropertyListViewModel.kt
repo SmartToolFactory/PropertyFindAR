@@ -9,7 +9,7 @@ import com.smarttoolfactory.core.viewstate.Status
 import com.smarttoolfactory.core.viewstate.ViewState
 import com.smarttoolfactory.domain.ORDER_BY_NONE
 import com.smarttoolfactory.domain.model.PropertyItem
-import com.smarttoolfactory.domain.usecase.GetPropertiesUseCasePaged
+import com.smarttoolfactory.domain.usecase.property.GetPropertiesUseCasePaged
 import com.smarttoolfactory.home.propertylist.AbstractPropertyListVM
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow

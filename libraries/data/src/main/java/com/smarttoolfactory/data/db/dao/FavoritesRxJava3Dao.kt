@@ -47,8 +47,7 @@ abstract class FavoritesRxJava3Dao : BaseRxDao<InteractivePropertyEntity> {
      *
      * @return id of inserted favorite property id
      */
-    @Transaction
-    open fun insertUserFavorite(
+    fun insertUserFavorite(
         userId: Long,
         favoritePropertyEntity: InteractivePropertyEntity,
         viewCount: Int = 0,

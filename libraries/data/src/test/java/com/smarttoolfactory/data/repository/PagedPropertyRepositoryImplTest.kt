@@ -7,7 +7,7 @@ import com.smarttoolfactory.data.mapper.PropertyDTOtoPagedEntityListMapper
 import com.smarttoolfactory.data.model.local.PagedPropertyEntity
 import com.smarttoolfactory.data.model.remote.PropertyResponse
 import com.smarttoolfactory.data.source.LocalPagedPropertyDataSource
-import com.smarttoolfactory.data.source.RemotePropertyDataSourceCoroutines
+import com.smarttoolfactory.data.source.RemotePropertyDataSource
 import com.smarttoolfactory.test_utils.RESPONSE_JSON_PATH
 import com.smarttoolfactory.test_utils.RESPONSE_JSON_PATH_PAGE_1
 import com.smarttoolfactory.test_utils.RESPONSE_JSON_PATH_PAGE_2
@@ -32,7 +32,7 @@ internal class PagedPropertyRepositoryImplTest {
     private lateinit var repository: PagedPropertyRepository
 
     private val localDataSource: LocalPagedPropertyDataSource = mockk()
-    private val remoteDataSource: RemotePropertyDataSourceCoroutines = mockk()
+    private val remoteDataSource: RemotePropertyDataSource = mockk()
     private val mapper: PropertyDTOtoPagedEntityListMapper = mockk()
 
     companion object {

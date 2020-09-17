@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 4,
-    "identityHash": "be0ca4c3cc9bce9c3cce46838635ed89",
+    "identityHash": "2262ca57ac784f638fbe9ddba2dcec0b",
     "entities": [
       {
         "tableName": "property",
@@ -945,7 +945,17 @@
           ],
           "autoGenerate": false
         },
-        "indices": [],
+        "indices": [
+          {
+            "name": "index_user_favorite_junction_userAccountId_propertyId",
+            "unique": false,
+            "columnNames": [
+              "userAccountId",
+              "propertyId"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_user_favorite_junction_userAccountId_propertyId` ON `${TABLE_NAME}` (`userAccountId`, `propertyId`)"
+          }
+        ],
         "foreignKeys": [
           {
             "table": "user",
@@ -975,7 +985,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'be0ca4c3cc9bce9c3cce46838635ed89')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '2262ca57ac784f638fbe9ddba2dcec0b')"
     ]
   }
 }

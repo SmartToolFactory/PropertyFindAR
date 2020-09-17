@@ -1,9 +1,9 @@
 package com.smarttoolfactory.core.di
 
-import com.smarttoolfactory.domain.usecase.GetPropertiesUseCaseFlow
-import com.smarttoolfactory.domain.usecase.GetPropertiesUseCasePaged
-import com.smarttoolfactory.domain.usecase.GetPropertiesUseCaseRxJava3
-import com.smarttoolfactory.domain.usecase.SetPropertyStatusUseCase
+import com.smarttoolfactory.domain.usecase.property.GetPropertiesUseCaseFlow
+import com.smarttoolfactory.domain.usecase.property.GetPropertiesUseCasePaged
+import com.smarttoolfactory.domain.usecase.property.GetPropertiesUseCaseRxJava3
+import com.smarttoolfactory.domain.usecase.property.SetPropertyStatusUseCase
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ApplicationComponent

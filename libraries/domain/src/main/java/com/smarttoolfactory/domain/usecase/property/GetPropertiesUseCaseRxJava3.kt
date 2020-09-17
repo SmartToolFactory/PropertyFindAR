@@ -1,6 +1,7 @@
-package com.smarttoolfactory.domain.usecase
+package com.smarttoolfactory.domain.usecase.property
 
 import com.smarttoolfactory.data.model.local.PropertyEntity
+import com.smarttoolfactory.data.repository.FavoritesRepositoryRxJava3
 import com.smarttoolfactory.data.repository.PropertyRepositoryRxJava3
 import com.smarttoolfactory.domain.ORDER_BY_NONE
 import com.smarttoolfactory.domain.error.EmptyDataException
@@ -25,6 +26,7 @@ import javax.inject.Inject
  * element to get the latest data or new data is always first preference.
  */
 class GetPropertiesUseCaseRxJava3 @Inject constructor(
+    private val favoritesRepo: FavoritesRepositoryRxJava3,
     private val repository: PropertyRepositoryRxJava3,
     private val mapper: PropertyEntityToItemListMapper,
 ) {

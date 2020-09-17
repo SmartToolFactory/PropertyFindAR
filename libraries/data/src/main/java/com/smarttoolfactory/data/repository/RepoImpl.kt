@@ -5,19 +5,19 @@ import com.smarttoolfactory.data.mapper.PropertyDTOtoPagedEntityListMapper
 import com.smarttoolfactory.data.model.local.PagedPropertyEntity
 import com.smarttoolfactory.data.model.local.PropertyEntity
 import com.smarttoolfactory.data.source.LocalPagedPropertyDataSource
-import com.smarttoolfactory.data.source.LocalPropertyDataSourceCoroutines
+import com.smarttoolfactory.data.source.LocalPropertyDataSource
 import com.smarttoolfactory.data.source.LocalPropertyDataSourceRxJava3
-import com.smarttoolfactory.data.source.RemotePropertyDataSourceCoroutines
+import com.smarttoolfactory.data.source.RemotePropertyDataSource
 import com.smarttoolfactory.data.source.RemotePropertyDataSourceRxJava3
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Single
 import javax.inject.Inject
 
-class PropertyRepositoryImplCoroutines @Inject constructor(
-    private val localDataSource: LocalPropertyDataSourceCoroutines,
-    private val remoteDataSource: RemotePropertyDataSourceCoroutines,
+class PropertyRepositoryImpl @Inject constructor(
+    private val localDataSource: LocalPropertyDataSource,
+    private val remoteDataSource: RemotePropertyDataSource,
     private val mapper: PropertyDTOtoEntityListMapper
-) : PropertyRepositoryCoroutines {
+) : PropertyRepository {
 
     override suspend fun fetchEntitiesFromRemote(orderBy: String): List<PropertyEntity> {
         val data = remoteDataSource.getPropertyDTOs(orderBy)
@@ -84,7 +84,7 @@ class PropertyRepositoryImlRxJava3 @Inject constructor(
 
 class PagedPropertyRepositoryImpl @Inject constructor(
     private val localDataSource: LocalPagedPropertyDataSource,
-    private val remoteDataSource: RemotePropertyDataSourceCoroutines,
+    private val remoteDataSource: RemotePropertyDataSource,
     private val mapper: PropertyDTOtoPagedEntityListMapper
 ) : PagedPropertyRepository {
 

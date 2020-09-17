@@ -5,6 +5,7 @@ import com.smarttoolfactory.data.constant.ORDER_BY_NONE
 import com.smarttoolfactory.data.repository.PropertyRepositoryRxJava3
 import com.smarttoolfactory.domain.error.EmptyDataException
 import com.smarttoolfactory.domain.mapper.PropertyEntityToItemListMapper
+import com.smarttoolfactory.domain.usecase.property.GetPropertiesUseCaseRxJava3
 import com.smarttoolfactory.test_utils.extension.RxImmediateSchedulerExtension
 import io.mockk.clearMocks
 import io.mockk.every

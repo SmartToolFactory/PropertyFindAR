@@ -3,6 +3,7 @@ package com.smarttoolfactory.data.model.local
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Index
 import androidx.room.Junction
 import androidx.room.Relation
 import com.smarttoolfactory.data.model.IEntity
@@ -35,6 +36,7 @@ import com.smarttoolfactory.data.model.IEntity
 @Entity(
     tableName = "user_favorite_junction",
     primaryKeys = ["userAccountId", "propertyId"],
+    indices = [Index("userAccountId", "propertyId")],
     // Foreign Keys
     foreignKeys = [
         ForeignKey(

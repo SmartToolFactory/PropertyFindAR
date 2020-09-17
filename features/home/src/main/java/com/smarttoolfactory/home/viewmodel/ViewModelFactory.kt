@@ -2,9 +2,9 @@ package com.smarttoolfactory.home.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.smarttoolfactory.domain.usecase.GetPropertiesUseCaseFlow
-import com.smarttoolfactory.domain.usecase.GetPropertiesUseCasePaged
-import com.smarttoolfactory.domain.usecase.GetPropertiesUseCaseRxJava3
+import com.smarttoolfactory.domain.usecase.property.GetPropertiesUseCaseFlow
+import com.smarttoolfactory.domain.usecase.property.GetPropertiesUseCasePaged
+import com.smarttoolfactory.domain.usecase.property.GetPropertiesUseCaseRxJava3
 import com.smarttoolfactory.home.propertylist.flow.PropertyListViewModelFlow
 import com.smarttoolfactory.home.propertylist.paged.PagedPropertyListViewModel
 import com.smarttoolfactory.home.propertylist.rxjava.PropertyListViewModelRxJava3

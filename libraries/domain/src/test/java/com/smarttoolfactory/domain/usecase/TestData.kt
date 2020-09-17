@@ -10,7 +10,6 @@ import com.smarttoolfactory.test_utils.RESPONSE_JSON_PATH_PAGE_2
 import com.smarttoolfactory.test_utils.util.convertToObjectFromJson
 import com.smarttoolfactory.test_utils.util.getResourceAsText
 
-// FIXME Cannot convert from Json to Entity even with wrapper, check out Moshi or Jackson
 object TestData {
 
     /*

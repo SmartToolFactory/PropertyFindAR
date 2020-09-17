@@ -9,9 +9,9 @@ import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Single
 import javax.inject.Inject
 
-class FavoritesRepoImplCoroutines @Inject constructor(
+class FavoritesRepositoryImpl @Inject constructor(
     private val favoriteSource: FavoritePropertyDataSource
-) : FavoritesRepositoryCoroutines {
+) : FavoritesRepository {
 
     override suspend fun insertOrUpdateFavorite(
         userId: Long,

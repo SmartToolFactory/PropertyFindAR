@@ -18,8 +18,8 @@ import javax.inject.Inject
 /*
     *** Coroutines Implementations for DataSources ***
  */
-class RemotePropertyDataSourceCoroutinesImpl
-@Inject constructor(private val api: PropertyApiCoroutines) : RemotePropertyDataSourceCoroutines {
+class RemotePropertyDataSourceImpl
+@Inject constructor(private val api: PropertyApiCoroutines) : RemotePropertyDataSource {
 
     override suspend fun getPropertyDTOs(orderBy: String): List<PropertyDTO> {
         return api.getPropertyResponse(orderBy).res
@@ -37,7 +37,7 @@ class LocalPropertyDataSourceImpl
 @Inject constructor(
     private val dao: PropertyCoroutinesDao,
     private val sortDao: SortOrderDaoCoroutines
-) : LocalPropertyDataSourceCoroutines {
+) : LocalPropertyDataSource {
 
     override suspend fun getPropertyEntities(): List<PropertyEntity> {
         return dao.getPropertyList()
@@ -63,7 +63,7 @@ class LocalPropertyDataSourceImpl
 /*
     *** RxJava3 Implementations for DataSources ***
  */
-class RemoteDataSourceRxJava3Impl @Inject constructor(private val api: PropertyApiRxJava) :
+class RemoteDataSourceImplRxJava3 @Inject constructor(private val api: PropertyApiRxJava) :
     RemotePropertyDataSourceRxJava3 {
 
     override fun getPropertyDTOs(orderBy: String): Single<List<PropertyDTO>> {

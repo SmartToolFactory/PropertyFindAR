@@ -2,7 +2,7 @@ package com.smarttoolfactory.property_detail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.smarttoolfactory.domain.usecase.SetPropertyStatusUseCase
+import com.smarttoolfactory.domain.usecase.property.SetPropertyStatusUseCase
 import javax.inject.Inject
 import kotlinx.coroutines.CoroutineScope
 

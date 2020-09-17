@@ -51,7 +51,7 @@ class PropertyDataSourceRxJava3Test {
 
         private val api = mockk<PropertyApiRxJava>()
 
-        private lateinit var remoteDataSource: RemoteDataSourceRxJava3Impl
+        private lateinit var remoteDataSource: RemoteDataSourceImplRxJava3
 
         @Test
         fun `given network error occurred, should return Single with error`() {
@@ -87,7 +87,7 @@ class PropertyDataSourceRxJava3Test {
 
         @BeforeEach
         fun setUp() {
-            remoteDataSource = RemoteDataSourceRxJava3Impl(api)
+            remoteDataSource = RemoteDataSourceImplRxJava3(api)
         }
 
         @AfterEach
