@@ -15,10 +15,21 @@ interface FavoritesRepository {
         liked: Boolean
     )
 
-    suspend fun getUserFavoriteJunction(
+    /**
+     * Retrieves favorite and view count stats for property with [propertyId] only for the user
+     * with [userId]
+     */
+    suspend fun getPropertyStats(
         userId: Long,
         propertyId: Int
     ): UserFavoriteJunction?
+
+    /**
+     * Retrieves favorite and view count stats for every property for the user with [userId]
+     */
+    suspend fun getStatsForProperties(
+        userId: Long
+    ): List<UserFavoriteJunction>
 
     suspend fun getPropertiesWithFavorites(userId: Long): List<PropertyWithFavorites>
 
@@ -35,10 +46,21 @@ interface FavoritesRepositoryRxJava3 {
         liked: Boolean
     ): Single<Long>
 
-    fun getUserFavoriteJunction(
+    /**
+     * Retrieves favorite and view count stats for property with [propertyId] only for the user
+     * with [userId]
+     */
+    fun getPropertyStats(
         userId: Long,
         propertyId: Int
     ): Single<UserFavoriteJunction?>
+
+    /**
+     * Retrieves favorite and view count stats for every property for the user with [userId]
+     */
+    fun getStatsForProperties(
+        userId: Long
+    ): Single<List<UserFavoriteJunction>>
 
     fun getPropertiesWithFavorites(userId: Long): Single<List<PropertyWithFavorites>>
 

@@ -17,10 +17,19 @@ interface FavoritePropertyDataSourceRxJava3 {
         liked: Boolean
     ): Single<Long>
 
-    fun getUserFavoriteJunction(
+    /**
+     * Retrieves favorite and view count stats for property with [propertyId] only for the user
+     * with [userId]
+     */
+    fun getPropertyStats(
         userId: Long,
         propertyId: Int
     ): Single<UserFavoriteJunction?>
+
+    /**
+     * Retrieves favorite and view count stats for every property for the user with [userId]
+     */
+    fun getPropertyStatsList(userId: Long): Single<List<UserFavoriteJunction>>
 
     fun getPropertiesWithFavorites(userId: Long): Single<List<PropertyWithFavorites>>
 
@@ -41,11 +50,15 @@ class FavoritePropertyDataSourceImplRxJava3 @Inject constructor(
         return favoritesDao.insertUserFavorite(userId, entity, viewCount, liked)
     }
 
-    override fun getUserFavoriteJunction(
+    override fun getPropertyStats(
         userId: Long,
         propertyId: Int
     ): Single<UserFavoriteJunction?> {
         return favoritesDao.getUserFavoriteJunction(userId, propertyId)
+    }
+
+    override fun getPropertyStatsList(userId: Long): Single<List<UserFavoriteJunction>> {
+        return favoritesDao.getUserFavoriteJunction(userId)
     }
 
     override fun getPropertiesWithFavorites(userId: Long): Single<List<PropertyWithFavorites>> {

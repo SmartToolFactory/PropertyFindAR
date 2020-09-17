@@ -2,7 +2,6 @@ package com.smarttoolfactory.domain.usecase.property
 
 import com.smarttoolfactory.data.constant.ORDER_BY_NONE
 import com.smarttoolfactory.data.model.local.PropertyEntity
-import com.smarttoolfactory.data.repository.FavoritesRepository
 import com.smarttoolfactory.data.repository.PropertyRepository
 import com.smarttoolfactory.domain.dispatcher.UseCaseDispatchers
 import com.smarttoolfactory.domain.error.EmptyDataException
@@ -32,7 +31,6 @@ import kotlinx.coroutines.flow.map
  * element to get the latest data or new data is always first preference.
  */
 class GetPropertiesUseCaseFlow @Inject constructor(
-    private val favoritesRepo: FavoritesRepository,
     private val repository: PropertyRepository,
     private val mapper: PropertyEntityToItemListMapper,
     private val dispatcherProvider: UseCaseDispatchers

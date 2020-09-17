@@ -2,6 +2,8 @@ package com.smarttoolfactory.data.di
 
 import android.app.Application
 import androidx.room.Room
+import androidx.room.RoomDatabase
+import androidx.sqlite.db.SupportSQLiteDatabase
 import com.smarttoolfactory.data.constant.DATABASE_NAME
 import com.smarttoolfactory.data.db.MIGRATION_1_2
 import com.smarttoolfactory.data.db.MIGRATION_2_3
@@ -34,6 +36,12 @@ class DatabaseModule {
             DATABASE_NAME
         )
             .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4)
+            .addCallback(object : RoomDatabase.Callback() {
+
+                override fun onCreate(db: SupportSQLiteDatabase) {
+                    db.execSQL("INSERT INTO user VALUES(0,'','','','')")
+                }
+            })
             .build()
     }
 

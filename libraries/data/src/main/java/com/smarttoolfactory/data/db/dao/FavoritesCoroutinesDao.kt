@@ -78,21 +78,18 @@ abstract class FavoritesCoroutinesDao : BaseCoroutinesDao<InteractivePropertyEnt
      * Get contents of user and favorite junction which are
      * userId, propertyId, viewCount, and favorite for every user
      */
-    @Transaction
     @Query("SELECT * FROM user_favorite_junction")
-    abstract suspend fun getUserFavoriteJunction(): List<UserFavoriteJunction>
+    abstract suspend fun getUserFavoriteJunctionForAll(): List<UserFavoriteJunction>
 
     /**
      * Get contents of user and favorite junction which are
      * userId, propertyId, viewCount, and favorite for user with id [userId]
      */
-    @Transaction
     @Query("SELECT * FROM user_favorite_junction WHERE userAccountId =:userId")
     abstract suspend fun getUserFavoriteJunction(
         userId: Long
     ): List<UserFavoriteJunction>
 
-    @Transaction
     @Query(
         "SELECT * FROM user_favorite_junction " +
             "WHERE userAccountId =:userId AND propertyId =:propertyId"

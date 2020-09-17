@@ -83,21 +83,18 @@ abstract class FavoritesRxJava3Dao : BaseRxDao<InteractivePropertyEntity> {
      * Get contents of user and favorite junction which are
      * userId, propertyId, viewCount, and favorite for every user
      */
-    @Transaction
     @Query("SELECT * FROM user_favorite_junction")
-    abstract fun getUserFavoriteJunction(): Single<List<UserFavoriteJunction>>
+    abstract fun getUserFavoriteJunctionForAll(): Single<List<UserFavoriteJunction>>
 
     /**
      * Get contents of user and favorite junction which are
      * userId, propertyId, viewCount, and favorite for user with id [userId]
      */
-    @Transaction
     @Query("SELECT * FROM user_favorite_junction WHERE userAccountId =:userId")
     abstract fun getUserFavoriteJunction(
         userId: Long
     ): Single<List<UserFavoriteJunction>>
 
-    @Transaction
     @Query(
         "SELECT * FROM user_favorite_junction " +
             "WHERE userAccountId =:userId AND propertyId =:propertyId"

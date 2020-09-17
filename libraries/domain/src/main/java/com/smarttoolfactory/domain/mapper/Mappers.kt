@@ -188,7 +188,7 @@ class PagedEntityToItemListMapper @Inject constructor() :
     }
 }
 
-class ItemToEntityMapper @Inject constructor() :
+class PropertyItemToEntityMapper @Inject constructor() :
     Mapper<PropertyItem, InteractivePropertyEntity> {
 
     override fun map(input: PropertyItem): InteractivePropertyEntity {
