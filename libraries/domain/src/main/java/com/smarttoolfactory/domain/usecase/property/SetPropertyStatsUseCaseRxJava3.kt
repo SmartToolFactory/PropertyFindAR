@@ -1,16 +1,14 @@
 package com.smarttoolfactory.domain.usecase.property
 
 import com.smarttoolfactory.data.model.local.UserFavoriteJunction
-import com.smarttoolfactory.data.repository.FavoritesRepository
+import com.smarttoolfactory.data.repository.FavoritesRepositoryRxJava3
 import com.smarttoolfactory.domain.mapper.PropertyItemToEntityMapper
 import com.smarttoolfactory.domain.model.PropertyItem
+import io.reactivex.rxjava3.core.Single
 import javax.inject.Inject
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.map
 
-class SetPropertyStatusUseCase @Inject constructor(
-    private val favoritesRepo: FavoritesRepository,
+class SetPropertyStatsUseCaseRxJava3 @Inject constructor(
+    private val favoritesRepo: FavoritesRepositoryRxJava3,
     private val mapper: PropertyItemToEntityMapper
 ) {
 
@@ -22,8 +20,8 @@ class SetPropertyStatusUseCase @Inject constructor(
     fun getStatusOfPropertiesForUser(
         userId: Long = 0,
         properties: List<PropertyItem>
-    ): Flow<List<PropertyItem>> {
-        return flow { emit(favoritesRepo.getStatsForProperties(userId)) }
+    ): Single<List<PropertyItem>> {
+        return favoritesRepo.getStatsForProperties(userId)
             .map { stats ->
                 if (stats.isNullOrEmpty()) {
                     properties
@@ -62,13 +60,13 @@ class SetPropertyStatusUseCase @Inject constructor(
     fun updatePropertyStatus(
         userId: Long = 0,
         property: PropertyItem
-    ): Flow<Unit> {
+    ): Single<Long> {
 
-        return flow { emit(mapper.map(property)) }
-            .map { propertyEntity ->
+        return Single.just(mapper.map(property))
+            .flatMap { propertyEntity ->
 
                 if (!property.isFavorite && property.viewCount == 0) {
-                    favoritesRepo.deleteFavoriteEntity(propertyEntity)
+                    favoritesRepo.deleteFavoriteEntity(propertyEntity).andThen(Single.just(-1L))
                 } else {
                     favoritesRepo.insertOrUpdateFavorite(
                         userId,

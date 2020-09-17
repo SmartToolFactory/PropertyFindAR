@@ -10,6 +10,7 @@ import com.smarttoolfactory.core.viewstate.ViewState
 import com.smarttoolfactory.domain.ORDER_BY_NONE
 import com.smarttoolfactory.domain.model.PropertyItem
 import com.smarttoolfactory.domain.usecase.property.GetPropertiesUseCaseFlow
+import com.smarttoolfactory.domain.usecase.property.SetPropertyStatsUseCase
 import com.smarttoolfactory.home.propertylist.AbstractPropertyListVM
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
@@ -21,7 +22,8 @@ import kotlinx.coroutines.flow.onStart
 
 class PropertyListViewModelFlow @ViewModelInject constructor(
     private val coroutineScope: CoroutineScope,
-    private val getPropertiesUseCase: GetPropertiesUseCaseFlow
+    private val getPropertiesUseCase: GetPropertiesUseCaseFlow,
+    private val setPropertyStatsUseCase: SetPropertyStatsUseCase
 ) : AbstractPropertyListVM() {
 
     private val _goToDetailScreen = MutableLiveData<Event<PropertyItem>>()
@@ -69,6 +71,9 @@ class PropertyListViewModelFlow @ViewModelInject constructor(
                 getPropertiesUseCase
                     .getPropertiesOfflineFirst(_orderByKey)
             }
+            .flatMapConcat {
+                setPropertyStatsUseCase.getStatusOfPropertiesForUser(properties = it)
+            }
             .convertToFlowViewState()
             .onStart {
                 println("🍏 FlowViewModel getPropertyList() START")
@@ -84,6 +89,9 @@ class PropertyListViewModelFlow @ViewModelInject constructor(
     override fun refreshPropertyList(orderBy: String?) {
 
         getPropertiesUseCase.getPropertiesOfflineLast(orderBy ?: _orderByKey)
+            .flatMapConcat {
+                setPropertyStatsUseCase.getStatusOfPropertiesForUser(properties = it)
+            }
             .convertToFlowViewState()
             .onStart {
                 _propertyViewState.value = ViewState(status = Status.LOADING)
@@ -96,9 +104,15 @@ class PropertyListViewModelFlow @ViewModelInject constructor(
 
     override fun onClick(item: PropertyItem) {
         _goToDetailScreen.value = Event(item)
+        item.viewCount++
+        setPropertyStatsUseCase.updatePropertyStatus(property = item)
+            .launchIn(coroutineScope)
     }
 
     fun onLikeButtonClick(item: PropertyItem) {
         println("🔥 Like: $item")
+        setPropertyStatsUseCase
+            .updatePropertyStatus(property = item)
+            .launchIn(coroutineScope)
     }
 }

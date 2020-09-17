@@ -10,13 +10,15 @@ import com.smarttoolfactory.core.viewstate.ViewState
 import com.smarttoolfactory.domain.ORDER_BY_NONE
 import com.smarttoolfactory.domain.model.PropertyItem
 import com.smarttoolfactory.domain.usecase.property.GetPropertiesUseCaseRxJava3
+import com.smarttoolfactory.domain.usecase.property.SetPropertyStatsUseCaseRxJava3
 import com.smarttoolfactory.home.propertylist.AbstractPropertyListVM
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
 
 class PropertyListViewModelRxJava3 @ViewModelInject constructor(
-    private val getPropertiesUseCase: GetPropertiesUseCaseRxJava3
+    private val getPropertiesUseCase: GetPropertiesUseCaseRxJava3,
+    private val setPropertyStatsUseCase: SetPropertyStatsUseCaseRxJava3
 ) : AbstractPropertyListVM() {
 
     private val _goToDetailScreen = MutableLiveData<Event<PropertyItem>>()
@@ -52,6 +54,9 @@ class PropertyListViewModelRxJava3 @ViewModelInject constructor(
             .flatMap {
                 getPropertiesUseCase.getPropertiesOfflineFirst(_orderByKey)
             }
+            .flatMap {
+                setPropertyStatsUseCase.getStatusOfPropertiesForUser(properties = it)
+            }
             .convertFromSingleToObservableViewStateWithLoading()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
@@ -67,6 +72,9 @@ class PropertyListViewModelRxJava3 @ViewModelInject constructor(
     override fun refreshPropertyList(orderBy: String?) {
 
         getPropertiesUseCase.getPropertiesOfflineLast(orderBy ?: _orderByKey)
+            .flatMap {
+                setPropertyStatsUseCase.getStatusOfPropertiesForUser(properties = it)
+            }
             .convertFromSingleToObservableViewStateWithLoading()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
