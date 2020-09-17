@@ -7,10 +7,10 @@ import com.smarttoolfactory.data.db.MIGRATION_1_2
 import com.smarttoolfactory.data.db.MIGRATION_2_3
 import com.smarttoolfactory.data.db.MIGRATION_3_4
 import com.smarttoolfactory.data.db.PropertyDatabase
-import com.smarttoolfactory.data.db.dao.FavoritesDao
+import com.smarttoolfactory.data.db.dao.FavoritesCoroutinesDao
 import com.smarttoolfactory.data.db.dao.PagedPropertyDao
-import com.smarttoolfactory.data.db.dao.PropertyDaoCoroutines
-import com.smarttoolfactory.data.db.dao.PropertyDaoRxJava3
+import com.smarttoolfactory.data.db.dao.PropertyCoroutinesDao
+import com.smarttoolfactory.data.db.dao.PropertyRxJava3Dao
 import com.smarttoolfactory.data.db.dao.SortOrderDaoCoroutines
 import com.smarttoolfactory.data.db.dao.SortOrderDaoRxJava3
 import com.smarttoolfactory.data.db.dao.UserDao
@@ -38,12 +38,12 @@ class DatabaseModule {
 
     @Singleton
     @Provides
-    fun providePropertyDaoCoroutines(appDatabase: PropertyDatabase): PropertyDaoCoroutines =
+    fun providePropertyDaoCoroutines(appDatabase: PropertyDatabase): PropertyCoroutinesDao =
         appDatabase.propertyDaoCoroutines()
 
     @Singleton
     @Provides
-    fun providePropertyDaoRxJava3(appDatabase: PropertyDatabase): PropertyDaoRxJava3 =
+    fun providePropertyDaoRxJava3(appDatabase: PropertyDatabase): PropertyRxJava3Dao =
         appDatabase.propertyDaoRxJava()
 
     @Singleton
@@ -66,6 +66,6 @@ class DatabaseModule {
         appDatabase.userDao()
 
     @Provides
-    fun provideFavoritesDao(appDatabase: PropertyDatabase): FavoritesDao =
+    fun provideFavoritesDao(appDatabase: PropertyDatabase): FavoritesCoroutinesDao =
         appDatabase.favoritesDao()
 }

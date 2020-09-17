@@ -3,8 +3,8 @@ package com.smarttoolfactory.data.source
 import com.smarttoolfactory.data.api.PropertyApiCoroutines
 import com.smarttoolfactory.data.api.PropertyApiRxJava
 import com.smarttoolfactory.data.db.dao.PagedPropertyDao
-import com.smarttoolfactory.data.db.dao.PropertyDaoCoroutines
-import com.smarttoolfactory.data.db.dao.PropertyDaoRxJava3
+import com.smarttoolfactory.data.db.dao.PropertyCoroutinesDao
+import com.smarttoolfactory.data.db.dao.PropertyRxJava3Dao
 import com.smarttoolfactory.data.db.dao.SortOrderDaoCoroutines
 import com.smarttoolfactory.data.db.dao.SortOrderDaoRxJava3
 import com.smarttoolfactory.data.model.local.PagedPropertyEntity
@@ -35,7 +35,7 @@ class RemotePropertyDataSourceCoroutinesImpl
 
 class LocalPropertyDataSourceImpl
 @Inject constructor(
-    private val dao: PropertyDaoCoroutines,
+    private val dao: PropertyCoroutinesDao,
     private val sortDao: SortOrderDaoCoroutines
 ) : LocalPropertyDataSourceCoroutines {
 
@@ -78,8 +78,8 @@ class RemoteDataSourceRxJava3Impl @Inject constructor(private val api: PropertyA
     }
 }
 
-class LocalDataSourceRxJava3Impl @Inject constructor(
-    private val dao: PropertyDaoRxJava3,
+class LocalDataSourceImplRxJava3 @Inject constructor(
+    private val dao: PropertyRxJava3Dao,
     private val sortDao: SortOrderDaoRxJava3
 ) :
     LocalPropertyDataSourceRxJava3 {

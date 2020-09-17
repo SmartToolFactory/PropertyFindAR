@@ -14,7 +14,7 @@ class PropertyEntityEntityListMapperTest {
     }
 
     @Test
-    fun `Given a valid propertyDTO list, should map to propertyEntity list`() {
+    fun `given a valid propertyDTO list, should map to propertyEntity list`() {
 
         val propertyDTOList = propertyDTOResponse.res
 

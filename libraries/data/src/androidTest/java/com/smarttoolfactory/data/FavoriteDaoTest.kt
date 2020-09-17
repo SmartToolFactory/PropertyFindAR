@@ -4,7 +4,7 @@ import android.database.sqlite.SQLiteConstraintException
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.RoomDatabase
 import com.google.common.truth.Truth
-import com.smarttoolfactory.data.db.dao.FavoritesDao
+import com.smarttoolfactory.data.db.dao.FavoritesCoroutinesDao
 import com.smarttoolfactory.data.db.dao.UserDao
 import com.smarttoolfactory.data.mapper.MapperFactory
 import com.smarttoolfactory.data.mapper.PropertyDTOtoFavoriteEntityListMapper
@@ -37,7 +37,7 @@ class FavoriteDaoTest : AbstractDaoTest(inMemoryDatabase = true) {
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    private lateinit var favoritesDao: FavoritesDao
+    private lateinit var favoritesDao: FavoritesCoroutinesDao
     private lateinit var userDao: UserDao
 
     companion object {
@@ -222,7 +222,7 @@ class FavoriteDaoTest : AbstractDaoTest(inMemoryDatabase = true) {
         favoritesDao.insertUserFavorite(user2.userId, favorite4, 4, false)
 
         // WHEN
-        favoritesDao.deleteFavoritesForUserWithId(user1.userId, favorite2.id)
+        favoritesDao.deleteFavoriteEntityForUser(user1.userId, favorite2.id)
 
         // THEN
         val favorites1 = favoritesDao.getPropertiesWithFavorites(user1.userId)

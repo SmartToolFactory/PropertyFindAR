@@ -7,10 +7,10 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.smarttoolfactory.data.constant.DATABASE_VERSION
 import com.smarttoolfactory.data.db.converters.PropertyTypeConverters
-import com.smarttoolfactory.data.db.dao.FavoritesDao
+import com.smarttoolfactory.data.db.dao.FavoritesCoroutinesDao
 import com.smarttoolfactory.data.db.dao.PagedPropertyDao
-import com.smarttoolfactory.data.db.dao.PropertyDaoCoroutines
-import com.smarttoolfactory.data.db.dao.PropertyDaoRxJava3
+import com.smarttoolfactory.data.db.dao.PropertyCoroutinesDao
+import com.smarttoolfactory.data.db.dao.PropertyRxJava3Dao
 import com.smarttoolfactory.data.db.dao.SortOrderDaoCoroutines
 import com.smarttoolfactory.data.db.dao.SortOrderDaoRxJava3
 import com.smarttoolfactory.data.db.dao.UserDao
@@ -36,9 +36,9 @@ import com.smarttoolfactory.data.model.local.UserFavoriteJunction
 @TypeConverters(PropertyTypeConverters::class)
 abstract class PropertyDatabase : RoomDatabase() {
 
-    abstract fun propertyDaoCoroutines(): PropertyDaoCoroutines
+    abstract fun propertyDaoCoroutines(): PropertyCoroutinesDao
 
-    abstract fun propertyDaoRxJava(): PropertyDaoRxJava3
+    abstract fun propertyDaoRxJava(): PropertyRxJava3Dao
 
     abstract fun propertySortDaoCoroutines(): SortOrderDaoCoroutines
 
@@ -48,7 +48,7 @@ abstract class PropertyDatabase : RoomDatabase() {
 
     abstract fun userDao(): UserDao
 
-    abstract fun favoritesDao(): FavoritesDao
+    abstract fun favoritesDao(): FavoritesCoroutinesDao
 }
 
 /**

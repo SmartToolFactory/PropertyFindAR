@@ -12,7 +12,7 @@ import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
 
 @Dao
-interface PropertyDaoRxJava3 : BaseRxDao<PropertyEntity> {
+interface PropertyRxJava3Dao : BaseRxDao<PropertyEntity> {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(propertyEntity: PropertyEntity): Completable

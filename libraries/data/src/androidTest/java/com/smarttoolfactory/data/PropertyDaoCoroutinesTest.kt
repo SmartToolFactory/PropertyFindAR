@@ -6,7 +6,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth
 import com.smarttoolfactory.data.db.PropertyDatabase
-import com.smarttoolfactory.data.db.dao.PropertyDaoCoroutines
+import com.smarttoolfactory.data.db.dao.PropertyCoroutinesDao
 import com.smarttoolfactory.data.mapper.MapperFactory
 import com.smarttoolfactory.data.mapper.PropertyDTOtoEntityListMapper
 import com.smarttoolfactory.data.model.remote.PropertyResponse
@@ -46,7 +46,7 @@ class PropertyDaoCoroutinesTest {
     /**
      * This is the SUT
      */
-    private lateinit var dao: PropertyDaoCoroutines
+    private lateinit var dao: PropertyCoroutinesDao
 
     /*
         Insert

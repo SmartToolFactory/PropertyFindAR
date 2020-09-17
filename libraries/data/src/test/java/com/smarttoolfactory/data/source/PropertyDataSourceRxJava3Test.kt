@@ -2,7 +2,7 @@ package com.smarttoolfactory.data.source
 
 import com.google.common.truth.Truth
 import com.smarttoolfactory.data.api.PropertyApiRxJava
-import com.smarttoolfactory.data.db.dao.PropertyDaoRxJava3
+import com.smarttoolfactory.data.db.dao.PropertyRxJava3Dao
 import com.smarttoolfactory.data.db.dao.SortOrderDaoRxJava3
 import com.smarttoolfactory.data.mapper.MapperFactory
 import com.smarttoolfactory.data.mapper.PropertyDTOtoEntityListMapper
@@ -100,10 +100,10 @@ class PropertyDataSourceRxJava3Test {
     @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     inner class LocalDataSourceTest {
 
-        private val dao = mockk<PropertyDaoRxJava3>()
+        private val dao = mockk<PropertyRxJava3Dao>()
         private val sortDao = mockk<SortOrderDaoRxJava3>()
 
-        private lateinit var localDataSource: LocalDataSourceRxJava3Impl
+        private lateinit var localDataSource: LocalDataSourceImplRxJava3
 
         @Test
         fun `given DB is empty should return an empty list`() = runBlockingTest {
@@ -169,7 +169,7 @@ class PropertyDataSourceRxJava3Test {
 
         @BeforeEach
         fun setUp() {
-            localDataSource = LocalDataSourceRxJava3Impl(dao, sortDao)
+            localDataSource = LocalDataSourceImplRxJava3(dao, sortDao)
         }
 
         @AfterEach

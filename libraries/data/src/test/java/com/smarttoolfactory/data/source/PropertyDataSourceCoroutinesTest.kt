@@ -2,7 +2,7 @@ package com.smarttoolfactory.data.source
 
 import com.google.common.truth.Truth
 import com.smarttoolfactory.data.api.PropertyApiCoroutines
-import com.smarttoolfactory.data.db.dao.PropertyDaoCoroutines
+import com.smarttoolfactory.data.db.dao.PropertyCoroutinesDao
 import com.smarttoolfactory.data.db.dao.SortOrderDaoCoroutines
 import com.smarttoolfactory.data.mapper.MapperFactory
 import com.smarttoolfactory.data.mapper.PropertyDTOtoEntityListMapper
@@ -98,7 +98,7 @@ class PropertyDataSourceCoroutinesTest {
     @Nested
     inner class LocalDataSourceTest {
 
-        private val dao = mockk<PropertyDaoCoroutines>()
+        private val dao = mockk<PropertyCoroutinesDao>()
 
         private lateinit var localDataSource: LocalPropertyDataSourceCoroutines
         private val sortDao = mockk<SortOrderDaoCoroutines>()

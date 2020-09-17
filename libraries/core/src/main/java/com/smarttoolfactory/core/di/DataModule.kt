@@ -9,7 +9,7 @@ import com.smarttoolfactory.data.repository.PropertyRepositoryCoroutines
 import com.smarttoolfactory.data.repository.PropertyRepositoryImlRxJava3
 import com.smarttoolfactory.data.repository.PropertyRepositoryImplCoroutines
 import com.smarttoolfactory.data.repository.PropertyRepositoryRxJava3
-import com.smarttoolfactory.data.source.LocalDataSourceRxJava3Impl
+import com.smarttoolfactory.data.source.LocalDataSourceImplRxJava3
 import com.smarttoolfactory.data.source.LocalPagedPropertyDataSource
 import com.smarttoolfactory.data.source.LocalPagedPropertySourceImpl
 import com.smarttoolfactory.data.source.LocalPropertyDataSourceCoroutines
@@ -72,7 +72,7 @@ interface DataModule {
 
     @Singleton
     @Binds
-    fun bindLocalDataSourceRxJava3(localDataSource: LocalDataSourceRxJava3Impl):
+    fun bindLocalDataSourceRxJava3(localDataSource: LocalDataSourceImplRxJava3):
         LocalPropertyDataSourceRxJava3
 
     @Singleton

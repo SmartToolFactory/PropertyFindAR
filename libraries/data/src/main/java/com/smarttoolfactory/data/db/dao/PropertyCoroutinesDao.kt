@@ -6,7 +6,7 @@ import androidx.room.Query
 import com.smarttoolfactory.data.model.local.PropertyEntity
 
 @Dao
-interface PropertyDaoCoroutines : BaseCoroutinesDao<PropertyEntity> {
+interface PropertyCoroutinesDao : BaseCoroutinesDao<PropertyEntity> {
 
     @Delete
     suspend fun deletePropertyEntity(entity: PropertyEntity): Int
