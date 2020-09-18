@@ -59,6 +59,8 @@ class SetPropertyStatsUseCase @Inject constructor(
         }
     }
 
+    // TODO Add delete function for junction table for property that is not
+    //  liked nor visited by any users
     fun updatePropertyStatus(
         userId: Long = 0,
         property: PropertyItem
@@ -67,16 +69,12 @@ class SetPropertyStatsUseCase @Inject constructor(
         return flow { emit(mapper.map(property)) }
             .map { propertyEntity ->
 
-                if (!property.isFavorite && property.viewCount == 0) {
-                    favoritesRepo.deleteFavoriteEntity(propertyEntity)
-                } else {
-                    favoritesRepo.insertOrUpdateFavorite(
-                        userId,
-                        propertyEntity,
-                        property.viewCount,
-                        property.isFavorite
-                    )
-                }
+                favoritesRepo.insertOrUpdateFavorite(
+                    userId,
+                    propertyEntity,
+                    property.viewCount,
+                    property.isFavorite
+                )
             }
     }
 }

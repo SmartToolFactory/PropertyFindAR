@@ -33,7 +33,7 @@ class GetPropertiesUseCasePaged @Inject constructor(
      */
     fun getPagedOfflineLast(orderBy: String): Flow<List<PropertyItem>> {
 
-        return flow { emit(repository.fetchEntitiesFromRemoteByPage(orderBy)) }
+        return flow { emit(repository.fetchPagedEntitiesFromRemote(orderBy)) }
             .map {
                 if (it.isNullOrEmpty()) {
                     throw EmptyDataException("No Data is available in Remote source!")

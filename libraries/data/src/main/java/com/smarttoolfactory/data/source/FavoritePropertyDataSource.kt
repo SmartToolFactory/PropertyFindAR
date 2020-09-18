@@ -15,6 +15,8 @@ interface FavoritePropertyDataSource {
         liked: Boolean
     )
 
+    suspend fun getStatsForAll(): List<UserFavoriteJunction>
+
     /**
      * Retrieves favorite and view count stats for property with [propertyId] only for the user
      * with [userId]
@@ -46,6 +48,10 @@ class FavoritePropertyDataSourceImpl @Inject constructor(
         liked: Boolean
     ) {
         favoritesDao.insertUserFavorite(userId, entity, viewCount, liked)
+    }
+
+    override suspend fun getStatsForAll(): List<UserFavoriteJunction> {
+        return favoritesDao.getUserFavoriteJunctionForAll()
     }
 
     override suspend fun getPropertyStats(

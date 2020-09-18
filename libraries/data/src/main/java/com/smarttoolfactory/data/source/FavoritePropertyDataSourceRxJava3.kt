@@ -18,6 +18,12 @@ interface FavoritePropertyDataSourceRxJava3 {
     ): Single<Long>
 
     /**
+     * Get stats for ever property that at least has been interacted by displaying details
+     * or setting as favorite
+     */
+    fun getStatsForAll(): Single<List<UserFavoriteJunction>>
+
+    /**
      * Retrieves favorite and view count stats for property with [propertyId] only for the user
      * with [userId]
      */
@@ -48,6 +54,10 @@ class FavoritePropertyDataSourceImplRxJava3 @Inject constructor(
         liked: Boolean
     ): Single<Long> {
         return favoritesDao.insertUserFavorite(userId, entity, viewCount, liked)
+    }
+
+    override fun getStatsForAll(): Single<List<UserFavoriteJunction>> {
+        return favoritesDao.getUserFavoriteJunctionForAll()
     }
 
     override fun getPropertyStats(

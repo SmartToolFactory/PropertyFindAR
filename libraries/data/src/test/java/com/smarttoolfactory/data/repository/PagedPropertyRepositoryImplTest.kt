@@ -107,10 +107,10 @@ internal class PagedPropertyRepositoryImplTest {
 
             // WHEN
             val page1 = repository.getCurrentPageNumber()
-            val expected1 = repository.fetchEntitiesFromRemoteByPage()
+            val expected1 = repository.fetchPagedEntitiesFromRemote()
 
             val page2 = repository.getCurrentPageNumber()
-            val expected2 = repository.fetchEntitiesFromRemoteByPage()
+            val expected2 = repository.fetchPagedEntitiesFromRemote()
 
             // THEN
             Truth.assertThat(expected1).isEqualTo(page1Data)

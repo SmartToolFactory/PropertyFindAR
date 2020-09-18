@@ -22,6 +22,10 @@ class FavoritesRepositoryImpl @Inject constructor(
         favoriteSource.insertOrUpdateFavorite(userId, entity, viewCount, liked)
     }
 
+    override suspend fun getStatsForAll(): List<UserFavoriteJunction> {
+        return favoriteSource.getStatsForAll()
+    }
+
     override suspend fun getPropertyStats(
         userId: Long,
         propertyId: Int
@@ -57,6 +61,10 @@ class FavoritesRepositoryImplRxJava3 @Inject constructor(
         liked: Boolean
     ): Single<Long> {
         return favoriteSource.insertOrUpdateFavorite(userId, entity, viewCount, liked)
+    }
+
+    override fun getStatsForAll(): Single<List<UserFavoriteJunction>> {
+        return favoriteSource.getStatsForAll()
     }
 
     override fun getPropertyStats(

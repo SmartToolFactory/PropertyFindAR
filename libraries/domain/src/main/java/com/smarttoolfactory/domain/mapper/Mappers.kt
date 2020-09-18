@@ -7,6 +7,8 @@ import com.smarttoolfactory.data.model.local.BrokerEntity
 import com.smarttoolfactory.data.model.local.InteractivePropertyEntity
 import com.smarttoolfactory.data.model.local.PagedPropertyEntity
 import com.smarttoolfactory.data.model.local.PropertyEntity
+import com.smarttoolfactory.data.model.remote.BrokerDTO
+import com.smarttoolfactory.data.model.remote.PropertyDTO
 import com.smarttoolfactory.domain.model.BrokerItem
 import com.smarttoolfactory.domain.model.PropertyItem
 import javax.inject.Inject
@@ -15,6 +17,29 @@ import javax.inject.Inject
 private class BrokerEntityToItemMapper : Mapper<BrokerEntity, BrokerItem> {
 
     override fun map(input: BrokerEntity): BrokerItem {
+        return BrokerItem(
+            id = input.id,
+            name = input.name,
+            address = input.address,
+            phone = input.phone,
+            phoneExtension = input.phoneExtension,
+            email = input.email,
+            // Maps String? nullable
+            mobile = input.mobile,
+            agentPhoto = input.agentPhoto,
+            agentName = input.agentName,
+            // Maps List<String>
+            leadEmailReceivers = input.leadEmailReceivers,
+            license = input.license,
+            agentId = input.agentId,
+            logo = input.logo
+        )
+    }
+}
+
+private class BrokerDTOtoItemMapper : Mapper<BrokerDTO, BrokerItem> {
+
+    override fun map(input: BrokerDTO): BrokerItem {
         return BrokerItem(
             id = input.id,
             name = input.name,
@@ -107,6 +132,71 @@ class PropertyEntityToItemListMapper @Inject constructor() :
 
                 latitude = input.latitude,
                 longitude = input.longitude,
+                premium = input.premium,
+                livingrooms = input.livingrooms,
+                verified = input.verified,
+
+                // Maps List<String>
+                gallery = input.gallery,
+                phone = input.phone,
+
+                // Maps List<String>
+                leadEmailReceivers = input.leadEmailReceivers,
+                reference = input.reference,
+            )
+        }
+    }
+}
+
+class PropertyDTOtoItemListMapper @Inject constructor() :
+    ListMapper<PropertyDTO, PropertyItem> {
+
+    override fun map(input: List<PropertyDTO>): List<PropertyItem> {
+
+        return input.map { input ->
+
+            PropertyItem(
+                id = input.id,
+                update = input.update,
+                categoryId = input.categoryId,
+                title = input.title,
+                subject = input.subject,
+                type = input.type,
+                typeId = input.typeId,
+                thumbnail = input.thumbnail,
+                thumbnailBig = input.thumbnailBig,
+                imageCount = input.imageCount,
+                price = input.price,
+                pricePeriod = input.pricePeriod,
+                pricePeriodRaw = input.pricePeriodRaw,
+                priceLabel = input.priceLabel,
+                priceValue = input.priceValue,
+                priceValueRaw = input.priceValueRaw,
+                currency = input.currency,
+                featured = input.featured,
+                location = input.location,
+                area = input.area,
+                poa = input.poa,
+                reraPermit = input.reraPermit,
+                bathrooms = input.bathrooms,
+                bedrooms = input.bedrooms,
+                dateInsert = input.dateInsert,
+                dateUpdate = input.dateUpdate,
+                agentName = input.agentName,
+                brokerName = input.brokerName,
+                agentLicense = input.agentLicense,
+                locationId = input.locationId,
+                hideLocation = input.hideLocation,
+
+                // Maps BrokerEntity
+                broker =
+                    MapperFactory.createMapper<BrokerDTOtoItemMapper>().map(input.broker),
+                // Maps List<String>
+                amenities = input.amenities,
+                amenitiesKeys = input.amenitiesKeys,
+
+                latitude = input.lat,
+                longitude = input.long,
                 premium = input.premium,
                 livingrooms = input.livingrooms,
                 verified = input.verified,

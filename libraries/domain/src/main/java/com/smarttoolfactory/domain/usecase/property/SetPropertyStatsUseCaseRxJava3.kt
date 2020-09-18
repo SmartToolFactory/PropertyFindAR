@@ -57,6 +57,8 @@ class SetPropertyStatsUseCaseRxJava3 @Inject constructor(
         }
     }
 
+    // TODO Add delete function for junction table for property that is not
+    //  liked nor visited by any users
     fun updatePropertyStatus(
         userId: Long = 0,
         property: PropertyItem
@@ -65,16 +67,12 @@ class SetPropertyStatsUseCaseRxJava3 @Inject constructor(
         return Single.just(mapper.map(property))
             .flatMap { propertyEntity ->
 
-                if (!property.isFavorite && property.viewCount == 0) {
-                    favoritesRepo.deleteFavoriteEntity(propertyEntity).andThen(Single.just(-1L))
-                } else {
-                    favoritesRepo.insertOrUpdateFavorite(
-                        userId,
-                        propertyEntity,
-                        property.viewCount,
-                        property.isFavorite
-                    )
-                }
+                favoritesRepo.insertOrUpdateFavorite(
+                    userId,
+                    propertyEntity,
+                    property.viewCount,
+                    property.isFavorite
+                )
             }
     }
 }

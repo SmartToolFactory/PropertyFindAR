@@ -4,6 +4,7 @@ import com.smarttoolfactory.data.mapper.PropertyDTOtoEntityListMapper
 import com.smarttoolfactory.data.mapper.PropertyDTOtoPagedEntityListMapper
 import com.smarttoolfactory.data.model.local.PagedPropertyEntity
 import com.smarttoolfactory.data.model.local.PropertyEntity
+import com.smarttoolfactory.data.model.remote.PropertyDTO
 import com.smarttoolfactory.data.source.LocalPagedPropertyDataSource
 import com.smarttoolfactory.data.source.LocalPropertyDataSource
 import com.smarttoolfactory.data.source.LocalPropertyDataSourceRxJava3
@@ -94,7 +95,7 @@ class PagedPropertyRepositoryImpl @Inject constructor(
         return currentPageNumber
     }
 
-    override suspend fun fetchEntitiesFromRemoteByPage(
+    override suspend fun fetchPagedEntitiesFromRemote(
         orderBy: String
     ): List<PagedPropertyEntity> {
 
@@ -104,6 +105,13 @@ class PagedPropertyRepositoryImpl @Inject constructor(
         )
         saveSortOrderKey(orderBy)
         return mapper.map(data)
+    }
+
+    override suspend fun fetchEntitiesFromRemoteByPage(
+        page: Int,
+        orderBy: String
+    ): List<PropertyDTO> {
+        return remoteDataSource.getPropertyDTOsWithPagination(page, orderBy)
     }
 
     override suspend fun getPropertyCount(): Int {

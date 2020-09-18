@@ -16,6 +16,12 @@ interface FavoritesRepository {
     )
 
     /**
+     * Get stats for ever property that at least has been interacted by displaying details
+     * or setting as favorite
+     */
+    suspend fun getStatsForAll(): List<UserFavoriteJunction>
+
+    /**
      * Retrieves favorite and view count stats for property with [propertyId] only for the user
      * with [userId]
      */
@@ -45,6 +51,12 @@ interface FavoritesRepositoryRxJava3 {
         viewCount: Int,
         liked: Boolean
     ): Single<Long>
+
+    /**
+     * Get stats for ever property that at least has been interacted by displaying details
+     * or setting as favorite
+     */
+    fun getStatsForAll(): Single<List<UserFavoriteJunction>>
 
     /**
      * Retrieves favorite and view count stats for property with [propertyId] only for the user

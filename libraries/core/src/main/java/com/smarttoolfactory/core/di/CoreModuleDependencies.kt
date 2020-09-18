@@ -1,5 +1,6 @@
 package com.smarttoolfactory.core.di
 
+import com.smarttoolfactory.domain.usecase.property.GetDashboardStatsUseCase
 import com.smarttoolfactory.domain.usecase.property.GetPropertiesUseCaseFlow
 import com.smarttoolfactory.domain.usecase.property.GetPropertiesUseCasePaged
 import com.smarttoolfactory.domain.usecase.property.GetPropertiesUseCaseRxJava3
@@ -27,4 +28,7 @@ interface CoreModuleDependencies {
     // Set property like or view status
     fun setPropertyStatsUseCase(): SetPropertyStatsUseCase
     fun setPropertyStatsUseCaseRxJava3(): SetPropertyStatsUseCaseRxJava3
+
+    // Dashboard stats for properties and info
+    fun getDashboardStatsUseCase(): GetDashboardStatsUseCase
 }

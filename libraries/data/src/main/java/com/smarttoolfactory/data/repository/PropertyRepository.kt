@@ -3,6 +3,7 @@ package com.smarttoolfactory.data.repository
 import com.smarttoolfactory.data.constant.ORDER_BY_NONE
 import com.smarttoolfactory.data.model.local.PagedPropertyEntity
 import com.smarttoolfactory.data.model.local.PropertyEntity
+import com.smarttoolfactory.data.model.remote.PropertyDTO
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Single
 
@@ -48,9 +49,21 @@ interface PagedPropertyRepository {
 
     fun getCurrentPageNumber(): Int
 
-    suspend fun fetchEntitiesFromRemoteByPage(
+    /**
+     * Fetch entities by remote using pagination in Repository and increasing page number
+     * with each request to fetch next page of result.
+     */
+    suspend fun fetchPagedEntitiesFromRemote(
         orderBy: String = ORDER_BY_NONE
     ): List<PagedPropertyEntity>
+
+    /**
+     * Returns network result without mapping to any DB entity.
+     */
+    suspend fun fetchEntitiesFromRemoteByPage(
+        page: Int,
+        orderBy: String = ORDER_BY_NONE,
+    ): List<PropertyDTO>
 
     suspend fun getPropertyCount(): Int
 
