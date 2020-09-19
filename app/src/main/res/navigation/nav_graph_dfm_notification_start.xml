@@ -4,7 +4,7 @@
     android:id="@+id/nav_graph_dfm_notification_start"
     app:startDestination="@id/nav_graph_notification">
 
-    <!-- Account  dynamic feature module -->
+    <!-- Notification  dynamic feature module -->
     <include-dynamic
         android:id="@+id/nav_graph_notification"
         android:name="com.smarttoolfactory.notification"

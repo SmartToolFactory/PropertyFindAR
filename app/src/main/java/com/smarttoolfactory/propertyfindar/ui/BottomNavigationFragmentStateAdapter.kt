@@ -33,8 +33,8 @@ class BottomNavigationFragmentStateAdapter(fragmentManager: FragmentManager, lif
 
             // Favorites Dynamic Feature Module
             1 -> NavHostContainerFragment.createNavHostContainerFragment(
-                R.layout.fragment_navhost_favorites,
-                R.id.nested_nav_host_fragment_favorites
+                R.layout.fragment_navhost_dashboard,
+                R.id.nested_nav_host_fragment_dashboard
             )
 
             // Notification Dynamic Feature Module

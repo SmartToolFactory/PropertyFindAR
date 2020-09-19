@@ -4,7 +4,7 @@
     android:id="@+id/nav_graph_dfm_home_start"
     app:startDestination="@id/nav_graph_home">
 
-    <!-- Account  dynamic feature module -->
+    <!-- Home  dynamic feature module -->
     <include-dynamic
         android:id="@+id/nav_graph_home"
         android:name="com.smarttoolfactory.home"

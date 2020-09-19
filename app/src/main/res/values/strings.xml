@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Property FindAR</string>
     <string name="title_home">Home</string>
-    <string name="title_favorites">Favorites</string>
+    <string name="title_dashboard">Dashboard</string>
     <string name="title_notification">Notification</string>
     <string name="title_account">Account</string>
     <string name="title_search">Search</string>

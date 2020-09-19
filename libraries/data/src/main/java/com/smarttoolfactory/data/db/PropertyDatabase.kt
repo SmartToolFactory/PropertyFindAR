@@ -142,6 +142,7 @@ val MIGRATION_3_4: Migration = object : Migration(3, 4) {
 
         database.execSQL(STATEMENT_FAVORITE_PROPERTIES)
 
+        // User
         database.execSQL(
             "CREATE TABLE IF NOT EXISTS `user` (" +
                 "`userId` INTEGER NOT NULL, " +
@@ -151,6 +152,7 @@ val MIGRATION_3_4: Migration = object : Migration(3, 4) {
                 "`password` TEXT NOT NULL, PRIMARY KEY(`userId`))"
         )
 
+        // User favorite junction
         database.execSQL(
             "CREATE TABLE IF NOT EXISTS `user_favorite_junction` (" +
                 "`userAccountId` INTEGER NOT NULL, " +
@@ -160,6 +162,13 @@ val MIGRATION_3_4: Migration = object : Migration(3, 4) {
                 "ON UPDATE NO ACTION ON DELETE CASCADE , " +
                 "FOREIGN KEY(`propertyId`) REFERENCES `favorite`(`id`) " +
                 "ON UPDATE NO ACTION ON DELETE CASCADE )"
+        )
+
+        // Indices
+        database.execSQL(
+            "CREATE INDEX IF NOT EXISTS " +
+                "`index_user_favorite_junction_userAccountId_propertyId` " +
+                "ON `user_favorite_junction` (`userAccountId`, `propertyId`)"
         )
     }
 }
@@ -212,6 +221,4 @@ const val STATEMENT_FAVORITE_PROPERTIES = "CREATE TABLE IF NOT EXISTS `favorite`
     "`leadEmailReceivers` TEXT NOT NULL, " +
     "`reference` TEXT NOT NULL, " +
     "`insert_date` INTEGER NOT NULL, " +
-    "`display_count` INTEGER NOT NULL, " +
-    "`favorite` INTEGER NOT NULL, " +
     "PRIMARY KEY(`id`))"
