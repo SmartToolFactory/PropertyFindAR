@@ -25,7 +25,7 @@ class GetDashboardStatsUseCase @Inject constructor(
 
     /**
      * Combines 5 pages of Properties sorted by ascending price order and
-     * searches for the deals in range between []
+     * searches for the deals in range between prices based on user's liked or visited items.
      */
     private fun getSumOfFivePages(): Flow<List<PropertyItem>> {
 

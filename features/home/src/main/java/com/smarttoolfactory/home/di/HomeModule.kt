@@ -31,7 +31,7 @@ class HomeModule {
         ViewModelProvider(fragment, factory).get(PropertyListViewModelFlow::class.java)
 
     /**
-     * Property ViewModel that uses Flow for data operation with Pagaination
+     * Property ViewModel that uses Flow for data operation with Pagination
      */
     @Provides
     fun providePagedPropertyListViewModel(
