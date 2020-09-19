@@ -2,8 +2,8 @@ package com.smarttoolfactory.data.source
 
 import com.google.common.truth.Truth
 import com.smarttoolfactory.data.api.PropertyApiCoroutines
-import com.smarttoolfactory.data.db.PropertyDaoCoroutines
-import com.smarttoolfactory.data.db.SortOrderDaoCoroutines
+import com.smarttoolfactory.data.db.dao.PropertyCoroutinesDao
+import com.smarttoolfactory.data.db.dao.SortOrderDaoCoroutines
 import com.smarttoolfactory.data.mapper.MapperFactory
 import com.smarttoolfactory.data.mapper.PropertyDTOtoEntityListMapper
 import com.smarttoolfactory.data.model.local.PropertyEntity
@@ -49,7 +49,7 @@ class PropertyDataSourceCoroutinesTest {
 
         private val api = mockk<PropertyApiCoroutines>()
 
-        private lateinit var remoteDataSource: RemotePropertyDataSourceCoroutines
+        private lateinit var remoteDataSource: RemotePropertyDataSource
 
         @Test
         fun `given network error occurred, should throw Exception`() = runBlockingTest {
@@ -86,7 +86,7 @@ class PropertyDataSourceCoroutinesTest {
 
         @BeforeEach
         fun setUp() {
-            remoteDataSource = RemotePropertyDataSourceCoroutinesImpl(api)
+            remoteDataSource = RemotePropertyDataSourceImpl(api)
         }
 
         @AfterEach
@@ -98,9 +98,9 @@ class PropertyDataSourceCoroutinesTest {
     @Nested
     inner class LocalDataSourceTest {
 
-        private val dao = mockk<PropertyDaoCoroutines>()
+        private val dao = mockk<PropertyCoroutinesDao>()
 
-        private lateinit var localDataSource: LocalPropertyDataSourceCoroutines
+        private lateinit var localDataSource: LocalPropertyDataSource
         private val sortDao = mockk<SortOrderDaoCoroutines>()
 
         @Test

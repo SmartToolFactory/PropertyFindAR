@@ -12,7 +12,7 @@ interface PropertyDataSource
 /*
     Coroutines
  */
-interface RemotePropertyDataSourceCoroutines : PropertyDataSource {
+interface RemotePropertyDataSource : PropertyDataSource {
     suspend fun getPropertyDTOs(orderBy: String = ORDER_BY_NONE): List<PropertyDTO>
     suspend fun getPropertyDTOsWithPagination(
         page: Int,
@@ -20,7 +20,7 @@ interface RemotePropertyDataSourceCoroutines : PropertyDataSource {
     ): List<PropertyDTO>
 }
 
-interface LocalPropertyDataSourceCoroutines : PropertyDataSource {
+interface LocalPropertyDataSource : PropertyDataSource {
     suspend fun getPropertyEntities(): List<PropertyEntity>
     suspend fun saveEntities(properties: List<PropertyEntity>): List<Long>
     suspend fun deletePropertyEntities()

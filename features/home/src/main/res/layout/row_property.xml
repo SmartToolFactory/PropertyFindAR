@@ -124,8 +124,8 @@
 
         <ImageView
             android:id="@+id/ivBeds"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:layout_marginTop="4dp"
             android:src="@drawable/ic_outline_airline_seat_individual_suite_24"
             app:layout_constraintStart_toStartOf="@+id/tvTitle"
@@ -133,15 +133,66 @@
             app:tint="@color/black" />
 
         <com.google.android.material.textview.MaterialTextView
+            android:id="@id/tvBeds"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginBottom="2dp"
             android:text="@{item.bedrooms}"
             android:textColor="@color/black"
+            android:textSize="10sp"
             app:layout_constraintBottom_toBottomOf="@id/ivBeds"
             app:layout_constraintStart_toEndOf="@+id/ivBeds"
             app:layout_constraintTop_toTopOf="@+id/ivBeds"
+            tools:text="1" />
+
+        <ImageView
+            android:id="@+id/ivArea"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="24dp"
+            android:src="@drawable/ic_baseline_architecture_24"
+            app:layout_constraintBottom_toBottomOf="@+id/ivBeds"
+            app:layout_constraintStart_toStartOf="@+id/tvBeds"
+            app:layout_constraintTop_toTopOf="@+id/ivBeds"
+            app:tint="@color/black" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@id/tvArea"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@{item.area + ` sqft`}"
+            android:textColor="@color/black"
+            android:textSize="10sp"
+            app:layout_constraintBottom_toBottomOf="@id/ivArea"
+            app:layout_constraintStart_toEndOf="@+id/ivArea"
+            app:layout_constraintTop_toTopOf="@+id/ivArea"
+            tools:text="1" />
+
+        <ImageView
+            android:id="@+id/ivViewCount"
+            visibilityBasedOn="@{item.viewCount!=0}"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="24dp"
+            android:src="@drawable/ic_baseline_remove_red_eye_24"
+            app:layout_constraintBottom_toBottomOf="@+id/ivBeds"
+            app:layout_constraintStart_toEndOf="@+id/tvArea"
+            app:layout_constraintTop_toTopOf="@+id/ivBeds"
+            app:tint="@color/black" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvViewCount"
+            visibilityBasedOn="@{item.viewCount!=0}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@{`` + item.viewCount}"
+            android:textColor="@color/black"
+            android:textSize="10sp"
+            app:layout_constraintBottom_toBottomOf="@+id/ivViewCount"
+            app:layout_constraintStart_toEndOf="@+id/ivViewCount"
+            app:layout_constraintTop_toTopOf="@+id/ivViewCount"
             tools:text="1" />
 
 

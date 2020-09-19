@@ -98,7 +98,7 @@ android {
     dynamicFeatures = mutableSetOf(
         Modules.DynamicFeature.HOME,
         Modules.DynamicFeature.PROPERTY_DETAIL,
-        Modules.DynamicFeature.FAVORITES,
+        Modules.DynamicFeature.DASHBOARD,
         Modules.DynamicFeature.NOTIFICATION,
         Modules.DynamicFeature.ACCOUNT
     )

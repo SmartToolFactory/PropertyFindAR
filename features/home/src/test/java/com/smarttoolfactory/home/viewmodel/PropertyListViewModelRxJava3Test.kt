@@ -5,7 +5,7 @@ import com.google.common.truth.Truth
 import com.smarttoolfactory.core.viewstate.Status
 import com.smarttoolfactory.domain.ORDER_BY_NONE
 import com.smarttoolfactory.domain.model.PropertyItem
-import com.smarttoolfactory.domain.usecase.GetPropertiesUseCaseRxJava3
+import com.smarttoolfactory.domain.usecase.property.GetPropertiesUseCaseRxJava3
 import com.smarttoolfactory.home.propertylist.rxjava.PropertyListViewModelRxJava3
 import com.smarttoolfactory.test_utils.RESPONSE_JSON_PATH
 import com.smarttoolfactory.test_utils.rule.RxImmediateSchedulerRule

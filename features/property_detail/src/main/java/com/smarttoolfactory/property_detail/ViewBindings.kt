@@ -20,7 +20,7 @@ import com.smarttoolfactory.domain.model.PropertyItem
 fun RecyclerView.setItems(items: List<PropertyItem>?) {
 
     items?.let {
-        (adapter as ListAdapter<PropertyItem, *>)?.submitList(items)
+        (adapter as? ListAdapter<PropertyItem, *>)?.submitList(items)
     }
 }
 

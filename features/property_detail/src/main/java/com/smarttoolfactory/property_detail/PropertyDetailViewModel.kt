@@ -2,18 +2,18 @@ package com.smarttoolfactory.property_detail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.smarttoolfactory.domain.usecase.SetPropertyStatusUseCase
+import com.smarttoolfactory.domain.usecase.property.SetPropertyStatsUseCase
 import javax.inject.Inject
 import kotlinx.coroutines.CoroutineScope
 
 class PropertyDetailViewModel @Inject constructor(
     private val coroutineScope: CoroutineScope,
-    private val setPropertyStatusUseCase: SetPropertyStatusUseCase
+    private val setPropertyStatusUseCase: SetPropertyStatsUseCase
 ) : ViewModel()
 
 class PropertyDetailViewModelFactory @Inject constructor(
     private val coroutineScope: CoroutineScope,
-    private val setPropertyStatusUseCase: SetPropertyStatusUseCase
+    private val setPropertyStatusUseCase: SetPropertyStatsUseCase
 ) : ViewModelProvider.Factory {
 
     @Suppress("UNCHECKED_CAST")

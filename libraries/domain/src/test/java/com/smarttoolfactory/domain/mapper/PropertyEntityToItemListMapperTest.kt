@@ -19,22 +19,4 @@ class PropertyEntityToItemListMapperTest {
             MapperFactory.createListMapper<PropertyDTOtoEntityListMapper>()
                 .map(propertyDTOList)
     }
-
-//    @Test
-//    fun `Given a valid propertyEntity list, should map to propertyItem list`() {
-//
-//        // GIVEN
-//        val mapper =
-//            MapperFactory.createListMapper<PropertyEntityToItemListMapper>()
-//
-//        // WHEN
-//        val actual = mapper.map(entityList)
-//
-//        // THEN
-//        actual.forEachIndexed { index, propertyItem ->
-//            Truth.assertThat(propertyItem.id).isEqualTo(entityList[index].id)
-//            Truth.assertThat(propertyItem.update).isEqualTo(entityList[index].update)
-//            Truth.assertThat(propertyItem.price).isEqualTo(entityList[index].price)
-//        }
-//    }
 }

@@ -2,11 +2,11 @@ package com.smarttoolfactory.data.source
 
 import com.smarttoolfactory.data.api.PropertyApiCoroutines
 import com.smarttoolfactory.data.api.PropertyApiRxJava
-import com.smarttoolfactory.data.db.PagedPropertyDao
-import com.smarttoolfactory.data.db.PropertyDaoCoroutines
-import com.smarttoolfactory.data.db.PropertyDaoRxJava3
-import com.smarttoolfactory.data.db.SortOrderDaoCoroutines
-import com.smarttoolfactory.data.db.SortOrderDaoRxJava3
+import com.smarttoolfactory.data.db.dao.PagedPropertyDao
+import com.smarttoolfactory.data.db.dao.PropertyCoroutinesDao
+import com.smarttoolfactory.data.db.dao.PropertyRxJava3Dao
+import com.smarttoolfactory.data.db.dao.SortOrderDaoCoroutines
+import com.smarttoolfactory.data.db.dao.SortOrderDaoRxJava3
 import com.smarttoolfactory.data.model.local.PagedPropertyEntity
 import com.smarttoolfactory.data.model.local.PropertyEntity
 import com.smarttoolfactory.data.model.local.SortOrderEntity
@@ -18,8 +18,8 @@ import javax.inject.Inject
 /*
     *** Coroutines Implementations for DataSources ***
  */
-class RemotePropertyDataSourceCoroutinesImpl
-@Inject constructor(private val api: PropertyApiCoroutines) : RemotePropertyDataSourceCoroutines {
+class RemotePropertyDataSourceImpl
+@Inject constructor(private val api: PropertyApiCoroutines) : RemotePropertyDataSource {
 
     override suspend fun getPropertyDTOs(orderBy: String): List<PropertyDTO> {
         return api.getPropertyResponse(orderBy).res
@@ -35,9 +35,9 @@ class RemotePropertyDataSourceCoroutinesImpl
 
 class LocalPropertyDataSourceImpl
 @Inject constructor(
-    private val dao: PropertyDaoCoroutines,
+    private val dao: PropertyCoroutinesDao,
     private val sortDao: SortOrderDaoCoroutines
-) : LocalPropertyDataSourceCoroutines {
+) : LocalPropertyDataSource {
 
     override suspend fun getPropertyEntities(): List<PropertyEntity> {
         return dao.getPropertyList()
@@ -63,7 +63,7 @@ class LocalPropertyDataSourceImpl
 /*
     *** RxJava3 Implementations for DataSources ***
  */
-class RemoteDataSourceRxJava3Impl @Inject constructor(private val api: PropertyApiRxJava) :
+class RemoteDataSourceImplRxJava3 @Inject constructor(private val api: PropertyApiRxJava) :
     RemotePropertyDataSourceRxJava3 {
 
     override fun getPropertyDTOs(orderBy: String): Single<List<PropertyDTO>> {
@@ -78,8 +78,8 @@ class RemoteDataSourceRxJava3Impl @Inject constructor(private val api: PropertyA
     }
 }
 
-class LocalDataSourceRxJava3Impl @Inject constructor(
-    private val dao: PropertyDaoRxJava3,
+class LocalDataSourceImplRxJava3 @Inject constructor(
+    private val dao: PropertyRxJava3Dao,
     private val sortDao: SortOrderDaoRxJava3
 ) :
     LocalPropertyDataSourceRxJava3 {

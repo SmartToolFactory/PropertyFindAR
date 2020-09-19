@@ -5,7 +5,7 @@ import com.google.common.truth.Truth
 import com.smarttoolfactory.core.viewstate.Status
 import com.smarttoolfactory.domain.ORDER_BY_NONE
 import com.smarttoolfactory.domain.model.PropertyItem
-import com.smarttoolfactory.domain.usecase.GetPropertiesUseCaseFlow
+import com.smarttoolfactory.domain.usecase.property.GetPropertiesUseCaseFlow
 import com.smarttoolfactory.home.propertylist.flow.PropertyListViewModelFlow
 import com.smarttoolfactory.test_utils.RESPONSE_JSON_PATH
 import com.smarttoolfactory.test_utils.rule.TestCoroutineRule

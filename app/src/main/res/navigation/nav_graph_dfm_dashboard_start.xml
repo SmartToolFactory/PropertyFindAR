@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph_dfm_dashboard_start"
+    app:startDestination="@id/nav_graph_dashboard">
+
+    <!-- Dashboard  dynamic feature module -->
+    <include-dynamic
+        android:id="@+id/nav_graph_dashboard"
+        android:name="com.smarttoolfactory.dashboard"
+        app:graphResName="nav_graph_dashboard"
+        app:moduleName="dashboard">
+    </include-dynamic>
+</navigation>
