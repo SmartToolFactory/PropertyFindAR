@@ -46,7 +46,7 @@ class MainFragment : DynamicNavigationFragment<FragmentMainBinding>() {
                     return@setOnNavigationItemSelectedListener true
                 }
 
-                R.id.nav_graph_dfm_dashboar_start -> {
+                R.id.nav_graph_dfm_dashboard_start -> {
                     viewPager2.setCurrentItem(1, false)
                     return@setOnNavigationItemSelectedListener true
                 }

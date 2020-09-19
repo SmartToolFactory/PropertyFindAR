@@ -49,7 +49,7 @@ class PropertyListRxjava3Fragment : DynamicNavigationFragment<FragmentPropertyLi
 
             // Set RecyclerViewAdapter
             itemListAdapter = PropertyItemListAdapter(
-                R.layout.row_property,
+                R.layout.item_property_list,
                 viewModel::onClick,
                 viewModel::onLikeButtonClick
 

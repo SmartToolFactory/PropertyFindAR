@@ -1,4 +1,4 @@
-package com.smarttoolfactory.home.adapter
+package com.smarttoolfactory.dashboard.adapter
 
 import android.graphics.Color
 import android.widget.ImageButton
@@ -7,12 +7,12 @@ import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.smarttoolfactory.core.ui.adapter.BaseListAdapter
+import com.smarttoolfactory.dashboard.BR
+import com.smarttoolfactory.dashboard.R
+import com.smarttoolfactory.dashboard.databinding.ItemPropertyListBinding
 import com.smarttoolfactory.domain.model.PropertyItem
-import com.smarttoolfactory.home.BR
-import com.smarttoolfactory.home.R
-import com.smarttoolfactory.home.databinding.ItemPropertyListBinding
 
-class PropertyItemListAdapter(
+class DashboardListAdapter(
     @LayoutRes private val layoutId: Int,
     private val onItemClicked: ((PropertyItem) -> Unit)? = null,
     private val onLikeButtonClicked: ((PropertyItem) -> Unit)? = null

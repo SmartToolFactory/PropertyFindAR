@@ -9,7 +9,7 @@
     <fragment
         android:id="@+id/dashboardFragment"
         android:name="com.smarttoolfactory.dashboard.DashboardFragment"
-        android:label="Account Fragment"
+        android:label="Dashboard Fragment"
         tools:layout="@layout/fragment_dashboard" />
 
 </navigation>

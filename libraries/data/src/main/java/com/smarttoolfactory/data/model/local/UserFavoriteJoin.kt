@@ -122,4 +122,4 @@ data class PropertyWithFavorites(
         entityColumn = "id"
     )
     val property: InteractivePropertyEntity
-)
+) : IEntity
