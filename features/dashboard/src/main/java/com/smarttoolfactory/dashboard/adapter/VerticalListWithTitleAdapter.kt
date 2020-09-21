@@ -6,25 +6,25 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.smarttoolfactory.core.ui.adapter.DefaultItemDiffCallback
 import com.smarttoolfactory.dashboard.R
-import com.smarttoolfactory.dashboard.adapter.viewholder.HorizontalItemViewHolder
-import com.smarttoolfactory.dashboard.model.HorizontalTitleListModel
+import com.smarttoolfactory.dashboard.adapter.viewholder.VerticalItemViewHolder
+import com.smarttoolfactory.dashboard.model.PropertyListWithTitleModel
 
-class HorizontalPropertySectionAdapter :
-    ListAdapter<HorizontalTitleListModel, HorizontalItemViewHolder>(
+class VerticalListWithTitleAdapter :
+    ListAdapter<PropertyListWithTitleModel, VerticalItemViewHolder>(
         DefaultItemDiffCallback()
     ) {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HorizontalItemViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VerticalItemViewHolder {
 
-        return HorizontalItemViewHolder(
+        return VerticalItemViewHolder(
             DataBindingUtil.inflate(
                 LayoutInflater.from(parent.context),
-                R.layout.item_list_with_title,
+                R.layout.layout_list_with_title,
                 parent, false
             )
         )
     }
 
-    override fun onBindViewHolder(holder: HorizontalItemViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: VerticalItemViewHolder, position: Int) {
         holder.bindTo(currentList[position])
     }
 }

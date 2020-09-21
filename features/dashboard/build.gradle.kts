@@ -73,6 +73,9 @@ dependencies {
     implementation(Deps.GLIDE)
     kapt(Deps.GLIDE_COMPILER)
 
+    // MpChart
+    implementation(Deps.MP_CHART)
+
     // Unit Tests
     addUnitTestDependencies()
     testImplementation(project(Modules.AndroidLibrary.TEST_UTILS))

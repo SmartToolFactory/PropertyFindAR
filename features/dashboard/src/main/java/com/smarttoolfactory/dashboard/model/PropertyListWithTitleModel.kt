@@ -3,9 +3,10 @@ package com.smarttoolfactory.dashboard.model
 import com.smarttoolfactory.domain.model.PropertyItem
 
 /**
- * Model for Horizontal list that has a title, and data for horizontally scrollable items
+ * Model for list that has a title,
+ * and data for either vertically or horizontally scrollable items in RecyclerView
  */
-data class HorizontalTitleListModel(
+data class PropertyListWithTitleModel(
     val title: String = "",
     val items: List<PropertyItem>
 )

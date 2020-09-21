@@ -20,7 +20,7 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
-            visibilityBasedOn="@{viewModel.propertyListViewState.success}"
+            visibilityBasedOn="@{viewModel.propertiesFavorite.success}"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="18dp"
@@ -32,10 +32,10 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_error"
-            visibilityBasedOn="@{viewModel.propertyListViewState.shouldShowErrorMessage()}"
+            visibilityBasedOn="@{viewModel.propertiesFavorite.shouldShowErrorMessage()}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{`⚠️ ` + viewModel.propertyListViewState.errorMessage}"
+            android:text="@{`⚠️ ` + viewModel.propertiesFavorite.errorMessage}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

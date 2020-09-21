@@ -6,11 +6,12 @@
     <data>
 
         <variable
-            name="horizontalListModel"
-            type="com.smarttoolfactory.dashboard.model.HorizontalTitleListModel" />
+            name="propertyListModel"
+            type="com.smarttoolfactory.dashboard.model.PropertyListWithTitleModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        visibilityBasedOn="@{!propertyListModel.items.isEmpty()}"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -19,10 +20,10 @@
             android:id="@+id/tvTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="12dp"
             android:layout_marginBottom="8dp"
-            android:layout_marginStart="16dp"
-            android:text="@{horizontalListModel.title}"
+            android:text="@{propertyListModel.title}"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
@@ -33,9 +34,9 @@
             android:id="@+id/tvSeeAll"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
             android:text="See all"
             android:textColor="#FB8C00"
-            android:layout_marginEnd="16dp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@id/tvTitle"
             app:layout_constraintEnd_toEndOf="parent"
@@ -45,11 +46,10 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:items="@{horizontalListModel.items}"
+            app:items="@{propertyListModel.items}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

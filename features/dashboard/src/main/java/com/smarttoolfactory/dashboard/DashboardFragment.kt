@@ -6,10 +6,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.smarttoolfactory.core.di.CoreModuleDependencies
 import com.smarttoolfactory.core.ui.fragment.DynamicNavigationFragment
 import com.smarttoolfactory.core.viewstate.Status
-import com.smarttoolfactory.dashboard.adapter.FooterAdapter
-import com.smarttoolfactory.dashboard.adapter.HorizontalPropertySectionAdapter
+import com.smarttoolfactory.dashboard.adapter.ChartContainerAdapter
+import com.smarttoolfactory.dashboard.adapter.HorizontalListWithTitleAdapter
+import com.smarttoolfactory.dashboard.adapter.VerticalListWithTitleAdapter
 import com.smarttoolfactory.dashboard.databinding.FragmentDashboardBinding
 import com.smarttoolfactory.dashboard.di.DaggerDashboardComponent
+import com.smarttoolfactory.dashboard.model.ChartItemModel
 import dagger.hilt.android.EntryPointAccessors
 import javax.inject.Inject
 
@@ -20,24 +22,51 @@ class DashboardFragment : DynamicNavigationFragment<FragmentDashboardBinding>() 
 
     override fun getLayoutRes(): Int = R.layout.fragment_dashboard
 
-    private val footerAdapter = FooterAdapter()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         initCoreDependentInjection()
         super.onCreate(savedInstanceState)
         viewModel.getFavoriteProperties()
+        viewModel.getMostViewedProperties()
+        viewModel.getRecommendedItems()
     }
 
     override fun bindViews() {
 
         dataBinding!!.viewModel = viewModel
 
-        val adapterHorizontalTop = HorizontalPropertySectionAdapter()
+        val adapterFavoriteProperties = HorizontalListWithTitleAdapter()
+        val adapterMostViewedProperties = HorizontalListWithTitleAdapter()
+        val adapterRecommendedProperties = VerticalListWithTitleAdapter()
 
-        val adapterHorizontalBottom = HorizontalPropertySectionAdapter()
+        val adapterChart = ChartContainerAdapter().apply {
+
+            val chartItemModel =
+                listOf(
+                    ChartItemModel(
+                        listOf(
+                            1_100_000,
+                            650_000,
+                            700_000,
+                            3_100_000,
+                            1_250_000,
+                            1_300_000,
+                            2_200_000,
+                            5_000_000,
+                            2_100_000,
+                            1_750_000
+                        )
+                    )
+                )
+            submitList(chartItemModel)
+        }
 
         val concatAdapter =
-            ConcatAdapter(adapterHorizontalTop, footerAdapter, adapterHorizontalBottom)
+            ConcatAdapter(
+                adapterFavoriteProperties,
+                adapterChart,
+                adapterMostViewedProperties,
+                adapterRecommendedProperties
+            )
 
         dataBinding!!.recyclerView.apply {
 
@@ -50,15 +79,64 @@ class DashboardFragment : DynamicNavigationFragment<FragmentDashboardBinding>() 
             this.adapter = concatAdapter
         }
 
-        viewModel.propertyListViewState.observe(
+        subscribeFavoriteProperties(adapterFavoriteProperties)
+
+        subscribeMostViewedProperties(adapterMostViewedProperties)
+
+        subscribeRecommendedProperties(adapterRecommendedProperties)
+    }
+
+    private fun subscribeFavoriteProperties(
+        adapter: HorizontalListWithTitleAdapter
+    ) {
+        viewModel.propertiesFavorite.observe(
             viewLifecycleOwner,
             {
                 when (it.status) {
                     Status.LOADING -> {
                     }
                     Status.SUCCESS -> {
-                        adapterHorizontalTop.submitList(it.data)
-                        adapterHorizontalBottom.submitList(it.data)
+                        if (!it.data.isNullOrEmpty()) {
+                            adapter.submitList(it.data)
+                        }
+                    }
+                    else -> {
+                    }
+                }
+            }
+        )
+    }
+
+    private fun subscribeMostViewedProperties(adapter: HorizontalListWithTitleAdapter) {
+        viewModel.propertiesMostViewed.observe(
+            viewLifecycleOwner,
+            {
+                when (it.status) {
+                    Status.LOADING -> {
+                    }
+                    Status.SUCCESS -> {
+                        if (!it.data.isNullOrEmpty()) {
+                            adapter.submitList(it.data)
+                        }
+                    }
+                    else -> {
+                    }
+                }
+            }
+        )
+    }
+
+    private fun subscribeRecommendedProperties(adapter: VerticalListWithTitleAdapter) {
+        viewModel.propertiesRecommended.observe(
+            viewLifecycleOwner,
+            {
+                when (it.status) {
+                    Status.LOADING -> {
+                    }
+                    Status.SUCCESS -> {
+                        if (!it.data.isNullOrEmpty()) {
+                            adapter.submitList(it.data)
+                        }
                     }
                     else -> {
                     }

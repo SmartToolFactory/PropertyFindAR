@@ -12,8 +12,10 @@ import com.smarttoolfactory.domain.model.PropertyItem
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.zip
 
 class GetDashboardStatsUseCase @Inject constructor(
     private val propertyRepo: PagedPropertyRepository,
@@ -71,11 +73,37 @@ class GetDashboardStatsUseCase @Inject constructor(
 
     /**
      * Deals recommended for the current user based on previous like or visit history
-     * * Deals recommendation are based on price range, number of bedrooms, bathrooms and property
-     * type
+     * * Deals recommendation are based on price range which is 10% of average of items,
+     * number of bedrooms, bathrooms and property type
      */
-    fun getRecommendedDeals() {
-        TODO()
+    fun getRecommendedDeals(): Flow<List<PropertyItem>> {
+
+        return getFavoriteProperties().filter {
+            it.isNullOrEmpty()
+        }
+            .zip(getSumOfFivePages()) { favoriteProperties, newProperties ->
+
+                val average = favoriteProperties.map {
+                    it.priceValueRaw
+                }.average()
+
+                newProperties.filter {
+                    it.priceValueRaw < average * 1.1 || it.priceValueRaw > average * 0.9
+                }
+            }
+    }
+
+    fun getPropFlow(): Flow<List<PropertyItem>> {
+        return flow {
+            emit(
+                propertyRepo.fetchEntitiesFromRemoteByPage(
+                    1,
+                    ORDER_BY_PRICE_ASCENDING
+                )
+            )
+        }.map {
+            mapperDTOtoItem.map(it)
+        }
     }
 
     /**
@@ -88,18 +116,16 @@ class GetDashboardStatsUseCase @Inject constructor(
 
         for (i in 1..5) {
 
-            listOfFlows.add(
-                flow {
-                    for (i in 1..5) {
-                        emit(
-                            propertyRepo.fetchEntitiesFromRemoteByPage(
-                                i,
-                                ORDER_BY_PRICE_ASCENDING
-                            )
-                        )
-                    }
-                }
-            )
+            val flowOfPagedProperties = flow {
+                emit(
+                    propertyRepo.fetchEntitiesFromRemoteByPage(
+                        i,
+                        ORDER_BY_PRICE_ASCENDING
+                    )
+                )
+            }
+
+            listOfFlows.add(flowOfPagedProperties)
         }
 
         return combine(*listOfFlows.toTypedArray()) { array ->

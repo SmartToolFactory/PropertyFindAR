@@ -89,6 +89,9 @@ object Version {
     // Lottie
     const val LOTTIE_VERSION ="3.4.2"
 
+    // MpChart
+    const val MP_CHART_VERSION = "3.1.0"
+
     // Preference Manager
     const val PREFERENCE_MANAGER_VERSION ="1.1.1"
 

@@ -118,6 +118,9 @@ object Deps {
     // Lottie
     const val LOTTIE = "com.airbnb.android:lottie:${Version.LOTTIE_VERSION}"
 
+    // MpChart
+    const val MP_CHART = "com.github.PhilJay:MPAndroidChart:${Version.MP_CHART_VERSION}"
+
     // Preference Manager
     const val PREFERENCE_MANAGER =
         "androidx.preference:preference-ktx:${Version.PREFERENCE_MANAGER_VERSION}"

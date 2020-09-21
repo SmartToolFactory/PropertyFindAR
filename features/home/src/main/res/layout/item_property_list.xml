@@ -72,7 +72,7 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
             android:maxLines="1"
-            android:text="@{item.title}"
+            android:text="@{item.type}"
             android:textColor="#aaa"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
