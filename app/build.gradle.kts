@@ -28,6 +28,7 @@ android {
                 arguments["room.schemaLocation"] = "$projectDir/schemas"
             }
         }
+
         kapt {
             arguments {
                 arg("room.schemaLocation", "$projectDir/schemas")
@@ -84,7 +85,9 @@ android {
         exclude("META-INF/LGPL2.1")
     }
 
-    android.buildFeatures.dataBinding = true
+    buildFeatures {
+        dataBinding = true
+    }
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8

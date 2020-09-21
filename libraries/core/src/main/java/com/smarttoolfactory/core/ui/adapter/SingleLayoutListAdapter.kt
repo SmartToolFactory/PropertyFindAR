@@ -22,7 +22,7 @@ import java.util.concurrent.Executors
  * * In [onViewHolderCreated] function, this method called when new data is required,
  * set any required click listeners for root view or other row elements.
  */
-abstract class BaseListAdapter<ItemType>(
+abstract class SingleLayoutListAdapter<ItemType>(
     @LayoutRes private val layoutId: Int,
     callBack: DiffUtil.ItemCallback<ItemType> = DefaultItemDiffCallback(),
 ) : ListAdapter<ItemType, BaseItemViewHolder>(
@@ -65,7 +65,7 @@ abstract class BaseListAdapter<ItemType>(
 
     override fun onBindViewHolder(holder: BaseItemViewHolder, position: Int) {
         println("🔥🔥")
-        Log.d(BaseListAdapter::class.toString(), "onBindViewHolder")
+        Log.d(SingleLayoutListAdapter::class.toString(), "onBindViewHolder")
     }
 
     /**
@@ -96,27 +96,3 @@ abstract class BaseListAdapter<ItemType>(
 open class BaseItemViewHolder(
     val binding: ViewDataBinding
 ) : RecyclerView.ViewHolder(binding.root)
-
-/**
- * Base [DiffUtil.ItemCallback]  that calculates the difference between two lists
- * and outputs a list of update operations that converts the first list into the second one.
- *
- * * With data classes have same items in constructor will have same **hash code** so using
- * hash code for [DiffUtil.ItemCallback.areContentsTheSame]
- */
-class DefaultItemDiffCallback<ItemType> : DiffUtil.ItemCallback<ItemType>() {
-
-    override fun areItemsTheSame(
-        oldItem: ItemType,
-        newItem: ItemType
-    ): Boolean {
-        return oldItem === newItem
-    }
-
-    override fun areContentsTheSame(
-        oldItem: ItemType,
-        newItem: ItemType
-    ): Boolean {
-        return oldItem.hashCode() == newItem.hashCode()
-    }
-}

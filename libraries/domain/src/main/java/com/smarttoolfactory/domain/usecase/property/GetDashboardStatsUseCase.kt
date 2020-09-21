@@ -30,10 +30,11 @@ class GetDashboardStatsUseCase @Inject constructor(
     fun getFavoriteProperties(userId: Long = 0): Flow<List<PropertyItem>> {
 
         return getPropertiesWithStats(userId)
-            .map {
-                it.filter { property ->
+            .map { propertyList ->
+                propertyList.filter { property ->
                     property.isFavorite
                 }
+                    .take(5)
             }
     }
 
@@ -43,12 +44,13 @@ class GetDashboardStatsUseCase @Inject constructor(
     fun getMostViewedProperties(userId: Long = 0): Flow<List<PropertyItem>> {
 
         return getPropertiesWithStats(userId)
-            .map {
-                it.filter { property ->
+            .map { propertyList ->
+                propertyList.filter { property ->
                     property.viewCount > 0
                 }.sortedByDescending { property ->
                     property.viewCount
                 }
+                    .take(5)
             }
     }
 

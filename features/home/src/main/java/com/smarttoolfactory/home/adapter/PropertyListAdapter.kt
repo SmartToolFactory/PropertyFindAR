@@ -6,7 +6,7 @@ import androidx.annotation.LayoutRes
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.smarttoolfactory.core.ui.adapter.BaseListAdapter
+import com.smarttoolfactory.core.ui.adapter.SingleLayoutListAdapter
 import com.smarttoolfactory.domain.model.PropertyItem
 import com.smarttoolfactory.home.BR
 import com.smarttoolfactory.home.R
@@ -17,7 +17,7 @@ class PropertyItemListAdapter(
     private val onItemClicked: ((PropertyItem) -> Unit)? = null,
     private val onLikeButtonClicked: ((PropertyItem) -> Unit)? = null
 ) :
-    BaseListAdapter<PropertyItem>(
+    SingleLayoutListAdapter<PropertyItem>(
         layoutId,
         PropertyItemDiffCallback()
     ) {

@@ -1,10 +1,13 @@
 package com.smarttoolfactory.dashboard
 
 import android.os.Bundle
+import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.smarttoolfactory.core.di.CoreModuleDependencies
 import com.smarttoolfactory.core.ui.fragment.DynamicNavigationFragment
-import com.smarttoolfactory.dashboard.adapter.DashboardListAdapter
+import com.smarttoolfactory.core.viewstate.Status
+import com.smarttoolfactory.dashboard.adapter.FooterAdapter
+import com.smarttoolfactory.dashboard.adapter.HorizontalPropertySectionAdapter
 import com.smarttoolfactory.dashboard.databinding.FragmentDashboardBinding
 import com.smarttoolfactory.dashboard.di.DaggerDashboardComponent
 import dagger.hilt.android.EntryPointAccessors
@@ -17,7 +20,7 @@ class DashboardFragment : DynamicNavigationFragment<FragmentDashboardBinding>() 
 
     override fun getLayoutRes(): Int = R.layout.fragment_dashboard
 
-    lateinit var itemListAdapter: DashboardListAdapter
+    private val footerAdapter = FooterAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         initCoreDependentInjection()
@@ -26,28 +29,42 @@ class DashboardFragment : DynamicNavigationFragment<FragmentDashboardBinding>() 
     }
 
     override fun bindViews() {
+
         dataBinding!!.viewModel = viewModel
+
+        val adapterHorizontalTop = HorizontalPropertySectionAdapter()
+
+        val adapterHorizontalBottom = HorizontalPropertySectionAdapter()
+
+        val concatAdapter =
+            ConcatAdapter(adapterHorizontalTop, footerAdapter, adapterHorizontalBottom)
 
         dataBinding!!.recyclerView.apply {
 
             // Set Layout manager
             this.layoutManager =
-                LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
+                LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
 
             // Set RecyclerViewAdapter
-            itemListAdapter = DashboardListAdapter(
-                R.layout.item_property_list,
-                viewModel::onClick
 
-            )
-            this.adapter = itemListAdapter
+            this.adapter = concatAdapter
         }
 
-        val swipeRefreshLayout = dataBinding!!.swipeRefreshLayout
-
-        swipeRefreshLayout.setOnRefreshListener {
-            swipeRefreshLayout.isRefreshing = false
-        }
+        viewModel.propertyListViewState.observe(
+            viewLifecycleOwner,
+            {
+                when (it.status) {
+                    Status.LOADING -> {
+                    }
+                    Status.SUCCESS -> {
+                        adapterHorizontalTop.submitList(it.data)
+                        adapterHorizontalBottom.submitList(it.data)
+                    }
+                    else -> {
+                    }
+                }
+            }
+        )
     }
 
     private fun initCoreDependentInjection() {
