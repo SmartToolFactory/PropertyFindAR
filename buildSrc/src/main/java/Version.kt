@@ -81,7 +81,7 @@ object Version {
     const val RX_JAVA3_ANDROID_VERSION = "3.0.0"
 
     // Coroutines
-    const val COROUTINES_VERSION = "1.3.5"
+    const val COROUTINES_VERSION = "1.3.7"
 
     // Glide
     const val GLIDE_VERSION = "4.9.0"

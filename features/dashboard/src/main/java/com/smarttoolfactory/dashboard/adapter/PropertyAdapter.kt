@@ -10,7 +10,7 @@ import com.smarttoolfactory.domain.model.PropertyItem
 
 class PropertyListAdapter(
     @LayoutRes private val layoutId: Int,
-    private val onItemClicked: ((PropertyItem) -> Unit)? = null
+    private val onItemClicked: ((PropertyItem) -> Unit)? = null,
 ) :
     SingleLayoutListAdapter<PropertyItem>(
         layoutId,

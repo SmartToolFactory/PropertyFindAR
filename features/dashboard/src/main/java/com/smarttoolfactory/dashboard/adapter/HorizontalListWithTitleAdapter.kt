@@ -7,10 +7,19 @@ import androidx.recyclerview.widget.ListAdapter
 import com.smarttoolfactory.core.ui.adapter.DefaultItemDiffCallback
 import com.smarttoolfactory.dashboard.R
 import com.smarttoolfactory.dashboard.adapter.viewholder.HorizontalItemViewHolder
-import com.smarttoolfactory.dashboard.model.PropertyListWithTitleModel
+import com.smarttoolfactory.dashboard.model.PropertyItemListModel
+import com.smarttoolfactory.domain.model.PropertyItem
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.MutableStateFlow
 
-class HorizontalListWithTitleAdapter :
-    ListAdapter<PropertyListWithTitleModel, HorizontalItemViewHolder>(
+class HorizontalListWithTitleAdapter(
+    private val onItemClick: ((PropertyItem) -> Unit)? = null,
+    private val onSeeAllClick: ((PropertyItemListModel) -> Unit)? = null,
+    private val coroutineScope: CoroutineScope? = null,
+    private val scrollPositionStateFlow: MutableStateFlow<Int>? = null
+
+) :
+    ListAdapter<PropertyItemListModel, HorizontalItemViewHolder>(
         DefaultItemDiffCallback()
     ) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HorizontalItemViewHolder {
@@ -18,9 +27,13 @@ class HorizontalListWithTitleAdapter :
         return HorizontalItemViewHolder(
             DataBindingUtil.inflate(
                 LayoutInflater.from(parent.context),
-                R.layout.layout_list_with_title_see,
+                R.layout.layout_list_with_title,
                 parent, false
-            )
+            ),
+            onItemClick,
+            onSeeAllClick,
+            coroutineScope,
+            scrollPositionStateFlow
         )
     }
 

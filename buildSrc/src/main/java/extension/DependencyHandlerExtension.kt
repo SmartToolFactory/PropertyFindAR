@@ -53,7 +53,7 @@ fun DependencyHandler.addAppModuleDependencies() {
     implementation(Deps.COROUTINES_ANDROID)
 
     // Leak Canary
-//    debugImplementation(Deps.LEAK_CANARY)
+    debugImplementation(Deps.LEAK_CANARY)
 
     // Room
     implementation(Deps.ROOM_RUNTIME)

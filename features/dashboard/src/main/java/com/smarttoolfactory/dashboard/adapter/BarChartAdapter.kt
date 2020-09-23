@@ -9,7 +9,7 @@ import com.smarttoolfactory.dashboard.R
 import com.smarttoolfactory.dashboard.adapter.viewholder.BarChartViewHolder
 import com.smarttoolfactory.dashboard.model.ChartItemListModel
 
-class ChartContainerAdapter(private val onChartItemClicked: ((Float) -> Unit)? = null) :
+class BarChartAdapter(private val onChartItemClicked: ((Float) -> Unit)? = null) :
     ListAdapter<ChartItemListModel, BarChartViewHolder>(
         DefaultItemDiffCallback()
     ) {

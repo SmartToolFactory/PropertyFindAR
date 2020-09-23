@@ -65,7 +65,7 @@
         </androidx.cardview.widget.CardView>
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tvTitle"
+            android:id="@+id/tvType"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
@@ -88,8 +88,8 @@
             android:textColor="@color/black"
             android:textSize="18sp"
             app:layout_constraintStart_toEndOf="@+id/cvThumbnail"
-            app:layout_constraintStart_toStartOf="@+id/tvTitle"
-            app:layout_constraintTop_toBottomOf="@+id/tvTitle"
+            app:layout_constraintStart_toStartOf="@+id/tvType"
+            app:layout_constraintTop_toBottomOf="@+id/tvType"
             tools:text="249,000 AED" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

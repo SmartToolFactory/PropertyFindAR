@@ -7,13 +7,14 @@ import com.smarttoolfactory.domain.ORDER_BY_PRICE_ASCENDING
 import com.smarttoolfactory.domain.dispatcher.UseCaseDispatchers
 import com.smarttoolfactory.domain.mapper.FavoriteEntityToItemListMapper
 import com.smarttoolfactory.domain.mapper.PropertyDTOtoItemListMapper
-import com.smarttoolfactory.domain.mapper.PropertyItemToEntityMapper
+import com.smarttoolfactory.domain.model.PropertyChartItem
 import com.smarttoolfactory.domain.model.PropertyItem
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.zip
 
@@ -22,7 +23,6 @@ class GetDashboardStatsUseCase @Inject constructor(
     private val mapperDTOtoItem: PropertyDTOtoItemListMapper,
     private val dispatcherProvider: UseCaseDispatchers,
     private val favoritesRepo: FavoritesRepository,
-    private val mapperItemToEntity: PropertyItemToEntityMapper,
     private val mapperEntityToFavoriteItemMapper: FavoriteEntityToItemListMapper
 ) {
 
@@ -36,8 +36,9 @@ class GetDashboardStatsUseCase @Inject constructor(
                 propertyList.filter { property ->
                     property.isFavorite
                 }
-                    .take(5)
+                    .take(8)
             }
+            .flowOn(dispatcherProvider.defaultDispatcher)
     }
 
     /**
@@ -52,8 +53,9 @@ class GetDashboardStatsUseCase @Inject constructor(
                 }.sortedByDescending { property ->
                     property.viewCount
                 }
-                    .take(5)
+                    .take(8)
             }
+            .flowOn(dispatcherProvider.defaultDispatcher)
     }
 
     /**
@@ -66,9 +68,47 @@ class GetDashboardStatsUseCase @Inject constructor(
     private fun getPropertiesWithStats(userId: Long = 0): Flow<List<PropertyItem>> {
 
         return flow { emit(favoritesRepo.getPropertiesWithFavorites(userId)) }
+            .flowOn(dispatcherProvider.ioDispatcher)
             .map { propertiesWithFavorites ->
                 mapperEntityToFavoriteItemMapper.map(propertiesWithFavorites)
             }
+            .flowOn(dispatcherProvider.defaultDispatcher)
+    }
+
+    fun getFavoriteChartItems(userId: Long = 0): Flow<List<PropertyChartItem>> {
+
+        return getFavoriteProperties()
+            .map { propertyList ->
+                propertyList.map { propertyItem ->
+                    PropertyChartItem(
+                        id = propertyItem.id,
+                        title = propertyItem.title,
+                        price = propertyItem.priceValueRaw.toFloat(),
+                        beds = propertyItem.bedrooms,
+                        baths = propertyItem.bathrooms,
+                        location = propertyItem.location
+                    )
+                }
+            }
+            .flowOn(dispatcherProvider.defaultDispatcher)
+    }
+
+    fun getMostViewedChartItems(userId: Long = 0): Flow<List<PropertyChartItem>> {
+
+        return getMostViewedProperties()
+            .map { propertyList ->
+                propertyList.map { propertyItem ->
+                    PropertyChartItem(
+                        id = propertyItem.id,
+                        title = propertyItem.title,
+                        price = propertyItem.priceValueRaw.toFloat(),
+                        beds = propertyItem.bedrooms,
+                        baths = propertyItem.bathrooms,
+                        location = propertyItem.location
+                    )
+                }
+            }
+            .flowOn(dispatcherProvider.defaultDispatcher)
     }
 
     /**
