@@ -4,6 +4,9 @@ object Deps {
 
     const val ANDROIDX_CORE_KTX = "androidx.core:core-ktx:${Version.CORE_KTX_VERSION}"
 
+    // Fragments
+    const val ANDROIDX_FRAGMENT_KTX = "androidx.core:core-ktx:${Version.FRAGMENT_KTX_VERSION}"
+
     // AppCompat
     const val APPCOMPAT = "androidx.appcompat:appcompat:${Version.APPCOMPAT_VERSION}"
 
