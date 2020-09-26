@@ -66,7 +66,7 @@ dependencies {
     // Lifecycle, LiveData, ViewModel
     implementation(Deps.LIFECYCLE_LIVEDATA_KTX)
     implementation(Deps.LIFECYCLE_VIEWMODEL_KTX)
-    implementation(Deps.LIFECYCLE_EXTENSIONS)
+    implementation(Deps.LIFECYCLE_COMMON_JAVA8)
 
 //    implementation(TestDeps.ANDROIDX_CORE_KTX)
 //    implementation(TestDeps.ANDROIDX_CORE_TESTING)

@@ -2,9 +2,9 @@ package com.smarttoolfactory.dashboard.adapter
 
 import androidx.annotation.LayoutRes
 import androidx.databinding.ViewDataBinding
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.smarttoolfactory.core.ui.adapter.SingleLayoutListAdapter
+import com.smarttoolfactory.core.ui.recyclerview.adapter.SingleLayoutListAdapter
+import com.smarttoolfactory.core.ui.recyclerview.itemcallback.PropertyItemCallback
 import com.smarttoolfactory.dashboard.BR
 import com.smarttoolfactory.domain.model.PropertyItem
 
@@ -14,7 +14,7 @@ class PropertyListAdapter(
 ) :
     SingleLayoutListAdapter<PropertyItem>(
         layoutId,
-        PropertyItemDiffCallback()
+        PropertyItemCallback()
     ) {
 
     override fun onViewHolderBound(
@@ -41,22 +41,5 @@ class PropertyListAdapter(
                 it((getItem(viewHolder.bindingAdapterPosition)))
             }
         }
-    }
-}
-
-/**
- * Callback for calculating the diff between two non-null items in a list.
- *
- * Used by ListAdapter to calculate the minimum number of changes between and old list and a new
- * list that's been passed to `submitList`.
- */
-class PropertyItemDiffCallback : DiffUtil.ItemCallback<PropertyItem>() {
-
-    override fun areItemsTheSame(oldItem: PropertyItem, newItem: PropertyItem): Boolean {
-        return oldItem.id == newItem.id
-    }
-
-    override fun areContentsTheSame(oldItem: PropertyItem, newItem: PropertyItem): Boolean {
-        return oldItem == newItem
     }
 }

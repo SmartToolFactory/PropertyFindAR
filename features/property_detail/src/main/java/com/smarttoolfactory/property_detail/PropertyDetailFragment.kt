@@ -1,6 +1,7 @@
 package com.smarttoolfactory.property_detail
 
 import android.os.Bundle
+import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
 import com.smarttoolfactory.core.di.CoreModuleDependencies
@@ -24,10 +25,10 @@ class PropertyDetailFragment : DynamicNavigationFragment<FragmentPropertyDetailB
      */
     private val navControllerViewModel by activityViewModels<NavControllerViewModel>()
 
-    override fun bindViews() {
+    override fun bindViews(view: View, savedInstanceState: Bundle?) {
         // Get Post from navigation component arguments
         val property = arguments?.get("property") as PropertyItem
-        dataBinding!!.item = property
+        dataBinding.item = property
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

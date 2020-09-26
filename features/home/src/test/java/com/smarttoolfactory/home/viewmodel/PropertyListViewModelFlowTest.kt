@@ -6,7 +6,7 @@ import com.smarttoolfactory.core.viewstate.Status
 import com.smarttoolfactory.domain.ORDER_BY_NONE
 import com.smarttoolfactory.domain.model.PropertyItem
 import com.smarttoolfactory.domain.usecase.property.GetPropertiesUseCaseFlow
-import com.smarttoolfactory.home.propertylist.flow.PropertyListViewModelFlow
+import com.smarttoolfactory.home.propertylist.flow.PropertyListViewModel
 import com.smarttoolfactory.test_utils.RESPONSE_JSON_PATH
 import com.smarttoolfactory.test_utils.rule.TestCoroutineRule
 import com.smarttoolfactory.test_utils.test_observer.test
@@ -64,7 +64,7 @@ class PropertyListViewModelFlowTest {
     /**
      * ViewModel to test list which is SUT
      */
-    private lateinit var viewModel: PropertyListViewModelFlow
+    private lateinit var viewModel: PropertyListViewModel
 
     @Test
     fun `given exception returned from useCase, should have ViewState ERROR offlineFirst`() =
@@ -203,7 +203,7 @@ class PropertyListViewModelFlowTest {
     @Before
     fun setUp() {
         viewModel =
-            PropertyListViewModelFlow(testCoroutineRule.testCoroutineScope, useCase)
+            PropertyListViewModel(testCoroutineRule.testCoroutineScope, useCase)
     }
 
     @After

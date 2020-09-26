@@ -1,4 +1,4 @@
-package com.smarttoolfactory.core.ui.adapter
+package com.smarttoolfactory.core.ui.viewpager2
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager

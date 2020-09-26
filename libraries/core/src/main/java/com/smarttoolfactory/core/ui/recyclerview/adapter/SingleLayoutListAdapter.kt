@@ -1,4 +1,4 @@
-package com.smarttoolfactory.core.ui.adapter
+package com.smarttoolfactory.core.ui.recyclerview.adapter
 
 import android.util.Log
 import android.view.LayoutInflater
@@ -6,11 +6,10 @@ import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
-import androidx.recyclerview.widget.AsyncDifferConfig
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import java.util.concurrent.Executors
+import com.smarttoolfactory.core.ui.recyclerview.itemcallback.DefaultItemCallback
 
 /**
  * Abstract [ListAdapter] with **ItemType** for data type.
@@ -24,12 +23,8 @@ import java.util.concurrent.Executors
  */
 abstract class SingleLayoutListAdapter<ItemType>(
     @LayoutRes private val layoutId: Int,
-    callBack: DiffUtil.ItemCallback<ItemType> = DefaultItemDiffCallback(),
-) : ListAdapter<ItemType, BaseItemViewHolder>(
-    AsyncDifferConfig.Builder<ItemType>(callBack)
-        .setBackgroundThreadExecutor(Executors.newSingleThreadExecutor())
-        .build()
-) {
+    callBack: DiffUtil.ItemCallback<ItemType> = DefaultItemCallback(),
+) : ListAdapter<ItemType, BaseItemViewHolder>(callBack) {
 
     override fun onCreateViewHolder(
         parent: ViewGroup,

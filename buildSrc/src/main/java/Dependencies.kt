@@ -29,12 +29,36 @@ object Deps {
 
 
     // Lifecycle, ViewModel and LiveData
-    const val LIFECYCLE_LIVEDATA_KTX =
-        "androidx.lifecycle:lifecycle-livedata-ktx:${Version.LIFECYCLE_VERSION}"
+
+    // ViewModel
     const val LIFECYCLE_VIEWMODEL_KTX =
         "androidx.lifecycle:lifecycle-viewmodel-ktx:${Version.LIFECYCLE_VERSION}"
-    const val LIFECYCLE_EXTENSIONS =
-        "androidx.lifecycle:lifecycle-extensions:${Version.LIFECYCLE_VERSION}"
+    // LiveData
+    const val LIFECYCLE_LIVEDATA_KTX =
+        "androidx.lifecycle:lifecycle-livedata-ktx:${Version.LIFECYCLE_VERSION}"
+
+    // Saved state module for ViewModel
+    const val LIFECYCLE_VIEWMODEL_SAVEDSTATE =
+        "androidx.lifecycle:lifecycle-viewmodel-savedstate:${Version.LIFECYCLE_VERSION}"
+
+    // Annotation processor
+//    const val LIFECYCLE_COMPILER = "androidx.lifecycle:lifecycle-compiler:${Version.LIFECYCLE_VERSION}"
+
+    // alternately - if using Java8, use the following instead of lifecycle-compiler
+    const val LIFECYCLE_COMMON_JAVA8 =
+        "androidx.lifecycle:lifecycle-common-java8:${Version.LIFECYCLE_VERSION}"
+
+    // optional - helpers for implementing LifecycleOwner in a Service
+    const val LIFECYCLE_SERVICE =
+        "androidx.lifecycle:lifecycle-service:${Version.LIFECYCLE_VERSION}"
+
+    // optional - ProcessLifecycleOwner provides a lifecycle for the whole application process
+    const val LIFECYCLE_PROCESS =
+        "androidx.lifecycle:lifecycle-process:${Version.LIFECYCLE_VERSION}"
+
+    // optional - ReactiveStreams support for LiveData
+    const val LIFECYCLE_REACTIVE_STREAMS =
+        "androidx.lifecycle:lifecycle-reactivestreams:${Version.LIFECYCLE_VERSION}"
 
 
     // Navigation Components

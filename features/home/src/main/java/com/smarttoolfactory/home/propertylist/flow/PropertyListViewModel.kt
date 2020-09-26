@@ -20,7 +20,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 
-class PropertyListViewModelFlow @ViewModelInject constructor(
+class PropertyListViewModel @ViewModelInject constructor(
     private val coroutineScope: CoroutineScope,
     private val getPropertiesUseCase: GetPropertiesUseCaseFlow,
     private val setPropertyStatsUseCase: SetPropertyStatsUseCase
@@ -43,13 +43,11 @@ class PropertyListViewModelFlow @ViewModelInject constructor(
     private fun getOrderByKey(): Flow<String?> {
         return getPropertiesUseCase.getCurrentSortKey()
             .onEach {
-                println("🍏 AbstractPropertyListVM init orderKey: $it")
                 _orderByKey = it ?: _orderByKey
                 orderKey.postValue(_orderByKey)
             }
             .catch {
                 orderKey.postValue(_orderByKey)
-                println("❌ AbstractPropertyListVM init error: $it")
             }
     }
 
@@ -76,11 +74,9 @@ class PropertyListViewModelFlow @ViewModelInject constructor(
             }
             .convertToFlowViewState()
             .onStart {
-                println("🍏 FlowViewModel getPropertyList() START")
                 _propertyViewState.value = ViewState(status = Status.LOADING)
             }
             .onEach {
-                println("🍎 FlowViewModel getPropertyList() RES: $it")
                 _propertyViewState.value = it
             }
             .launchIn(coroutineScope)

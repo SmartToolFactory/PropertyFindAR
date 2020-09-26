@@ -3,6 +3,7 @@ package com.smarttoolfactory.home
 import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
@@ -23,7 +24,7 @@ import com.smarttoolfactory.core.util.Event
 import com.smarttoolfactory.core.util.observe
 import com.smarttoolfactory.core.viewmodel.NavControllerViewModel
 import com.smarttoolfactory.core.viewmodel.PropertyDetailNavigationVM
-import com.smarttoolfactory.home.adapter.HomeViewPager2FragmentStateAdapter
+import com.smarttoolfactory.home.adapter.HomeFragmentStateAdapter
 import com.smarttoolfactory.home.databinding.FragmentHomeBinding
 import com.smarttoolfactory.home.viewmodel.HomeToolbarVM
 
@@ -62,13 +63,13 @@ class HomeFragment : DynamicNavigationFragment<FragmentHomeBinding>() {
      */
     private val propertyDetailNavigationVM by activityViewModels<PropertyDetailNavigationVM>()
 
-    override fun bindViews() {
+    override fun bindViews(view: View, savedInstanceState: Bundle?) {
 
         // ViewPager2
-        val viewPager = dataBinding!!.viewPager
+        val viewPager = dataBinding.viewPager
 
         // TabLayout
-        val tabLayout = dataBinding!!.tabLayout
+        val tabLayout = dataBinding.tabLayout
 
         /*
             Set Adapter for ViewPager inside this fragment using this Fragment,
@@ -78,9 +79,9 @@ class HomeFragment : DynamicNavigationFragment<FragmentHomeBinding>() {
             https://stackoverflow.com/questions/61779776/leak-canary-detects-memory-leaks-for-tablayout-with-viewpager2
          */
         viewPager.adapter =
-            HomeViewPager2FragmentStateAdapter(childFragmentManager, viewLifecycleOwner.lifecycle)
+            HomeFragmentStateAdapter(childFragmentManager, viewLifecycleOwner.lifecycle)
 
-        dataBinding!!.toolbar.inflateMenu(R.menu.menu_home)
+        dataBinding.toolbar.inflateMenu(R.menu.menu_home)
 
         // Bind tabs and viewpager
         TabLayoutMediator(tabLayout, viewPager, tabConfigurationStrategy).attach()
@@ -112,7 +113,7 @@ class HomeFragment : DynamicNavigationFragment<FragmentHomeBinding>() {
     }
 
     private fun setToolbarMenuItemListener() {
-        dataBinding!!.toolbar.setOnMenuItemClickListener {
+        dataBinding.toolbar.setOnMenuItemClickListener {
             if (it.itemId == R.id.menu_item_sort) {
                 val dialogFragment = SortDialogFragment().show(
                     requireActivity().supportFragmentManager,
@@ -133,7 +134,7 @@ class HomeFragment : DynamicNavigationFragment<FragmentHomeBinding>() {
                 it?.let { event: Event<NavController?> ->
                     event.getContentIfNotHandled()?.let { navController ->
                         val appBarConfig = AppBarConfiguration(navController.graph)
-                        dataBinding!!.toolbar.setupWithNavController(navController, appBarConfig)
+                        dataBinding.toolbar.setupWithNavController(navController, appBarConfig)
                     }
                 }
             }
@@ -143,9 +144,9 @@ class HomeFragment : DynamicNavigationFragment<FragmentHomeBinding>() {
     override fun onDestroyView() {
 
         // ViewPager2
-        val viewPager2 = dataBinding!!.viewPager
+        val viewPager2 = dataBinding.viewPager
         // TabLayout
-        val tabLayout = dataBinding!!.tabLayout
+        val tabLayout = dataBinding.tabLayout
 
         /*
             🔥 Detach TabLayoutMediator since it causing memory leaks when it's in a fragment
@@ -162,7 +163,7 @@ class HomeFragment : DynamicNavigationFragment<FragmentHomeBinding>() {
         }
 
         // Remove menu item click listener
-        dataBinding!!.toolbar.setOnMenuItemClickListener(null)
+        dataBinding.toolbar.setOnMenuItemClickListener(null)
 
         super.onDestroyView()
     }
@@ -205,13 +206,13 @@ class SortDialogFragment : DialogFragment() {
             .setSingleChoiceItems(
                 viewModel.sortFilterNames.toTypedArray(),
                 currentItem
-            ) { dialog, which ->
+            ) { _, which ->
                 checkedItem = which
 
                 // Alternative 1 works as soon as user changes the option
-                //                if (currentItem != checkedItem) {
-//                    viewModel.queryBySort.value = Event(viewModel.sortPropertyList[checkedItem])
-//                }
+                if (currentItem != checkedItem) {
+                    viewModel.queryBySort.value = Event(viewModel.sortPropertyList[checkedItem])
+                }
             }
         return builder.create()
     }
@@ -219,8 +220,8 @@ class SortDialogFragment : DialogFragment() {
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
         // Alternative works after dialog is dismissed
-        if (currentItem != checkedItem && !canceled) {
-            viewModel.queryBySort.value = Event(viewModel.sortPropertyList[checkedItem])
-        }
+//        if (currentItem != checkedItem && !canceled) {
+//            viewModel.queryBySort.value = Event(viewModel.sortPropertyList[checkedItem])
+//        }
     }
 }

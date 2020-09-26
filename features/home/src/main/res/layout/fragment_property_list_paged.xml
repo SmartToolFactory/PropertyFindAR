@@ -22,19 +22,19 @@
             android:layout_height="match_parent">
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_view"
+                android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_marginTop="18dp"
                 app:items="@{viewModel.propertyListViewState.data}"
-                app:layout_constraintBottom_toTopOf="@+id/progress_bar"
+                app:layout_constraintBottom_toTopOf="@+id/progressBar"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 android:scrollbars="vertical"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tv_error"
+                android:id="@+id/tvError"
                 visibilityBasedOn="@{viewModel.propertyListViewState.shouldShowErrorMessage()}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -42,10 +42,10 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/recycler_view" />
+                app:layout_constraintTop_toTopOf="@+id/recyclerView" />
 
             <ProgressBar
-                android:id="@+id/progress_bar"
+                android:id="@+id/progressBar"
                 visibilityBasedOn="@{viewModel.propertyListViewState.loading}"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"

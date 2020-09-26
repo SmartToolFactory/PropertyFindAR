@@ -1,32 +1,29 @@
 package com.smarttoolfactory.dashboard.adapter
 
-import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.smarttoolfactory.core.ui.adapter.DefaultItemDiffCallback
-import com.smarttoolfactory.dashboard.R
+import com.smarttoolfactory.core.ui.recyclerview.itemcallback.DefaultItemCallback
 import com.smarttoolfactory.dashboard.adapter.viewholder.GridItemViewHolder
-import com.smarttoolfactory.dashboard.model.PropertyItemListModel
-import com.smarttoolfactory.domain.model.PropertyItem
+import com.smarttoolfactory.dashboard.adapter.viewholder.GridSectionViewBinder
+import com.smarttoolfactory.dashboard.model.GridPropertyListModel
 
-class GridListWithTitleAdapter(private val onItemClick: ((PropertyItem) -> Unit)? = null) :
-    ListAdapter<PropertyItemListModel, GridItemViewHolder>(
-        DefaultItemDiffCallback()
+class GridListWithTitleAdapter(private val gridSectionViewBinder: GridSectionViewBinder) :
+    ListAdapter<GridPropertyListModel, GridItemViewHolder>(
+        DefaultItemCallback()
     ) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GridItemViewHolder {
-
-        return GridItemViewHolder(
-            DataBindingUtil.inflate(
-                LayoutInflater.from(parent.context),
-                R.layout.layout_list_with_title,
-                parent, false
-            ),
-            onItemClick
-        )
+        return gridSectionViewBinder.createViewHolder(parent)
     }
 
     override fun onBindViewHolder(holder: GridItemViewHolder, position: Int) {
         holder.bindTo(currentList[position])
+    }
+
+    override fun onViewRecycled(holder: GridItemViewHolder) {
+        gridSectionViewBinder.onViewRecycled(holder)
+    }
+
+    override fun onViewDetachedFromWindow(holder: GridItemViewHolder) {
+        gridSectionViewBinder.onViewDetachedFromWindow(holder)
     }
 }

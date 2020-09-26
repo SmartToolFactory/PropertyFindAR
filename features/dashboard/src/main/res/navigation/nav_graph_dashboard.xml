@@ -45,8 +45,8 @@
             app:popExitAnim="@anim/slide_out_right" />
 
         <argument
-            android:name="propertyItemListModel"
-            app:argType="com.smarttoolfactory.dashboard.model.PropertyItemListModel" />
+            android:name="propertyListModel"
+            app:argType="com.smarttoolfactory.dashboard.model.PropertyListModel" />
 
     </fragment>
 

@@ -1,20 +1,22 @@
 package com.smarttoolfactory.dashboard
 
+import android.os.Bundle
+import android.view.View
 import androidx.core.os.bundleOf
-import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.smarttoolfactory.core.ui.fragment.DynamicNavigationFragment
 import com.smarttoolfactory.dashboard.adapter.PropertyListAdapter
 import com.smarttoolfactory.dashboard.databinding.FragmentDashboardSeeAllBinding
-import com.smarttoolfactory.dashboard.model.PropertyItemListModel
+import com.smarttoolfactory.dashboard.model.PropertyListModel
 import com.smarttoolfactory.domain.model.PropertyItem
 
 class DashboardSeeAllFragment : DynamicNavigationFragment<FragmentDashboardSeeAllBinding>() {
 
     override fun getLayoutRes() = R.layout.fragment_dashboard_see_all
 
-    override fun bindViews() {
+    override fun bindViews(view: View, savedInstanceState: Bundle?) {
 
         dataBinding.recyclerView.apply {
 
@@ -44,7 +46,7 @@ class DashboardSeeAllFragment : DynamicNavigationFragment<FragmentDashboardSeeAl
 
             // Set data
             val propertyItemListModel =
-                arguments?.get("propertyItemListModel") as PropertyItemListModel
+                arguments?.get("propertyListModel") as PropertyListModel
 
             itemListAdapter.submitList(propertyItemListModel.items)
         }

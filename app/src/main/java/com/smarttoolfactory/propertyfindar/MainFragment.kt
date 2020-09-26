@@ -24,7 +24,7 @@ class MainFragment : DynamicNavigationFragment<FragmentMainBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val binding = dataBinding!!
+        val binding = dataBinding
 
         val viewPager2 = binding.viewPager
         val bottomNavigationView = binding.bottomNav

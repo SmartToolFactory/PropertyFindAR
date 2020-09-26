@@ -1,31 +1,30 @@
 package com.smarttoolfactory.dashboard.adapter
 
-import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.smarttoolfactory.core.ui.adapter.DefaultItemDiffCallback
-import com.smarttoolfactory.dashboard.R
+import com.smarttoolfactory.core.ui.recyclerview.itemcallback.DefaultItemCallback
+import com.smarttoolfactory.dashboard.adapter.viewholder.BarChartViewBinder
 import com.smarttoolfactory.dashboard.adapter.viewholder.BarChartViewHolder
 import com.smarttoolfactory.dashboard.model.ChartItemListModel
 
-class BarChartAdapter(private val onChartItemClicked: ((Float) -> Unit)? = null) :
+class BarChartAdapter(private val barChartViewBinder: BarChartViewBinder) :
     ListAdapter<ChartItemListModel, BarChartViewHolder>(
-        DefaultItemDiffCallback()
+        DefaultItemCallback()
     ) {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BarChartViewHolder {
 
-        return BarChartViewHolder(
-            DataBindingUtil.inflate(
-                LayoutInflater.from(parent.context),
-                R.layout.item_bar_chart,
-                parent, false
-            ),
-            onChartItemClicked
-        )
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BarChartViewHolder {
+        return barChartViewBinder.createViewHolder(parent)
     }
 
     override fun onBindViewHolder(holder: BarChartViewHolder, position: Int) {
         holder.bindTo(currentList[position])
+    }
+
+    override fun onViewRecycled(holder: BarChartViewHolder) {
+        barChartViewBinder.onViewRecycled(holder)
+    }
+
+    override fun onViewDetachedFromWindow(holder: BarChartViewHolder) {
+        barChartViewBinder.onViewDetachedFromWindow(holder)
     }
 }

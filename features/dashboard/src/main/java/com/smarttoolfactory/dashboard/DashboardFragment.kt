@@ -1,79 +1,174 @@
 package com.smarttoolfactory.dashboard
 
 import android.os.Bundle
+import android.view.View
 import androidx.core.os.bundleOf
-import androidx.lifecycle.lifecycleScope
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.smarttoolfactory.core.di.CoreModuleDependencies
 import com.smarttoolfactory.core.ui.fragment.DynamicNavigationFragment
-import com.smarttoolfactory.core.util.EndlessScrollListener
+import com.smarttoolfactory.core.ui.recyclerview.adapter.ItemBinder
+import com.smarttoolfactory.core.ui.recyclerview.adapter.ItemClazz
 import com.smarttoolfactory.core.viewstate.Status
 import com.smarttoolfactory.dashboard.adapter.BarChartAdapter
 import com.smarttoolfactory.dashboard.adapter.GridListWithTitleAdapter
 import com.smarttoolfactory.dashboard.adapter.HorizontalListWithTitleAdapter
+import com.smarttoolfactory.dashboard.adapter.viewholder.BarChartViewBinder
+import com.smarttoolfactory.dashboard.adapter.viewholder.GridSectionViewBinder
+import com.smarttoolfactory.dashboard.adapter.viewholder.HorizontalSectionViewBinder
 import com.smarttoolfactory.dashboard.databinding.FragmentDashboardBinding
 import com.smarttoolfactory.dashboard.di.DaggerDashboardComponent
+import com.smarttoolfactory.dashboard.di.withFactory
 import dagger.hilt.android.EntryPointAccessors
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class DashboardFragment :
-    DynamicNavigationFragment<FragmentDashboardBinding>(),
-    EndlessScrollListener.ScrollToBottomListener {
-
+    DynamicNavigationFragment<FragmentDashboardBinding>() {
     @Inject
-    lateinit var viewModel: DashboardViewModel
+    lateinit var dashboardViewModelFactory: DashboardViewModelFactory
 
-    private var isRecommendedAdded = false
+    private val viewModel: DashboardViewModel
+    by viewModels { withFactory(dashboardViewModelFactory) }
+
+    override fun getLayoutRes(): Int = R.layout.fragment_dashboard
 
     private lateinit var concatAdapter: ConcatAdapter
 
-    override fun getLayoutRes(): Int = R.layout.fragment_dashboard
+    private lateinit var adapterFavoriteProperties: HorizontalListWithTitleAdapter
+    private lateinit var adapterFavoriteChart: BarChartAdapter
+
+    private lateinit var adapterMostViewedProperties: HorizontalListWithTitleAdapter
+    private lateinit var adapterMostViewedChart: BarChartAdapter
+
+    private lateinit var adapterRecommendedProperties: GridListWithTitleAdapter
+
+    private lateinit var favoriteViewBinder: HorizontalSectionViewBinder
+    private lateinit var viewedMostViewBinder: HorizontalSectionViewBinder
+
+    companion object {
+        private const val BUNDLE_KEY_FAVORITES_LAYOUT_MANAGER_STATE =
+            "favorites_layout_manager"
+        private const val BUNDLE_KEY_VIES_LAYOUT_MANAGER_STATE =
+            "views_layout_manager"
+        private const val BUNDLE_KEY_RECOMMENDED_LAYOUT_MANAGER_STATE =
+            "recommended_layout_manager"
+    }
+
+//    override fun onSaveInstanceState(outState: Bundle) {
+//
+//        if (::favoriteViewBinder.isInitialized) {
+//            outState.putParcelable(
+//                BUNDLE_KEY_FAVORITES_LAYOUT_MANAGER_STATE,
+//                favoriteViewBinder.recyclerViewManagerState
+//            )
+//        }
+//        super.onSaveInstanceState(outState)
+//    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         initCoreDependentInjection()
         super.onCreate(savedInstanceState)
+
+//        createAdapters(savedInstanceState)
     }
 
-    override fun bindViews() {
+    private fun createAdapters(savedInstanceState: Bundle?) {
 
-        viewModel.getFavoriteProperties()
-        viewModel.getFavoriteChartItems()
-        viewModel.getMostViewedProperties()
+        // TODO set ViewBinders for MultipleLayout Adapters
+        val viewBindersPropertyFavorites = HashMap<ItemClazz, ItemBinder>()
 
-        dataBinding.viewModel = viewModel
+        val scrollStateFavorite = viewModel.favoriteScrollState.value
 
-        val scrollStateFavoritesFlow = MutableStateFlow(0)
+//        favoriteViewBinder = HorizontalSectionViewBinder(
+//            onItemClick = viewModel::onItemClick,
+//            onSeeAllClick = viewModel::onSeeAllClick,
+//            savedInstanceState?.getParcelable(
+//                BUNDLE_KEY_FAVORITES_LAYOUT_MANAGER_STATE
+//            )
+//        )
 
-        val adapterFavoriteProperties =
-            HorizontalListWithTitleAdapter(
-                onItemClick = viewModel::onItemClick,
-                onSeeAllClick = viewModel::onSeeAllClick,
-                coroutineScope = viewLifecycleOwner.lifecycleScope,
-                scrollPositionStateFlow = scrollStateFavoritesFlow
-            )
-
-        val adapterMostViewedProperties = HorizontalListWithTitleAdapter(
+        favoriteViewBinder = HorizontalSectionViewBinder(
             onItemClick = viewModel::onItemClick,
             onSeeAllClick = viewModel::onSeeAllClick,
-            coroutineScope = viewLifecycleOwner.lifecycleScope
+            recyclerViewManagerState = scrollStateFavorite
         )
+
+        viewedMostViewBinder = HorizontalSectionViewBinder(
+            onItemClick = viewModel::onItemClick,
+            onSeeAllClick = viewModel::onSeeAllClick,
+            recyclerViewManagerState = savedInstanceState?.getParcelable(
+                BUNDLE_KEY_VIES_LAYOUT_MANAGER_STATE
+            )
+        )
+
+        /*
+            Favorites
+         */
+        val scrollStateFavoritesFlow = MutableStateFlow(0)
+
+        adapterFavoriteProperties =
+            HorizontalListWithTitleAdapter(favoriteViewBinder)
 
         val chartItemClickLambda: ((Float) -> Unit) = { position ->
             scrollStateFavoritesFlow.value = position.toInt()
         }
 
-        val adapterChart =
-            BarChartAdapter(chartItemClickLambda)
+        val favoriteChartViewBinder = BarChartViewBinder(chartItemClickLambda)
+        adapterFavoriteChart = BarChartAdapter(favoriteChartViewBinder)
+
+        /*
+            Most Viewed
+         */
+
+        val scrollStateMostViewedFlow = MutableStateFlow(0)
+
+        adapterMostViewedProperties =
+            HorizontalListWithTitleAdapter(viewedMostViewBinder)
+
+        val chartMostViewedClick: ((Float) -> Unit) = { position ->
+            scrollStateMostViewedFlow.value = position.toInt()
+        }
+
+        val mostViewedChartViewBinder = BarChartViewBinder(chartMostViewedClick)
+        adapterMostViewedChart = BarChartAdapter(mostViewedChartViewBinder)
+
+        /*
+            Recommended
+         */
+        val gridSectionViewBinder = GridSectionViewBinder(
+            viewModel,
+            viewModel::onItemClick
+        )
+        adapterRecommendedProperties = GridListWithTitleAdapter(gridSectionViewBinder)
 
         concatAdapter =
             ConcatAdapter(
                 adapterFavoriteProperties,
-                adapterChart,
-                adapterMostViewedProperties
+                adapterFavoriteChart,
+                adapterMostViewedProperties,
+                adapterMostViewedChart,
+                adapterRecommendedProperties
             )
+    }
+
+    override fun bindViews(view: View, savedInstanceState: Bundle?) {
+
+        viewModel.getFavoriteProperties()
+        viewModel.getFavoriteChartItems()
+        viewModel.getMostViewedProperties()
+        viewModel.getMostViewedChartItems()
+        viewModel.getRecommendedProperties()
+
+        dataBinding.recyclerView.visibility = View.GONE
+        dataBinding.progressBar.visibility = View.VISIBLE
+
+        createAdapters(savedInstanceState)
+
+        dataBinding.viewModel = viewModel
 
         dataBinding.recyclerView.apply {
 
@@ -84,137 +179,179 @@ class DashboardFragment :
             this.layoutManager = linearLayoutManager
 
             // Set RecyclerViewAdapter
-
-            this.adapter = concatAdapter
-
-            val endlessScrollListener =
-                EndlessScrollListener(linearLayoutManager, this@DashboardFragment)
-
-            this.addOnScrollListener(endlessScrollListener)
+            if (adapter == null) {
+                this.adapter = concatAdapter
+            }
         }
 
-        subscribeFavoriteProperties(adapterFavoriteProperties)
+        subscribeFavorites(adapterFavoriteProperties, adapterFavoriteChart)
+        subscribeMostViewed(adapterMostViewedProperties, adapterMostViewedChart)
 
-        subscribeMostViewedProperties(adapterMostViewedProperties)
+        subscribeRecommendedProperties(adapterRecommendedProperties)
 
-        subscribeFavoriteChartItems(adapterChart)
-
-        subscribeGoToPropertyDetailsScreen()
-
-        subscribeGoToSeeAllScreen()
+        subscribeEvents()
     }
 
-    private fun subscribeFavoriteProperties(
-        adapter: HorizontalListWithTitleAdapter
+    private fun subscribeFavorites(
+        adapter: HorizontalListWithTitleAdapter,
+        adapterChartAdapter: BarChartAdapter
     ) {
         viewModel.propertiesFavorite.observe(
-            viewLifecycleOwner,
-            {
-                when (it.status) {
-                    Status.LOADING -> {
+            viewLifecycleOwner
+        ) {
+            when (it.status) {
+                Status.LOADING -> {
+                    dataBinding.recyclerView.visibility = View.GONE
+                    dataBinding.progressBar.visibility = View.VISIBLE
+                }
+                Status.SUCCESS -> {
+                    if (!it.data.isNullOrEmpty()) {
+                        adapter.submitList(it.data)
                     }
-                    Status.SUCCESS -> {
-                        if (!it.data.isNullOrEmpty()) {
-                            adapter.submitList(it.data)
-                        }
-                    }
-                    else -> {
-                    }
+                    dataBinding.recyclerView.visibility = View.VISIBLE
+                    dataBinding.progressBar.visibility = View.GONE
+                }
+                else -> {
+
+                    dataBinding.recyclerView.visibility = View.VISIBLE
+                    dataBinding.progressBar.visibility = View.GONE
                 }
             }
-        )
+        }
+
+        viewModel.chartFavoriteViewState.observe(
+            viewLifecycleOwner
+        ) {
+            when (it.status) {
+                Status.LOADING -> {
+                    dataBinding.recyclerView.visibility = View.GONE
+                    dataBinding.progressBar.visibility = View.VISIBLE
+                }
+                Status.SUCCESS -> {
+                    if (!it.data.isNullOrEmpty()) {
+                        adapterChartAdapter.submitList(it.data)
+                    }
+                    dataBinding.recyclerView.visibility = View.VISIBLE
+                    dataBinding.progressBar.visibility = View.GONE
+                }
+                else -> {
+
+                    dataBinding.recyclerView.visibility = View.VISIBLE
+                    dataBinding.progressBar.visibility = View.GONE
+                }
+            }
+        }
     }
 
-    private fun subscribeMostViewedProperties(adapter: HorizontalListWithTitleAdapter) {
+    private fun subscribeMostViewed(
+        adapter: HorizontalListWithTitleAdapter,
+        adapterChartAdapter: BarChartAdapter
+    ) {
         viewModel.propertiesMostViewed.observe(
-            viewLifecycleOwner,
-            {
-                when (it.status) {
-                    Status.LOADING -> {
+            viewLifecycleOwner
+        ) {
+            when (it.status) {
+                Status.LOADING -> {
+                    dataBinding.recyclerView.visibility = View.GONE
+                    dataBinding.progressBar.visibility = View.VISIBLE
+                }
+                Status.SUCCESS -> {
+                    if (!it.data.isNullOrEmpty()) {
+                        adapter.submitList(it.data)
                     }
-                    Status.SUCCESS -> {
-                        if (!it.data.isNullOrEmpty()) {
-                            adapter.submitList(it.data)
-                        }
-                    }
-                    else -> {
-                    }
+                    dataBinding.recyclerView.visibility = View.VISIBLE
+                    dataBinding.progressBar.visibility = View.GONE
+                }
+                else -> {
+
+                    dataBinding.recyclerView.visibility = View.VISIBLE
+                    dataBinding.progressBar.visibility = View.GONE
                 }
             }
-        )
+        }
+
+        viewModel.chartMostViewedViewState.observe(
+            viewLifecycleOwner
+        ) {
+            when (it.status) {
+                Status.LOADING -> {
+                    dataBinding.recyclerView.visibility = View.GONE
+                    dataBinding.progressBar.visibility = View.VISIBLE
+                }
+                Status.SUCCESS -> {
+                    if (!it.data.isNullOrEmpty()) {
+                        adapterChartAdapter.submitList(it.data)
+                    }
+                    dataBinding.recyclerView.visibility = View.VISIBLE
+                    dataBinding.progressBar.visibility = View.GONE
+                }
+                else -> {
+
+                    dataBinding.recyclerView.visibility = View.VISIBLE
+                    dataBinding.progressBar.visibility = View.GONE
+                }
+            }
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        viewModel.favoriteScrollState.value = favoriteViewBinder.recyclerViewManagerState
     }
 
     private fun subscribeRecommendedProperties(adapter: GridListWithTitleAdapter) {
         viewModel.propertiesRecommended.observe(
-            viewLifecycleOwner,
-            {
-                when (it.status) {
-                    Status.LOADING -> {
+            viewLifecycleOwner
+        ) {
+            when (it.status) {
+                Status.LOADING -> {
+                    dataBinding.recyclerView.visibility = View.GONE
+                    dataBinding.progressBar.visibility = View.VISIBLE
+                }
+                Status.SUCCESS -> {
+                    if (!it.data.isNullOrEmpty()) {
+                        adapter.submitList(it.data)
                     }
-                    Status.SUCCESS -> {
-                        if (!it.data.isNullOrEmpty()) {
-                            adapter.submitList(it.data)
-                        }
-                    }
-                    else -> {
-                    }
+                    dataBinding.recyclerView.visibility = View.VISIBLE
+                    dataBinding.progressBar.visibility = View.GONE
+                }
+                else -> {
+
+                    dataBinding.recyclerView.visibility = View.VISIBLE
+                    dataBinding.progressBar.visibility = View.GONE
                 }
             }
-        )
+        }
     }
 
-    private fun subscribeFavoriteChartItems(adapter: BarChartAdapter) {
-        viewModel.chartFavoriteViewState.observe(
-            viewLifecycleOwner,
-            {
-                when (it.status) {
-                    Status.LOADING -> {
-                    }
-                    Status.SUCCESS -> {
-                        if (!it.data.isNullOrEmpty()) {
-                            adapter.submitList(it.data)
-                        }
-                    }
-                    else -> {
-                    }
-                }
-            }
-        )
-    }
-
-    private fun subscribeGoToPropertyDetailsScreen() {
+    private fun subscribeEvents() {
         viewModel.goToDetailScreen.observe(
-            viewLifecycleOwner,
-            {
-                it.getContentIfNotHandled()?.let { propertyItem ->
-                    val bundle = bundleOf("property" to propertyItem)
-                    findNavController().navigate(
-                        R.id.action_dashboardFragment_to_nav_graph_property_detail,
-                        bundle
-                    )
-                }
+            viewLifecycleOwner
+        ) {
+            it.getContentIfNotHandled()?.let { propertyItem ->
+                val bundle = bundleOf("property" to propertyItem)
+                findNavController().navigate(
+                    R.id.action_dashboardFragment_to_nav_graph_property_detail,
+                    bundle
+                )
             }
-        )
-    }
-
-    private fun subscribeGoToSeeAllScreen() {
+        }
 
         viewModel.goToSeeAllListScreen.observe(
-            viewLifecycleOwner,
-            {
-                it.getContentIfNotHandled()?.let { propertyItemListModel ->
+            viewLifecycleOwner
+        ) {
+            it.getContentIfNotHandled()?.let { propertyListModel ->
 
-                    val bundle = bundleOf(
-                        "propertyItemListModel" to propertyItemListModel
-                    )
+                val bundle = bundleOf(
+                    "propertyListModel" to propertyListModel
+                )
 
-                    findNavController().navigate(
-                        R.id.action_dashboardFragment_to_dashboardSeeAllFragment,
-                        bundle
-                    )
-                }
+                findNavController().navigate(
+                    R.id.action_dashboardFragment_to_dashboardSeeAllFragment,
+                    bundle
+                )
             }
-        )
+        }
     }
 
     private fun initCoreDependentInjection() {
@@ -229,21 +366,5 @@ class DashboardFragment :
             fragment = this
         )
             .inject(this)
-    }
-
-    override fun onScrollToBottom() {
-
-//        if (!isRecommendedAdded) {
-//
-//            isRecommendedAdded = true
-//
-//            // Recommended Properties
-//            val adapterRecommendedProperties = GridListWithTitleAdapter(viewModel::onItemClick)
-//
-//            concatAdapter.addAdapter(adapterRecommendedProperties)
-//
-//            subscribeRecommendedProperties(adapterRecommendedProperties)
-//
-//        }
     }
 }

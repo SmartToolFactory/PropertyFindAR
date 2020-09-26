@@ -3,8 +3,8 @@ package com.smarttoolfactory.home.adapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
-import com.smarttoolfactory.core.ui.adapter.NavigableFragmentStateAdapter
 import com.smarttoolfactory.core.ui.fragment.navhost.NavHostContainerFragment
+import com.smarttoolfactory.core.ui.viewpager2.NavigableFragmentStateAdapter
 import com.smarttoolfactory.home.R
 
 /**
@@ -15,7 +15,7 @@ import com.smarttoolfactory.home.R
  *
  * * https://stackoverflow.com/questions/61779776/leak-canary-detects-memory-leaks-for-tablayout-with-viewpager2
  */
-class HomeViewPager2FragmentStateAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) :
+class HomeFragmentStateAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) :
     NavigableFragmentStateAdapter(fragmentManager, lifecycle) {
 
     override fun getItemCount(): Int = 3

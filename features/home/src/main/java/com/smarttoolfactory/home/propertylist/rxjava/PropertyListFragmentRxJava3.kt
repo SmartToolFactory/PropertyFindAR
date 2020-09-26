@@ -1,29 +1,31 @@
 package com.smarttoolfactory.home.propertylist.rxjava
 
 import android.os.Bundle
+import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.smarttoolfactory.core.di.CoreModuleDependencies
 import com.smarttoolfactory.core.ui.fragment.DynamicNavigationFragment
 import com.smarttoolfactory.core.util.Event
 import com.smarttoolfactory.core.util.observe
 import com.smarttoolfactory.core.viewmodel.PropertyDetailNavigationVM
 import com.smarttoolfactory.home.R
-import com.smarttoolfactory.home.adapter.PropertyItemListAdapter
+import com.smarttoolfactory.home.adapter.PropertyListAdapter
 import com.smarttoolfactory.home.databinding.FragmentPropertyListBinding
 import com.smarttoolfactory.home.di.DaggerHomeComponent
 import com.smarttoolfactory.home.viewmodel.HomeToolbarVM
 import dagger.hilt.android.EntryPointAccessors
 import javax.inject.Inject
 
-class PropertyListRxjava3Fragment : DynamicNavigationFragment<FragmentPropertyListBinding>() {
+class PropertyListFragmentRxJava3 : DynamicNavigationFragment<FragmentPropertyListBinding>() {
 
     @Inject
     lateinit var viewModel: PropertyListViewModelRxJava3
 
     private val propertyDetailNavigationVM by activityViewModels<PropertyDetailNavigationVM>()
 
-    lateinit var itemListAdapter: PropertyItemListAdapter
+    lateinit var itemListAdapter: PropertyListAdapter
 
     /**
      * ViewModel for setting sort filter on top menu and property list fragments
@@ -35,29 +37,35 @@ class PropertyListRxjava3Fragment : DynamicNavigationFragment<FragmentPropertyLi
     override fun onCreate(savedInstanceState: Bundle?) {
         initCoreDependentInjection()
         super.onCreate(savedInstanceState)
-        viewModel.getPropertyList()
     }
 
-    override fun bindViews() {
-        dataBinding!!.viewModel = viewModel
+    override fun bindViews(view: View, savedInstanceState: Bundle?) {
+        dataBinding.viewModel = viewModel
 
-        dataBinding!!.recyclerView.apply {
+        // Fetch offline-first data
+        viewModel.getPropertyList()
+
+        dataBinding.recyclerView.apply {
 
             // Set Layout manager
             this.layoutManager =
                 LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
 
             // Set RecyclerViewAdapter
-            itemListAdapter = PropertyItemListAdapter(
+            itemListAdapter = PropertyListAdapter(
                 R.layout.item_property_list,
                 viewModel::onClick,
                 viewModel::onLikeButtonClick
 
             )
+
+            itemListAdapter.stateRestorationPolicy =
+                RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+
             this.adapter = itemListAdapter
         }
 
-        val swipeRefreshLayout = dataBinding!!.swipeRefreshLayout
+        val swipeRefreshLayout = dataBinding.swipeRefreshLayout
 
         swipeRefreshLayout.setOnRefreshListener {
             swipeRefreshLayout.isRefreshing = false
@@ -129,7 +137,7 @@ class PropertyListRxjava3Fragment : DynamicNavigationFragment<FragmentPropertyLi
     }
 
     override fun onDestroyView() {
-        dataBinding!!.swipeRefreshLayout.setOnRefreshListener(null)
+        dataBinding.swipeRefreshLayout.setOnRefreshListener(null)
         super.onDestroyView()
     }
 }

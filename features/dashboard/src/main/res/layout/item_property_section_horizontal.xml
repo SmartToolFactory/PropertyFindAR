@@ -7,7 +7,7 @@
 
         <variable
             name="propertyListModel"
-            type="com.smarttoolfactory.dashboard.model.PropertyItemListModel" />
+            type="com.smarttoolfactory.dashboard.model.PropertyListModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -32,10 +32,10 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tvSeeAll"
+            visibilityBasedOn="@{propertyListModel.seeAll}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
-            visibilityBasedOn="@{propertyListModel.seeAll}"
             android:text="See all"
             android:textColor="#FB8C00"
             android:textStyle="bold"

@@ -35,6 +35,12 @@ abstract class BaseDataBindingFragment<ViewBinding : ViewDataBinding> : Fragment
 
     val dataBinding: ViewBinding get() = _dataBinding!!
 
+    private var onCreateViewStartTime: Long = 0
+
+    private var onViewCreatedStartTime: Long = 0
+
+    var totalInitTime: Long = 0
+
     /**
      * This method gets the layout id from the derived fragment to bind to that layout via data-binding
      */
@@ -52,6 +58,9 @@ abstract class BaseDataBindingFragment<ViewBinding : ViewDataBinding> : Fragment
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        onCreateViewStartTime = System.currentTimeMillis()
+//        println("🤣 ${this.javaClass.simpleName} #${this.hashCode()} onCreateView()")
 
         // Each fragment can have it's separate toolbar menu
         setHasOptionsMenu(true)
@@ -75,19 +84,53 @@ abstract class BaseDataBindingFragment<ViewBinding : ViewDataBinding> : Fragment
             dimensions.y = rootView.height
         }
 
-        bindViews()
-
         return rootView
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        onViewCreatedStartTime = System.currentTimeMillis()
+
+        println(
+            "🍏  ${this.javaClass.simpleName} #${this.hashCode()}  onViewCreated() " +
+                "START took ${onViewCreatedStartTime - onCreateViewStartTime} ms"
+        )
+
+        bindViews(view, savedInstanceState)
+
+        println(
+            "🍏  ${this.javaClass.simpleName} #${this.hashCode()}  onViewCreated() " +
+                "FINISH took ${System.currentTimeMillis() - onCreateViewStartTime} ms"
+        )
+    }
+
+    override fun onResume() {
+        super.onResume()
+        totalInitTime = System.currentTimeMillis() - onCreateViewStartTime
+        println(
+            "🍎  ${this.javaClass.simpleName} #${this.hashCode()}  onResume() " +
+                "TOTAL: ${System.currentTimeMillis() - onCreateViewStartTime} ms"
+        )
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _dataBinding = null
+//        println("🥵 ${this.javaClass.simpleName} #${this.hashCode()}  onDestroyView()")
     }
 
     /**
-     * Called from [Fragment.onCreateView] to implement bound ui items and set properties
+     * Called from [Fragment.onViewCreated] to implement bound ui items and set properties
      */
-    open fun bindViews() {
+    open fun bindViews(view: View, savedInstanceState: Bundle?) = Unit
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+//        println("😀 ${this.javaClass.simpleName} #${this.hashCode()}  onCreate()")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+//        println("🥶 ${this.javaClass.simpleName} #${this.hashCode()}  onDestroy()")
     }
 }

@@ -2,7 +2,7 @@ package com.smarttoolfactory.home.di
 
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.smarttoolfactory.home.propertylist.flow.PropertyListViewModelFlow
+import com.smarttoolfactory.home.propertylist.flow.PropertyListViewModel
 import com.smarttoolfactory.home.propertylist.paged.PagedPropertyListViewModel
 import com.smarttoolfactory.home.propertylist.rxjava.PropertyListViewModelRxJava3
 import com.smarttoolfactory.home.viewmodel.PagedPropertyListViewModelFactory
@@ -28,7 +28,7 @@ class HomeModule {
         fragment: Fragment,
         factory: PropertyListFlowViewModelFactory
     ) =
-        ViewModelProvider(fragment, factory).get(PropertyListViewModelFlow::class.java)
+        ViewModelProvider(fragment, factory).get(PropertyListViewModel::class.java)
 
     /**
      * Property ViewModel that uses Flow for data operation with Pagination
