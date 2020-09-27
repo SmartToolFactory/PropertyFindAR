@@ -1,6 +1,5 @@
 package com.smarttoolfactory.core.ui.fragment
 
-import android.graphics.Point
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -47,12 +46,6 @@ abstract class BaseDataBindingFragment<ViewBinding : ViewDataBinding> : Fragment
     @LayoutRes
     abstract fun getLayoutRes(): Int
 
-    /**
-     * Point that contains width and height of the fragment.
-     *
-     */
-    private val dimensions = Point()
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -76,41 +69,33 @@ abstract class BaseDataBindingFragment<ViewBinding : ViewDataBinding> : Fragment
          */
         dataBinding.lifecycleOwner = viewLifecycleOwner
 
-        val rootView = dataBinding.root
-
-        // Get width and height of the fragment
-        rootView.post {
-            dimensions.x = rootView.width
-            dimensions.y = rootView.height
-        }
-
-        return rootView
+        return dataBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         onViewCreatedStartTime = System.currentTimeMillis()
 
-        println(
-            "🍏  ${this.javaClass.simpleName} #${this.hashCode()}  onViewCreated() " +
-                "START took ${onViewCreatedStartTime - onCreateViewStartTime} ms"
-        )
+//        println(
+//            "🍏  ${this.javaClass.simpleName} #${this.hashCode()}  onViewCreated() " +
+//                "START took ${onViewCreatedStartTime - onCreateViewStartTime} ms"
+//        )
 
         bindViews(view, savedInstanceState)
 
-        println(
-            "🍏  ${this.javaClass.simpleName} #${this.hashCode()}  onViewCreated() " +
-                "FINISH took ${System.currentTimeMillis() - onCreateViewStartTime} ms"
-        )
+//        println(
+//            "🍏  ${this.javaClass.simpleName} #${this.hashCode()}  onViewCreated() " +
+//                "FINISH took ${System.currentTimeMillis() - onCreateViewStartTime} ms"
+//        )
     }
 
     override fun onResume() {
         super.onResume()
         totalInitTime = System.currentTimeMillis() - onCreateViewStartTime
-        println(
-            "🍎  ${this.javaClass.simpleName} #${this.hashCode()}  onResume() " +
-                "TOTAL: ${System.currentTimeMillis() - onCreateViewStartTime} ms"
-        )
+//        println(
+//            "🍎  ${this.javaClass.simpleName} #${this.hashCode()}  onResume() " +
+//                "TOTAL: ${System.currentTimeMillis() - onCreateViewStartTime} ms"
+//        )
     }
 
     override fun onDestroyView() {

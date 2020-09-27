@@ -3,6 +3,7 @@ package com.smarttoolfactory.dashboard.adapter
 import androidx.annotation.LayoutRes
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
+import com.smarttoolfactory.core.ui.recyclerview.adapter.BaseItemViewHolder
 import com.smarttoolfactory.core.ui.recyclerview.adapter.SingleLayoutListAdapter
 import com.smarttoolfactory.core.ui.recyclerview.itemcallback.PropertyItemCallback
 import com.smarttoolfactory.dashboard.BR
@@ -16,6 +17,11 @@ class PropertyListAdapter(
         layoutId,
         PropertyItemCallback()
     ) {
+
+    init {
+        // Make this adapter to attempt only after one or more items available
+        stateRestorationPolicy = StateRestorationPolicy.PREVENT_WHEN_EMPTY
+    }
 
     override fun onViewHolderBound(
         binding: ViewDataBinding,
@@ -41,5 +47,11 @@ class PropertyListAdapter(
                 it((getItem(viewHolder.bindingAdapterPosition)))
             }
         }
+    }
+
+    override fun onViewRecycled(holder: BaseItemViewHolder) {
+        super.onViewRecycled(holder)
+        holder.binding.root.setOnClickListener(null)
+        holder.binding.unbind()
     }
 }

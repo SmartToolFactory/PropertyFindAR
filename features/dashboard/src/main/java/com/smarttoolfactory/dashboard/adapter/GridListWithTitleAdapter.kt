@@ -3,27 +3,40 @@ package com.smarttoolfactory.dashboard.adapter
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import com.smarttoolfactory.core.ui.recyclerview.itemcallback.DefaultItemCallback
-import com.smarttoolfactory.dashboard.adapter.viewholder.GridItemViewHolder
-import com.smarttoolfactory.dashboard.adapter.viewholder.GridSectionViewBinder
+import com.smarttoolfactory.dashboard.adapter.viewholder.RecommendedSectionViewBinder
+import com.smarttoolfactory.dashboard.adapter.viewholder.RecommendedSectionViewHolder
 import com.smarttoolfactory.dashboard.model.GridPropertyListModel
 
-class GridListWithTitleAdapter(private val gridSectionViewBinder: GridSectionViewBinder) :
-    ListAdapter<GridPropertyListModel, GridItemViewHolder>(
+class GridListWithTitleAdapter(private val gridSectionViewBinder: RecommendedSectionViewBinder) :
+    ListAdapter<GridPropertyListModel, RecommendedSectionViewHolder>(
         DefaultItemCallback()
     ) {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GridItemViewHolder {
+
+    init {
+        stateRestorationPolicy = StateRestorationPolicy.PREVENT_WHEN_EMPTY
+    }
+
+    override fun getItemViewType(position: Int): Int =
+        gridSectionViewBinder.getItemLayoutResource()
+
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): RecommendedSectionViewHolder {
         return gridSectionViewBinder.createViewHolder(parent)
     }
 
-    override fun onBindViewHolder(holder: GridItemViewHolder, position: Int) {
-        holder.bindTo(currentList[position])
+    override fun onBindViewHolder(holder: RecommendedSectionViewHolder, position: Int) {
+        gridSectionViewBinder.bindViewHolder(currentList[position], holder)
     }
 
-    override fun onViewRecycled(holder: GridItemViewHolder) {
+    override fun onViewRecycled(holder: RecommendedSectionViewHolder) {
         gridSectionViewBinder.onViewRecycled(holder)
+        super.onViewRecycled(holder)
     }
 
-    override fun onViewDetachedFromWindow(holder: GridItemViewHolder) {
+    override fun onViewDetachedFromWindow(holder: RecommendedSectionViewHolder) {
         gridSectionViewBinder.onViewDetachedFromWindow(holder)
+        super.onViewDetachedFromWindow(holder)
     }
 }

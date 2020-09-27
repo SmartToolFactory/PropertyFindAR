@@ -31,12 +31,17 @@ class DashboardViewModel @ViewModelInject constructor(
     private val setPropertyStatsUseCase: SetPropertyStatsUseCase
 ) : ViewModel() {
 
-    companion object {
+    /*
+        Scroll states for inner horizontal and grid layout RecyclerViews
+     */
+    val scrollStateFavorites =
+        savedStateHandle.getLiveData<Parcelable?>(KEY_FAVORITES_LAYOUT_MANAGER_STATE)
 
-        const val KEY_FAVORITE_SCROLL = "favorite_scroll_state"
-    }
+    val scrollStateMostViewed =
+        savedStateHandle.getLiveData<Parcelable?>(KEY_MOST_VIEWED_LAYOUT_MANAGER_STATE)
 
-    val favoriteScrollState = savedStateHandle.getLiveData<Parcelable?>(KEY_FAVORITE_SCROLL)
+    val scrollStateRecommended =
+        savedStateHandle.getLiveData<Parcelable?>(KEY_RECOMMENDED_LAYOUT_MANAGER_STATE)
 
     /*
         Go to property item detail
@@ -53,6 +58,8 @@ class DashboardViewModel @ViewModelInject constructor(
 
     val goToSeeAllListScreen: LiveData<Event<PropertyListModel>>
         get() = _goToSeeAllScreen
+
+    val combinedData = MutableLiveData<ViewState<Array<Any?>>>()
 
     /*
         Favorites Section
@@ -96,130 +103,51 @@ class DashboardViewModel @ViewModelInject constructor(
     fun getDashboardDataCombined() {
 
         combine(
-            dashboardStatsUseCase.getFavoriteProperties(),
-            dashboardStatsUseCase.getFavoriteChartItems(),
-            dashboardStatsUseCase.getMostViewedProperties(),
-            dashboardStatsUseCase.getMostViewedChartItems(),
-            dashboardStatsUseCase.getPropFlow()
-        ) { propFavs, chartFavs, propViews, chartViews, props ->
+            dashboardStatsUseCase.getFavoriteProperties()
+                .map { listOf(PropertyListModel("Favorites", it)) }
+                .convertToFlowViewState()
+                .onStart { _propertyFavoriteViewState.value = ViewState(status = Status.LOADING) }
+                .onEach { _propertyFavoriteViewState.value = it },
+
+            dashboardStatsUseCase.getFavoriteChartItems()
+                .map { listOf(ChartItemListModel(it, "Favorites")) }
+                .convertToFlowViewState()
+                .onStart { _chartFavoriteViewState.value = ViewState(status = Status.LOADING) }
+                .onEach { _chartFavoriteViewState.value = it },
+
+            dashboardStatsUseCase.getMostViewedProperties()
+                .map { listOf(PropertyListModel("Viewed Most", it)) }
+                .convertToFlowViewState()
+                .onStart { _propertyMostViewedViewState.value = ViewState(status = Status.LOADING) }
+                .onEach { _propertyMostViewedViewState.value = it },
+
+            dashboardStatsUseCase.getMostViewedChartItems()
+                .map { listOf(ChartItemListModel(it, "Viewed Most")) }
+                .convertToFlowViewState()
+                .onStart { _chartMostViewedViewState.value = ViewState(status = Status.LOADING) }
+                .onEach { _chartMostViewedViewState.value = it }
+
+        ) { propFavs, chartFavs, propViews, chartViews ->
             val array = arrayOfNulls<Any?>(4)
 
             array[0] = propFavs
-            array[1] = chartViews
+            array[1] = chartFavs
             array[2] = propViews
             array[3] = chartViews
 
             array
         }
-            .convertToFlowViewState()
-            .onStart {
-                _propertyFavoriteViewState.value = ViewState(status = Status.LOADING)
-//                delay(2000)
-            }
-            .onEach {
-            }
-            .launchIn(coroutineScope)
-    }
-
-    fun getFavoriteProperties() {
-        dashboardStatsUseCase.getFavoriteProperties()
-            .map {
-                println(
-                    "DashboardViewModel getFavoriteProperties() in " +
-                        "thread: ${Thread.currentThread().name}"
-                )
-                listOf(PropertyListModel("Favorites", it))
-            }
-            .convertToFlowViewState()
-            .onStart {
-                _propertyFavoriteViewState.value = ViewState(status = Status.LOADING)
-//                delay(2000)
-            }
-            .onEach {
-                _propertyFavoriteViewState.value = it
-            }
-            .launchIn(coroutineScope)
-    }
-
-    fun getFavoriteChartItems() {
-        dashboardStatsUseCase.getFavoriteChartItems()
-            .map {
-                println(
-                    "DashboardViewModel getFavoriteChartItems() in " +
-                        "thread: ${Thread.currentThread().name}"
-                )
-                listOf(ChartItemListModel(it, "Favorites"))
-            }
-            .convertToFlowViewState()
-            .onStart {
-                _chartFavoriteViewState.value = ViewState(status = Status.LOADING)
-//                delay(3000)
-            }
-            .onEach {
-                _chartFavoriteViewState.value = it
-            }
-            .launchIn(coroutineScope)
-    }
-
-    fun getMostViewedProperties() {
-        dashboardStatsUseCase.getMostViewedProperties()
-            .map {
-                println(
-                    "DashboardViewModel getMostViewedProperties() in thread: " +
-                        "${Thread.currentThread().name}"
-                )
-                listOf(PropertyListModel("Viewed Most", it))
-            }
-            .convertToFlowViewState()
-            .onStart {
-                _propertyMostViewedViewState.value = ViewState(status = Status.LOADING)
-//                delay(4000)
-            }
-            .onEach {
-                _propertyMostViewedViewState.value = it
-            }
-            .launchIn(coroutineScope)
-    }
-
-    fun getMostViewedChartItems() {
-        dashboardStatsUseCase.getMostViewedChartItems()
-            .map {
-                println(
-                    "DashboardViewModel getMostViewedChartItems() in thread: " +
-                        "${Thread.currentThread().name}"
-                )
-                listOf(ChartItemListModel(it, "Viewed Most"))
-            }
-            .convertToFlowViewState()
-            .onStart {
-                _chartMostViewedViewState.value = ViewState(status = Status.LOADING)
-//                delay(5000)
-            }
-            .onEach {
-                _chartMostViewedViewState.value = it
-            }
+            .onStart { combinedData.value = ViewState(status = Status.LOADING) }
+            .onEach { combinedData.value = ViewState(status = Status.SUCCESS, data = it) }
             .launchIn(coroutineScope)
     }
 
     fun getRecommendedProperties() {
-
         dashboardStatsUseCase.getPropFlow()
-            .map {
-                println(
-                    "🚗🔥 DashboardViewModel getRecommendedProperties() -> map(): " +
-                        "${Thread.currentThread().name}"
-                )
-                listOf(
-                    GridPropertyListModel("Recommended For You", it)
-                )
-            }
+            .map { listOf(GridPropertyListModel("Recommended For You", it)) }
             .convertToFlowViewState()
-            .onStart {
-                _propertyRecommendationViewState.value = ViewState(status = Status.LOADING)
-            }
-            .onEach {
-                _propertyRecommendationViewState.value = it
-            }
+            .onStart { _propertyRecommendationViewState.value = ViewState(status = Status.LOADING) }
+            .onEach { _propertyRecommendationViewState.value = it }
             .launchIn(coroutineScope)
     }
 

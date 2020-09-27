@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.view.View
 import android.widget.ImageButton
 import android.widget.ImageView
+import androidx.core.widget.ContentLoadingProgressBar
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -60,6 +61,11 @@ fun setImageUrl(view: ImageView, path: String?) {
 @BindingAdapter("visibilityBasedOn")
 fun View.visibilityBasedOn(condition: Boolean) {
     visibility = if (condition) View.VISIBLE else View.GONE
+}
+
+@BindingAdapter("showWhen")
+fun ContentLoadingProgressBar.showWhen(condition: Boolean) {
+    if (condition) show() else hide()
 }
 
 @BindingAdapter("favoriteImageSrc")

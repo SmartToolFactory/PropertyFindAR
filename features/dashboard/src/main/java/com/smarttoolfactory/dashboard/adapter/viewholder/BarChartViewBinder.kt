@@ -36,7 +36,7 @@ class BarChartViewBinder(
     }
 
     override fun bindViewHolder(model: ChartItemListModel, viewHolder: BarChartViewHolder) {
-        viewHolder.bindTo(model)
+        viewHolder.bind(model)
     }
 
     override fun getItemLayoutResource() = R.layout.item_bar_chart
@@ -65,7 +65,7 @@ class BarChartViewHolder(
     private val onChartItemClicked: ((Float) -> Unit)? = null
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bindTo(chartItem: ChartItemListModel) {
+    fun bind(chartItem: ChartItemListModel) {
 
         val chart = binding.barChart
 
@@ -110,7 +110,6 @@ class BarChartViewHolder(
         val chartData = BarData(dataSet)
 
         chart.data = chartData
-        chart.invalidate()
 
         binding.executePendingBindings()
     }

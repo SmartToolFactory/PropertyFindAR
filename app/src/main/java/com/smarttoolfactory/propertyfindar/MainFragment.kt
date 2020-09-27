@@ -30,7 +30,10 @@ class MainFragment : DynamicNavigationFragment<FragmentMainBinding>() {
         val bottomNavigationView = binding.bottomNav
 
         // Cancel ViewPager swipe
-        viewPager2.isUserInputEnabled = false
+        viewPager2.apply {
+            isUserInputEnabled = false
+            offscreenPageLimit = 4
+        }
 
         // Set viewpager adapter
         viewPager2.adapter =

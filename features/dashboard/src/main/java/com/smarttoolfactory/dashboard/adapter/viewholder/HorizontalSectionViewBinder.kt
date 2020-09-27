@@ -22,17 +22,17 @@ import kotlinx.coroutines.flow.onEach
 class HorizontalSectionViewBinder(
     private val onItemClick: ((PropertyItem) -> Unit)? = null,
     private val onSeeAllClick: ((PropertyListModel) -> Unit)? = null,
-    var recyclerViewManagerState: Parcelable? = null,
+    var layoutManagerState: Parcelable? = null,
     private val coroutineScope: CoroutineScope? = null,
     private val scrollPositionStateFlow: MutableStateFlow<Int>? = null
 ) :
-    AbstractItemViewBinder<PropertyListModel, HorizontalPropertySectionViewHolder>(
+    AbstractItemViewBinder<PropertyListModel, HorizontalSectionViewHolder>(
         PropertyListModel::class.java
     ) {
 
-    override fun createViewHolder(parent: ViewGroup): HorizontalPropertySectionViewHolder {
+    override fun createViewHolder(parent: ViewGroup): HorizontalSectionViewHolder {
 
-        val holder = HorizontalPropertySectionViewHolder(
+        val holder = HorizontalSectionViewHolder(
             ItemPropertySectionHorizontalBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
@@ -43,6 +43,8 @@ class HorizontalSectionViewBinder(
             coroutineScope,
             scrollPositionStateFlow
         )
+
+        println("😂 HorizontalSectionViewBinder createViewHolder() $holder")
 
         holder.binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
@@ -58,9 +60,9 @@ class HorizontalSectionViewBinder(
 
     override fun bindViewHolder(
         model: PropertyListModel,
-        viewHolder: HorizontalPropertySectionViewHolder
+        viewHolder: HorizontalSectionViewHolder
     ) {
-        viewHolder.bindTo(model, recyclerViewManagerState)
+        viewHolder.bind(model, layoutManagerState)
     }
 
     override fun getItemLayoutResource() = R.layout.item_property_section_horizontal
@@ -79,23 +81,26 @@ class HorizontalSectionViewBinder(
         return true
     }
 
-    override fun onViewRecycled(viewHolder: HorizontalPropertySectionViewHolder) {
+    override fun onViewRecycled(viewHolder: HorizontalSectionViewHolder) {
         saveInstanceState(viewHolder)
+        viewHolder.onViewRecycled()
+        println("👻 Horizontal onViewRecycled: $viewHolder")
     }
 
-    override fun onViewDetachedFromWindow(viewHolder: HorizontalPropertySectionViewHolder) {
+    override fun onViewDetachedFromWindow(viewHolder: HorizontalSectionViewHolder) {
         saveInstanceState(viewHolder)
+        println("💀 Horizontal onViewDetachedFromWindow: $viewHolder")
     }
 
-    private fun saveInstanceState(viewHolder: HorizontalPropertySectionViewHolder) {
+    private fun saveInstanceState(viewHolder: HorizontalSectionViewHolder) {
         if (viewHolder.bindingAdapterPosition == RecyclerView.NO_POSITION) {
             return
         }
-        recyclerViewManagerState = viewHolder.getLayoutManagerState()
+        layoutManagerState = viewHolder.getLayoutManagerState()
     }
 }
 
-class HorizontalPropertySectionViewHolder(
+class HorizontalSectionViewHolder(
     internal val binding: ItemPropertySectionHorizontalBinding,
     private val onItemClick: ((PropertyItem) -> Unit)? = null,
     private val onSeeAllClick: ((PropertyListModel) -> Unit)? = null,
@@ -106,9 +111,11 @@ class HorizontalPropertySectionViewHolder(
 
     private var layoutManager: RecyclerView.LayoutManager? = null
 
-    fun getLayoutManagerState(): Parcelable? = layoutManager?.onSaveInstanceState()
+    internal fun getLayoutManagerState(): Parcelable? = layoutManager?.onSaveInstanceState()
 
-    fun bindTo(item: PropertyListModel, layoutManagerState: Parcelable?) {
+    fun bind(item: PropertyListModel, layoutManagerState: Parcelable?) {
+
+        println("🚕 HorizontalSectionViewHolder bind() holder: $this")
 
         binding.executeAfter {
 
@@ -126,10 +133,14 @@ class HorizontalPropertySectionViewHolder(
                     PropertyListAdapter(R.layout.item_property_favorite, onItemClick)
 
                 this.adapter = itemListAdapter
+
+//                itemAnimator = null
+//                isNestedScrollingEnabled = false
             }
 
             layoutManager = binding.recyclerView.layoutManager
 
+            // Restore layout state to previous one
             if (layoutManagerState != null) {
                 layoutManager?.onRestoreInstanceState(layoutManagerState)
             }
@@ -142,10 +153,10 @@ class HorizontalPropertySectionViewHolder(
             }
         }
 
-        listenScrollStateFlow()
+//        listenScrollStateFlow()
     }
 
-    private fun listenScrollStateFlow() {
+    internal fun listenScrollStateFlow() {
         coroutineScope?.let {
             scrollPositionStateFlow
                 ?.onEach { position ->
@@ -153,5 +164,10 @@ class HorizontalPropertySectionViewHolder(
                 }
                 ?.launchIn(coroutineScope)
         }
+    }
+
+    internal fun onViewRecycled() {
+        binding.tvSeeAll.setOnClickListener(null)
+        binding.unbind()
     }
 }

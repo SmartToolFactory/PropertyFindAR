@@ -46,14 +46,16 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/recyclerView" />
 
-            <ProgressBar
-                android:id="@+id/progressBar"
-                visibilityBasedOn="@{viewModel.propertyListViewState.loading}"
+            <androidx.core.widget.ContentLoadingProgressBar
+                android:id="@+id/contentLoadingProgressBar"
+                showWhen="@{viewModel.propertyListViewState.loading}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                style="?android:attr/progressBarStyleLarge"
                 app:layout_constraintStart_toStartOf="parent"
+                android:visibility="visible"
                 app:layout_constraintTop_toTopOf="@+id/recyclerView" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

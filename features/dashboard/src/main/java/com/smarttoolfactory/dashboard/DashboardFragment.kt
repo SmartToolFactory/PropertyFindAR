@@ -2,12 +2,14 @@ package com.smarttoolfactory.dashboard
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.smarttoolfactory.core.di.CoreModuleDependencies
 import com.smarttoolfactory.core.ui.fragment.DynamicNavigationFragment
 import com.smarttoolfactory.core.ui.recyclerview.adapter.ItemBinder
@@ -17,8 +19,8 @@ import com.smarttoolfactory.dashboard.adapter.BarChartAdapter
 import com.smarttoolfactory.dashboard.adapter.GridListWithTitleAdapter
 import com.smarttoolfactory.dashboard.adapter.HorizontalListWithTitleAdapter
 import com.smarttoolfactory.dashboard.adapter.viewholder.BarChartViewBinder
-import com.smarttoolfactory.dashboard.adapter.viewholder.GridSectionViewBinder
 import com.smarttoolfactory.dashboard.adapter.viewholder.HorizontalSectionViewBinder
+import com.smarttoolfactory.dashboard.adapter.viewholder.RecommendedSectionViewBinder
 import com.smarttoolfactory.dashboard.databinding.FragmentDashboardBinding
 import com.smarttoolfactory.dashboard.di.DaggerDashboardComponent
 import com.smarttoolfactory.dashboard.di.withFactory
@@ -38,6 +40,8 @@ class DashboardFragment :
 
     private lateinit var concatAdapter: ConcatAdapter
 
+    val viewBindersPropertyFavorites = HashMap<ItemClazz, ItemBinder>()
+
     private lateinit var adapterFavoriteProperties: HorizontalListWithTitleAdapter
     private lateinit var adapterFavoriteChart: BarChartAdapter
 
@@ -48,61 +52,64 @@ class DashboardFragment :
 
     private lateinit var favoriteViewBinder: HorizontalSectionViewBinder
     private lateinit var viewedMostViewBinder: HorizontalSectionViewBinder
+    private lateinit var recommendedViewBinder: RecommendedSectionViewBinder
 
-    companion object {
-        private const val BUNDLE_KEY_FAVORITES_LAYOUT_MANAGER_STATE =
-            "favorites_layout_manager"
-        private const val BUNDLE_KEY_VIES_LAYOUT_MANAGER_STATE =
-            "views_layout_manager"
-        private const val BUNDLE_KEY_RECOMMENDED_LAYOUT_MANAGER_STATE =
-            "recommended_layout_manager"
+    private var fetchRecommendedItems = true
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        viewModel.getDashboardDataCombined()
+        viewModel.combinedData.observe(
+            viewLifecycleOwner,
+            {
+
+                when (it.status) {
+                    Status.LOADING -> {
+                        dataBinding.recyclerView.visibility = View.GONE
+                        dataBinding.contentLoadingProgressBar.show()
+                    }
+                    Status.SUCCESS -> {
+                        dataBinding.recyclerView.visibility = View.VISIBLE
+                        dataBinding.contentLoadingProgressBar.hide()
+                    }
+                    else -> {
+                        dataBinding.recyclerView.visibility = View.VISIBLE
+                        dataBinding.contentLoadingProgressBar.hide()
+                    }
+                }
+            }
+        )
     }
-
-//    override fun onSaveInstanceState(outState: Bundle) {
-//
-//        if (::favoriteViewBinder.isInitialized) {
-//            outState.putParcelable(
-//                BUNDLE_KEY_FAVORITES_LAYOUT_MANAGER_STATE,
-//                favoriteViewBinder.recyclerViewManagerState
-//            )
-//        }
-//        super.onSaveInstanceState(outState)
-//    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         initCoreDependentInjection()
         super.onCreate(savedInstanceState)
-
-//        createAdapters(savedInstanceState)
+        createAdapters(savedInstanceState)
     }
 
+    /**
+     * Creates adapters for outer and  inner recyclerViews, viewBinders to create
+     * each type of ViewHolder depending on layout and data type
+     */
     private fun createAdapters(savedInstanceState: Bundle?) {
-
-        // TODO set ViewBinders for MultipleLayout Adapters
-        val viewBindersPropertyFavorites = HashMap<ItemClazz, ItemBinder>()
-
-        val scrollStateFavorite = viewModel.favoriteScrollState.value
-
-//        favoriteViewBinder = HorizontalSectionViewBinder(
-//            onItemClick = viewModel::onItemClick,
-//            onSeeAllClick = viewModel::onSeeAllClick,
-//            savedInstanceState?.getParcelable(
-//                BUNDLE_KEY_FAVORITES_LAYOUT_MANAGER_STATE
-//            )
-//        )
 
         favoriteViewBinder = HorizontalSectionViewBinder(
             onItemClick = viewModel::onItemClick,
             onSeeAllClick = viewModel::onSeeAllClick,
-            recyclerViewManagerState = scrollStateFavorite
+            layoutManagerState = viewModel.scrollStateFavorites.value
         )
 
         viewedMostViewBinder = HorizontalSectionViewBinder(
             onItemClick = viewModel::onItemClick,
             onSeeAllClick = viewModel::onSeeAllClick,
-            recyclerViewManagerState = savedInstanceState?.getParcelable(
-                BUNDLE_KEY_VIES_LAYOUT_MANAGER_STATE
-            )
+            layoutManagerState = viewModel.scrollStateMostViewed.value
+        )
+
+        recommendedViewBinder = RecommendedSectionViewBinder(
+            viewModel,
+            viewModel::onItemClick,
+            layoutManagerState = viewModel.scrollStateRecommended.value
         )
 
         /*
@@ -113,11 +120,10 @@ class DashboardFragment :
         adapterFavoriteProperties =
             HorizontalListWithTitleAdapter(favoriteViewBinder)
 
-        val chartItemClickLambda: ((Float) -> Unit) = { position ->
+        val favoriteChartViewBinder = BarChartViewBinder { position ->
             scrollStateFavoritesFlow.value = position.toInt()
         }
 
-        val favoriteChartViewBinder = BarChartViewBinder(chartItemClickLambda)
         adapterFavoriteChart = BarChartAdapter(favoriteChartViewBinder)
 
         /*
@@ -139,34 +145,52 @@ class DashboardFragment :
         /*
             Recommended
          */
-        val gridSectionViewBinder = GridSectionViewBinder(
-            viewModel,
-            viewModel::onItemClick
-        )
-        adapterRecommendedProperties = GridListWithTitleAdapter(gridSectionViewBinder)
+        adapterRecommendedProperties = GridListWithTitleAdapter(recommendedViewBinder)
+
+        /*
+            setIsolateViewTypes(false) lets nested adapters to use same RecycledViewPool
+
+            🔥 Note: causing layout manager states to be overridden,
+            saving state only one ViewHolder, others are returning NULL
+
+         */
+        val concatBuildConfig = ConcatAdapter.Config.Builder()
+            .setIsolateViewTypes(false)
+            .build()
 
         concatAdapter =
             ConcatAdapter(
+//                concatBuildConfig,
                 adapterFavoriteProperties,
                 adapterFavoriteChart,
                 adapterMostViewedProperties,
-                adapterMostViewedChart,
-                adapterRecommendedProperties
+                adapterMostViewedChart
             )
     }
 
     override fun bindViews(view: View, savedInstanceState: Bundle?) {
 
-        viewModel.getFavoriteProperties()
-        viewModel.getFavoriteChartItems()
-        viewModel.getMostViewedProperties()
-        viewModel.getMostViewedChartItems()
-        viewModel.getRecommendedProperties()
+        //        createAdapters(savedInstanceState)
 
-        dataBinding.recyclerView.visibility = View.GONE
-        dataBinding.progressBar.visibility = View.VISIBLE
+        fetchRecommendedItems = true
 
-        createAdapters(savedInstanceState)
+        // Check if RecyclerView has reached the bottom
+        dataBinding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+
+                // Check if scrolled to bottom of RecyclerView and not fetched recommended data
+                if (!recyclerView.canScrollVertically(1) &&
+                    newState == RecyclerView.SCROLL_STATE_IDLE &&
+                    fetchRecommendedItems
+                ) {
+
+                    Toast.makeText(requireContext(), "BOTTOM", Toast.LENGTH_SHORT).show()
+                    viewModel.getRecommendedProperties()
+                }
+            }
+        })
 
         dataBinding.viewModel = viewModel
 
@@ -186,9 +210,7 @@ class DashboardFragment :
 
         subscribeFavorites(adapterFavoriteProperties, adapterFavoriteChart)
         subscribeMostViewed(adapterMostViewedProperties, adapterMostViewedChart)
-
         subscribeRecommendedProperties(adapterRecommendedProperties)
-
         subscribeEvents()
     }
 
@@ -200,21 +222,13 @@ class DashboardFragment :
             viewLifecycleOwner
         ) {
             when (it.status) {
-                Status.LOADING -> {
-                    dataBinding.recyclerView.visibility = View.GONE
-                    dataBinding.progressBar.visibility = View.VISIBLE
-                }
+
                 Status.SUCCESS -> {
                     if (!it.data.isNullOrEmpty()) {
                         adapter.submitList(it.data)
                     }
-                    dataBinding.recyclerView.visibility = View.VISIBLE
-                    dataBinding.progressBar.visibility = View.GONE
                 }
                 else -> {
-
-                    dataBinding.recyclerView.visibility = View.VISIBLE
-                    dataBinding.progressBar.visibility = View.GONE
                 }
             }
         }
@@ -223,21 +237,13 @@ class DashboardFragment :
             viewLifecycleOwner
         ) {
             when (it.status) {
-                Status.LOADING -> {
-                    dataBinding.recyclerView.visibility = View.GONE
-                    dataBinding.progressBar.visibility = View.VISIBLE
-                }
+
                 Status.SUCCESS -> {
                     if (!it.data.isNullOrEmpty()) {
                         adapterChartAdapter.submitList(it.data)
                     }
-                    dataBinding.recyclerView.visibility = View.VISIBLE
-                    dataBinding.progressBar.visibility = View.GONE
                 }
                 else -> {
-
-                    dataBinding.recyclerView.visibility = View.VISIBLE
-                    dataBinding.progressBar.visibility = View.GONE
                 }
             }
         }
@@ -251,21 +257,13 @@ class DashboardFragment :
             viewLifecycleOwner
         ) {
             when (it.status) {
-                Status.LOADING -> {
-                    dataBinding.recyclerView.visibility = View.GONE
-                    dataBinding.progressBar.visibility = View.VISIBLE
-                }
+
                 Status.SUCCESS -> {
                     if (!it.data.isNullOrEmpty()) {
                         adapter.submitList(it.data)
                     }
-                    dataBinding.recyclerView.visibility = View.VISIBLE
-                    dataBinding.progressBar.visibility = View.GONE
                 }
                 else -> {
-
-                    dataBinding.recyclerView.visibility = View.VISIBLE
-                    dataBinding.progressBar.visibility = View.GONE
                 }
             }
         }
@@ -274,29 +272,46 @@ class DashboardFragment :
             viewLifecycleOwner
         ) {
             when (it.status) {
-                Status.LOADING -> {
-                    dataBinding.recyclerView.visibility = View.GONE
-                    dataBinding.progressBar.visibility = View.VISIBLE
-                }
+
                 Status.SUCCESS -> {
                     if (!it.data.isNullOrEmpty()) {
                         adapterChartAdapter.submitList(it.data)
                     }
-                    dataBinding.recyclerView.visibility = View.VISIBLE
-                    dataBinding.progressBar.visibility = View.GONE
                 }
                 else -> {
-
-                    dataBinding.recyclerView.visibility = View.VISIBLE
-                    dataBinding.progressBar.visibility = View.GONE
                 }
             }
         }
     }
 
     override fun onDestroyView() {
+
+        println(
+            "DashboardFragment onDestroyView() favoriteViewBinder: " +
+                "${favoriteViewBinder.layoutManagerState}"
+        )
+
+        println(
+            "DashboardFragment onDestroyView() viewedMostViewBinder: " +
+                "${viewedMostViewBinder.layoutManagerState}"
+        )
+
+        println(
+            "DashboardFragment onDestroyView() recommendedViewBinder: " +
+                "${recommendedViewBinder.layoutManagerState}"
+        )
+
+        if (::favoriteViewBinder.isInitialized) {
+            viewModel.scrollStateFavorites.value = favoriteViewBinder.layoutManagerState
+        }
+        if (::viewedMostViewBinder.isInitialized) {
+            viewModel.scrollStateMostViewed.value = viewedMostViewBinder.layoutManagerState
+        }
+        if (::recommendedViewBinder.isInitialized) {
+            viewModel.scrollStateRecommended.value = recommendedViewBinder.layoutManagerState
+        }
+
         super.onDestroyView()
-        viewModel.favoriteScrollState.value = favoriteViewBinder.recyclerViewManagerState
     }
 
     private fun subscribeRecommendedProperties(adapter: GridListWithTitleAdapter) {
@@ -305,26 +320,22 @@ class DashboardFragment :
         ) {
             when (it.status) {
                 Status.LOADING -> {
-                    dataBinding.recyclerView.visibility = View.GONE
-                    dataBinding.progressBar.visibility = View.VISIBLE
                 }
                 Status.SUCCESS -> {
                     if (!it.data.isNullOrEmpty()) {
+                        concatAdapter.addAdapter(adapter)
                         adapter.submitList(it.data)
+                        fetchRecommendedItems = false
                     }
-                    dataBinding.recyclerView.visibility = View.VISIBLE
-                    dataBinding.progressBar.visibility = View.GONE
                 }
                 else -> {
-
-                    dataBinding.recyclerView.visibility = View.VISIBLE
-                    dataBinding.progressBar.visibility = View.GONE
                 }
             }
         }
     }
 
     private fun subscribeEvents() {
+
         viewModel.goToDetailScreen.observe(
             viewLifecycleOwner
         ) {

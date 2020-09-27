@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.view.View
 import android.widget.ImageButton
 import android.widget.ImageView
+import androidx.core.widget.ContentLoadingProgressBar
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -25,6 +26,11 @@ fun RecyclerView.setItems(items: List<PropertyItem>?) {
     items?.let {
         (adapter as ListAdapter<PropertyItem, *>)?.submitList(items)
     }
+}
+
+@BindingAdapter("showWhen")
+fun ContentLoadingProgressBar.showWhen(condition: Boolean) {
+    if (condition) show() else hide()
 }
 
 /**

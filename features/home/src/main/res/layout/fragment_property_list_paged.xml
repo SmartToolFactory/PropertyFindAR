@@ -27,7 +27,7 @@
                 android:layout_height="0dp"
                 android:layout_marginTop="18dp"
                 app:items="@{viewModel.propertyListViewState.data}"
-                app:layout_constraintBottom_toTopOf="@+id/progressBar"
+                app:layout_constraintBottom_toTopOf="@+id/contentLoadingProgressBar"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 android:scrollbars="vertical"
@@ -45,7 +45,7 @@
                 app:layout_constraintTop_toTopOf="@+id/recyclerView" />
 
             <ProgressBar
-                android:id="@+id/progressBar"
+                android:id="@+id/contentLoadingProgressBar"
                 visibilityBasedOn="@{viewModel.propertyListViewState.loading}"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"

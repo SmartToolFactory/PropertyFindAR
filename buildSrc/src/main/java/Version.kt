@@ -84,7 +84,7 @@ object Version {
     const val COROUTINES_VERSION = "1.3.7"
 
     // Glide
-    const val GLIDE_VERSION = "4.9.0"
+    const val GLIDE_VERSION = "4.11.0"
 
     // Lottie
     const val LOTTIE_VERSION ="3.4.2"

@@ -12,19 +12,24 @@ class BarChartAdapter(private val barChartViewBinder: BarChartViewBinder) :
         DefaultItemCallback()
     ) {
 
+    override fun getItemViewType(position: Int): Int =
+        barChartViewBinder.getItemLayoutResource()
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BarChartViewHolder {
         return barChartViewBinder.createViewHolder(parent)
     }
 
     override fun onBindViewHolder(holder: BarChartViewHolder, position: Int) {
-        holder.bindTo(currentList[position])
+        barChartViewBinder.bindViewHolder(currentList[position], holder)
     }
 
     override fun onViewRecycled(holder: BarChartViewHolder) {
         barChartViewBinder.onViewRecycled(holder)
+        super.onViewRecycled(holder)
     }
 
     override fun onViewDetachedFromWindow(holder: BarChartViewHolder) {
         barChartViewBinder.onViewDetachedFromWindow(holder)
+        super.onViewDetachedFromWindow(holder)
     }
 }

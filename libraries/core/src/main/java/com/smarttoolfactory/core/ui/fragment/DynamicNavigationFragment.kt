@@ -18,18 +18,14 @@ import com.google.android.play.core.splitinstall.model.SplitInstallSessionStatus
 abstract class DynamicNavigationFragment<ViewBinding : ViewDataBinding> :
     BaseDataBindingFragment<ViewBinding>() {
 
-    /**
-     * [DynamicInstallMonitor] is for monitoring installation progress of a dynamic module
-     * after we tried to navigate to it and under circumstances that it's not available.
-     */
-    private val installMonitor = DynamicInstallMonitor()
-
     fun navigateWithInstallMonitor(
         navController: NavController,
         @IdRes resId: Int,
         args: Bundle? = null,
         navOptions: NavOptions? = null,
     ) {
+
+        val installMonitor = DynamicInstallMonitor()
 
         navController.navigate(
             resId,
