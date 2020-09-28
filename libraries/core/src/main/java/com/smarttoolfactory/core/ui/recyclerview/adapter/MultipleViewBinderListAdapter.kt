@@ -1,7 +1,6 @@
 package com.smarttoolfactory.core.ui.recyclerview.adapter
 
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 
@@ -21,9 +20,14 @@ typealias ItemBinder = AbstractItemViewBinder<Any, ViewHolder>
  * checks class of data which is send to this adapter with [ListAdapter.submitList].
  *
  */
-class MultipleLayoutListAdapter(
-    private val viewBinders: Map<ItemClazz, ItemBinder>
+class MultipleViewBinderListAdapter(
+    private val viewBinders: Map<ItemClazz, ItemBinder>,
+    stateRestorationPolicy: StateRestorationPolicy = StateRestorationPolicy.PREVENT_WHEN_EMPTY
 ) : ListAdapter<Any, ViewHolder>(ItemDiffCallback(viewBinders)) {
+
+    init {
+        this.stateRestorationPolicy = stateRestorationPolicy
+    }
 
     private val viewTypeToBinders = viewBinders.mapKeys { it.value.getItemLayoutResource() }
 
@@ -48,35 +52,5 @@ class MultipleLayoutListAdapter(
     override fun onViewDetachedFromWindow(holder: ViewHolder) {
         getViewBinder(holder.itemViewType).onViewDetachedFromWindow(holder)
         super.onViewDetachedFromWindow(holder)
-    }
-}
-
-abstract class AbstractItemViewBinder<M, in VH : ViewHolder>(
-    val modelClazz: Class<out M>
-) : DiffUtil.ItemCallback<M>() {
-
-    abstract fun createViewHolder(parent: ViewGroup): ViewHolder
-    abstract fun bindViewHolder(model: M, viewHolder: VH)
-    abstract fun getItemLayoutResource(): Int
-
-    // Having these as non abstract because not all the viewBinders are required to implement them.
-    open fun onViewRecycled(viewHolder: VH) = Unit
-    open fun onViewDetachedFromWindow(viewHolder: VH) = Unit
-}
-
-internal class ItemDiffCallback(
-    private val viewBinders: Map<ItemClazz, ItemBinder>
-) : DiffUtil.ItemCallback<Any>() {
-
-    override fun areItemsTheSame(oldItem: Any, newItem: Any): Boolean {
-        if (oldItem::class != newItem::class) {
-            return false
-        }
-        return viewBinders[oldItem::class.java]?.areItemsTheSame(oldItem, newItem) ?: false
-    }
-
-    override fun areContentsTheSame(oldItem: Any, newItem: Any): Boolean {
-        // We know the items are the same class because [areItemsTheSame] returned true
-        return viewBinders[oldItem::class.java]?.areContentsTheSame(oldItem, newItem) ?: false
     }
 }

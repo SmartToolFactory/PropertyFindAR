@@ -43,6 +43,8 @@ class PropertyListFragment : DynamicNavigationFragment<FragmentPropertyListBindi
     override fun bindViews(view: View, savedInstanceState: Bundle?) {
         dataBinding.viewModel = viewModel
 
+        dataBinding.contentLoadingProgressBar.show()
+
         // Fetch offline-first data
         viewModel.getPropertyList()
 

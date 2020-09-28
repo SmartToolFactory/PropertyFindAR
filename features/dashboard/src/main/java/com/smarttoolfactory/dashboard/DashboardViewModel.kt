@@ -11,9 +11,9 @@ import com.smarttoolfactory.core.util.Event
 import com.smarttoolfactory.core.util.convertToFlowViewState
 import com.smarttoolfactory.core.viewstate.Status
 import com.smarttoolfactory.core.viewstate.ViewState
-import com.smarttoolfactory.dashboard.model.ChartItemListModel
-import com.smarttoolfactory.dashboard.model.GridPropertyListModel
+import com.smarttoolfactory.dashboard.model.ChartSectionModel
 import com.smarttoolfactory.dashboard.model.PropertyListModel
+import com.smarttoolfactory.dashboard.model.RecommendedSectionModel
 import com.smarttoolfactory.domain.model.PropertyItem
 import com.smarttoolfactory.domain.usecase.property.GetDashboardStatsUseCase
 import com.smarttoolfactory.domain.usecase.property.SetPropertyStatsUseCase
@@ -71,9 +71,9 @@ class DashboardViewModel @ViewModelInject constructor(
         get() = _propertyFavoriteViewState
 
     private val _chartFavoriteViewState =
-        MutableLiveData<ViewState<List<ChartItemListModel>>>()
+        MutableLiveData<ViewState<List<ChartSectionModel>>>()
 
-    val chartFavoriteViewState: LiveData<ViewState<List<ChartItemListModel>>>
+    val chartFavoriteViewState: LiveData<ViewState<List<ChartSectionModel>>>
         get() = _chartFavoriteViewState
 
     /*
@@ -86,18 +86,18 @@ class DashboardViewModel @ViewModelInject constructor(
         get() = _propertyMostViewedViewState
 
     private val _chartMostViewedViewState =
-        MutableLiveData<ViewState<List<ChartItemListModel>>>()
+        MutableLiveData<ViewState<List<ChartSectionModel>>>()
 
-    val chartMostViewedViewState: LiveData<ViewState<List<ChartItemListModel>>>
+    val chartMostViewedViewState: LiveData<ViewState<List<ChartSectionModel>>>
         get() = _chartMostViewedViewState
 
     /*
         Recommendations Section
      */
     private val _propertyRecommendationViewState =
-        MutableLiveData<ViewState<List<GridPropertyListModel>>>()
+        MutableLiveData<ViewState<List<RecommendedSectionModel>>>()
 
-    val propertiesRecommended: LiveData<ViewState<List<GridPropertyListModel>>>
+    val propertiesRecommended: LiveData<ViewState<List<RecommendedSectionModel>>>
         get() = _propertyRecommendationViewState
 
     fun getDashboardDataCombined() {
@@ -110,7 +110,7 @@ class DashboardViewModel @ViewModelInject constructor(
                 .onEach { _propertyFavoriteViewState.value = it },
 
             dashboardStatsUseCase.getFavoriteChartItems()
-                .map { listOf(ChartItemListModel(it, "Favorites")) }
+                .map { listOf(ChartSectionModel(it, "Favorites")) }
                 .convertToFlowViewState()
                 .onStart { _chartFavoriteViewState.value = ViewState(status = Status.LOADING) }
                 .onEach { _chartFavoriteViewState.value = it },
@@ -122,7 +122,7 @@ class DashboardViewModel @ViewModelInject constructor(
                 .onEach { _propertyMostViewedViewState.value = it },
 
             dashboardStatsUseCase.getMostViewedChartItems()
-                .map { listOf(ChartItemListModel(it, "Viewed Most")) }
+                .map { listOf(ChartSectionModel(it, "Viewed Most")) }
                 .convertToFlowViewState()
                 .onStart { _chartMostViewedViewState.value = ViewState(status = Status.LOADING) }
                 .onEach { _chartMostViewedViewState.value = it }
@@ -144,7 +144,7 @@ class DashboardViewModel @ViewModelInject constructor(
 
     fun getRecommendedProperties() {
         dashboardStatsUseCase.getPropFlow()
-            .map { listOf(GridPropertyListModel("Recommended For You", it)) }
+            .map { listOf(RecommendedSectionModel("Recommended For You", it)) }
             .convertToFlowViewState()
             .onStart { _propertyRecommendationViewState.value = ViewState(status = Status.LOADING) }
             .onEach { _propertyRecommendationViewState.value = it }

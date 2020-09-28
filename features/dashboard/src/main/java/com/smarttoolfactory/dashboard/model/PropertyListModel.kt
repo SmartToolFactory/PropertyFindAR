@@ -6,11 +6,11 @@ import kotlinx.android.parcel.Parcelize
 
 /**
  * Model for list that has a title,
- * and data for either vertically or horizontally scrollable items in RecyclerView
+ * and data for horizontally scrollable items in RecyclerView
  */
 @Parcelize
 data class PropertyListModel(
     val title: String = "",
     val items: List<PropertyItem>,
     var seeAll: Boolean = true
-) : Parcelable
+) : Model, Parcelable

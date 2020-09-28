@@ -6,7 +6,7 @@
 
         <variable
             name="chartItemListModel"
-            type="com.smarttoolfactory.dashboard.model.ChartItemListModel" />
+            type="com.smarttoolfactory.dashboard.model.ChartSectionModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

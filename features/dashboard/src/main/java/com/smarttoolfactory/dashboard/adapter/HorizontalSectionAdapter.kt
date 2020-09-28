@@ -7,7 +7,7 @@ import com.smarttoolfactory.dashboard.adapter.viewholder.HorizontalSectionViewBi
 import com.smarttoolfactory.dashboard.adapter.viewholder.HorizontalSectionViewHolder
 import com.smarttoolfactory.dashboard.model.PropertyListModel
 
-class HorizontalListWithTitleAdapter(
+class HorizontalSectionAdapter(
     private val horizontalSectionViewBinder: HorizontalSectionViewBinder
 ) : ListAdapter<PropertyListModel, HorizontalSectionViewHolder>(
     DefaultItemCallback()

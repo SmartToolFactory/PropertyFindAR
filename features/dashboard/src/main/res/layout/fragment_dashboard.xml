@@ -30,7 +30,7 @@
 
         <androidx.core.widget.ContentLoadingProgressBar
             android:id="@+id/contentLoadingProgressBar"
-            style="?android:attr/progressBarStyleLarge"
+            style="?android:attr/progressBarStyle"
             showWhen="@{viewModel.combinedData.loading}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

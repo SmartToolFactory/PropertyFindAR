@@ -1,27 +1,27 @@
 package com.smarttoolfactory.dashboard.adapter.viewholder
 
 import android.os.Parcelable
-import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.smarttoolfactory.core.ui.recyclerview.adapter.AbstractItemViewBinder
 import com.smarttoolfactory.core.util.executeAfter
+import com.smarttoolfactory.core.util.inflate
 import com.smarttoolfactory.dashboard.BR
+import com.smarttoolfactory.dashboard.DashboardViewModel
 import com.smarttoolfactory.dashboard.R
 import com.smarttoolfactory.dashboard.adapter.PropertyListAdapter
 import com.smarttoolfactory.dashboard.adapter.layoutmanager.ScaledLinearLayoutManager
 import com.smarttoolfactory.dashboard.databinding.ItemPropertySectionHorizontalBinding
 import com.smarttoolfactory.dashboard.model.PropertyListModel
-import com.smarttoolfactory.domain.model.PropertyItem
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 class HorizontalSectionViewBinder(
-    private val onItemClick: ((PropertyItem) -> Unit)? = null,
-    private val onSeeAllClick: ((PropertyListModel) -> Unit)? = null,
+    private val viewModel: DashboardViewModel,
+    private val pool: RecyclerView.RecycledViewPool? = null,
     var layoutManagerState: Parcelable? = null,
     private val coroutineScope: CoroutineScope? = null,
     private val scrollPositionStateFlow: MutableStateFlow<Int>? = null
@@ -33,13 +33,9 @@ class HorizontalSectionViewBinder(
     override fun createViewHolder(parent: ViewGroup): HorizontalSectionViewHolder {
 
         val holder = HorizontalSectionViewHolder(
-            ItemPropertySectionHorizontalBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false
-            ),
-            onItemClick,
-            onSeeAllClick,
+            parent.inflate(getItemLayoutResource()),
+            viewModel,
+            pool,
             coroutineScope,
             scrollPositionStateFlow
         )
@@ -102,8 +98,8 @@ class HorizontalSectionViewBinder(
 
 class HorizontalSectionViewHolder(
     internal val binding: ItemPropertySectionHorizontalBinding,
-    private val onItemClick: ((PropertyItem) -> Unit)? = null,
-    private val onSeeAllClick: ((PropertyListModel) -> Unit)? = null,
+    private val viewModel: DashboardViewModel,
+    private val pool: RecyclerView.RecycledViewPool?,
     private val coroutineScope: CoroutineScope? = null,
     private val scrollPositionStateFlow: MutableStateFlow<Int>? = null
 ) :
@@ -120,6 +116,7 @@ class HorizontalSectionViewHolder(
         binding.executeAfter {
 
             setVariable(BR.propertyListModel, item)
+            setVariable(BR.viewModel, viewModel)
 
             // Set RecyclerView
             recyclerView.apply {
@@ -129,26 +126,33 @@ class HorizontalSectionViewHolder(
                     ScaledLinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
 
                 // Set RecyclerViewAdapter
+
+                val onItemClick = viewModel?.let { it::onItemClick }
+
                 val itemListAdapter =
-                    PropertyListAdapter(R.layout.item_property_favorite, onItemClick)
+                    PropertyListAdapter(R.layout.item_property_horizontal, onItemClick)
 
                 this.adapter = itemListAdapter
 
 //                itemAnimator = null
 //                isNestedScrollingEnabled = false
+
+                pool?.let {
+                    this.setRecycledViewPool(pool)
+                }
             }
 
             layoutManager = binding.recyclerView.layoutManager
 
-            // Restore layout state to previous one
+            // 🔥 Restore layout state before onDestroy or configuration change
             if (layoutManagerState != null) {
                 layoutManager?.onRestoreInstanceState(layoutManagerState)
             }
 
             // Set see all touch listener
             tvSeeAll.setOnClickListener {
-                onSeeAllClick?.let {
-                    it(item)
+                viewModel?.let {
+                    (it::onSeeAllClick)(item)
                 }
             }
         }
@@ -168,6 +172,8 @@ class HorizontalSectionViewHolder(
 
     internal fun onViewRecycled() {
         binding.tvSeeAll.setOnClickListener(null)
+        binding.viewModel = null
+        binding.propertyListModel = null
         binding.unbind()
     }
 }

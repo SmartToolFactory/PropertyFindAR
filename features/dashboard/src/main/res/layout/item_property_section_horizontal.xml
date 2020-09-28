@@ -8,6 +8,11 @@
         <variable
             name="propertyListModel"
             type="com.smarttoolfactory.dashboard.model.PropertyListModel" />
+
+        <variable
+            name="viewModel"
+            type="com.smarttoolfactory.dashboard.DashboardViewModel" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

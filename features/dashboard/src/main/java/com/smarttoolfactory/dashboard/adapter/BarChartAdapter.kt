@@ -5,10 +5,10 @@ import androidx.recyclerview.widget.ListAdapter
 import com.smarttoolfactory.core.ui.recyclerview.itemcallback.DefaultItemCallback
 import com.smarttoolfactory.dashboard.adapter.viewholder.BarChartViewBinder
 import com.smarttoolfactory.dashboard.adapter.viewholder.BarChartViewHolder
-import com.smarttoolfactory.dashboard.model.ChartItemListModel
+import com.smarttoolfactory.dashboard.model.ChartSectionModel
 
 class BarChartAdapter(private val barChartViewBinder: BarChartViewBinder) :
-    ListAdapter<ChartItemListModel, BarChartViewHolder>(
+    ListAdapter<ChartSectionModel, BarChartViewHolder>(
         DefaultItemCallback()
     ) {
 
