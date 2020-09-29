@@ -4,11 +4,11 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.smarttoolfactory.core.di.CoreModuleDependencies
 import com.smarttoolfactory.core.ui.fragment.DynamicNavigationFragment
-import com.smarttoolfactory.core.util.Event
 import com.smarttoolfactory.core.util.observe
 import com.smarttoolfactory.core.viewmodel.PropertyDetailNavigationVM
 import com.smarttoolfactory.home.R
@@ -25,8 +25,6 @@ class PropertyListFragment : DynamicNavigationFragment<FragmentPropertyListBindi
     lateinit var viewModel: PropertyListViewModel
 
     private val propertyDetailNavigationVM by activityViewModels<PropertyDetailNavigationVM>()
-
-//    lateinit var itemListAdapter: PropertyListAdapter
 
     /**
      * ViewModel for setting sort filter on top menu and property list fragments
@@ -108,30 +106,10 @@ class PropertyListFragment : DynamicNavigationFragment<FragmentPropertyListBindi
                 it.getContentIfNotHandled()?.let { propertyItem ->
 
                     val bundle = bundleOf("property" to propertyItem)
-                    /*
-                     * This is the navController belong to Home
-                     */
-
-                    // Alternative 1 getting grand grand parent fragment of this fragment
-//                    try {
-//                        val homeFragment = parentFragment?.parentFragment?.parentFragment
-//
-//                        (homeFragment as? HomeFragment)?.findNavController()?.navigate(
-//                            R.id.action_home_dest_to_propertyDetailFragment,
-//                            bundle
-//                        )
-//
-//                    } catch (e: Exception) {
-//                        findNavController()
-//                            .navigate(
-//                                R.id.action_propertyListFragment_to_nav_graph_property_detail,
-//                                bundle
-//                            )
-//                    }
-
-                    // Alternative 2 use ViewModel
-                    propertyDetailNavigationVM.goToPropertyDetailFromMain.value =
-                        (Event(propertyItem))
+                    findNavController().navigate(
+                        R.id.action_propertyListFragment_to_nav_graph_property_detail,
+                        bundle
+                    )
                 }
             }
         )

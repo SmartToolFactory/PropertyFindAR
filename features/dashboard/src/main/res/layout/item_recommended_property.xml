@@ -32,6 +32,7 @@
             app:layout_constraintWidth_percent=".3">
 
             <ImageView
+                android:id="@+id/ivThumbnail"
                 imageSrc="@{item.thumbnail}"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

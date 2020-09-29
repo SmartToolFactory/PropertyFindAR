@@ -1,30 +1,10 @@
 package com.smarttoolfactory.core.util
 
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.annotation.LayoutRes
 import androidx.core.widget.ContentLoadingProgressBar
 import androidx.databinding.BindingAdapter
-import androidx.databinding.DataBindingUtil
-import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-
-inline fun <T : ViewDataBinding> T.executeAfter(block: T.() -> Unit) {
-    block()
-    executePendingBindings()
-}
-
-inline fun <reified T : ViewDataBinding> ViewGroup.inflate(
-    @LayoutRes layout: Int,
-    attachToRoot: Boolean = false
-): T = DataBindingUtil.inflate<T>(
-    LayoutInflater.from(context),
-    layout,
-    this,
-    attachToRoot
-)
 
 /**
  * [BindingAdapter]s for the binding items to ListAdapter.

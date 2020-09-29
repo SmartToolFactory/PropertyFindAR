@@ -3,9 +3,8 @@ package com.smarttoolfactory.dashboard.adapter.viewholder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import com.smarttoolfactory.core.ui.recyclerview.adapter.AbstractItemViewBinder
+import com.smarttoolfactory.core.ui.recyclerview.adapter.MappableItemViewBinder
 import com.smarttoolfactory.dashboard.R
 
 // Shown while loading
@@ -13,7 +12,7 @@ object LoadingIndicator
 
 class LoadingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
-class LoadingViewBinder : AbstractItemViewBinder<LoadingIndicator, LoadingViewHolder>(
+class LoadingViewBinder : MappableItemViewBinder<LoadingIndicator, LoadingViewHolder>(
     LoadingIndicator::class.java
 ) {
 
@@ -23,13 +22,7 @@ class LoadingViewBinder : AbstractItemViewBinder<LoadingIndicator, LoadingViewHo
         )
     }
 
-    override fun bindViewHolder(model: LoadingIndicator, viewHolder: LoadingViewHolder) {
-        Toast.makeText(
-            viewHolder.itemView.context,
-            "LoadingViewBinder bindViewHolder() $viewHolder",
-            Toast.LENGTH_SHORT
-        ).show()
-    }
+    override fun bindViewHolder(model: LoadingIndicator, viewHolder: LoadingViewHolder) = Unit
 
     override fun getItemLayoutResource() = R.layout.item_loading
 

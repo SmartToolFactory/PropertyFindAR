@@ -4,20 +4,20 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.smarttoolfactory.core.di.CoreModuleDependencies
+import com.smarttoolfactory.core.di.qualifier.RecycledViewPool
 import com.smarttoolfactory.core.ui.fragment.DynamicNavigationFragment
-import com.smarttoolfactory.core.ui.recyclerview.adapter.ItemBinder
 import com.smarttoolfactory.core.ui.recyclerview.adapter.ItemClazz
-import com.smarttoolfactory.core.ui.recyclerview.adapter.SingleViewBinderListAdapter
+import com.smarttoolfactory.core.ui.recyclerview.adapter.MappableItemBinder
+import com.smarttoolfactory.core.ui.recyclerview.adapter.SingleViewBinderAdapter
 import com.smarttoolfactory.core.viewstate.Status
-import com.smarttoolfactory.dashboard.adapter.BarChartAdapter
-import com.smarttoolfactory.dashboard.adapter.HorizontalSectionAdapter
-import com.smarttoolfactory.dashboard.adapter.RecommendedSectionAdapter
+import com.smarttoolfactory.core.viewstate.ViewState
 import com.smarttoolfactory.dashboard.adapter.viewholder.BarChartViewBinder
 import com.smarttoolfactory.dashboard.adapter.viewholder.HorizontalSectionViewBinder
 import com.smarttoolfactory.dashboard.adapter.viewholder.LoadingIndicator
@@ -28,12 +28,21 @@ import com.smarttoolfactory.dashboard.di.DaggerDashboardComponent
 import com.smarttoolfactory.dashboard.di.withFactory
 import dagger.hilt.android.EntryPointAccessors
 import javax.inject.Inject
-import kotlinx.coroutines.flow.MutableStateFlow
 
+@Suppress("UNCHECKED_CAST")
 class DashboardFragment :
     DynamicNavigationFragment<FragmentDashboardBinding>() {
+
     @Inject
     lateinit var dashboardViewModelFactory: DashboardViewModelFactory
+
+    @RecycledViewPool(RecycledViewPool.Type.CHART_ITEM)
+    @Inject
+    lateinit var chartPool: RecyclerView.RecycledViewPool
+
+    @RecycledViewPool(RecycledViewPool.Type.PROPERTY_HORIZONTAL)
+    @Inject
+    lateinit var propertyPool: RecyclerView.RecycledViewPool
 
     private val viewModel: DashboardViewModel
     by viewModels { withFactory(dashboardViewModelFactory) }
@@ -42,15 +51,15 @@ class DashboardFragment :
 
     private lateinit var concatAdapter: ConcatAdapter
 
-    val viewBinders = HashMap<ItemClazz, ItemBinder>()
+    val viewBinders = HashMap<ItemClazz, MappableItemBinder>()
 
-    private lateinit var adapterFavoriteProperties: SingleViewBinderListAdapter
-    private lateinit var adapterFavoriteChart: BarChartAdapter
+    private lateinit var adapterFavoriteProperties: SingleViewBinderAdapter
+    private lateinit var adapterFavoriteChart: SingleViewBinderAdapter
 
-    private lateinit var adapterMostViewedProperties: HorizontalSectionAdapter
-    private lateinit var adapterMostViewedChart: BarChartAdapter
+    private lateinit var adapterMostViewedProperties: SingleViewBinderAdapter
+    private lateinit var adapterMostViewedChart: SingleViewBinderAdapter
 
-    private lateinit var adapterRecommendedProperties: RecommendedSectionAdapter
+    private lateinit var adapterRecommendedProperties: SingleViewBinderAdapter
 
     private lateinit var favoriteViewBinder: HorizontalSectionViewBinder
     private lateinit var viewedMostViewBinder: HorizontalSectionViewBinder
@@ -61,7 +70,7 @@ class DashboardFragment :
     override fun onCreate(savedInstanceState: Bundle?) {
         initCoreDependentInjection()
         super.onCreate(savedInstanceState)
-        createAdapters(savedInstanceState)
+//        createAdapters(savedInstanceState)
     }
 
     /**
@@ -70,9 +79,12 @@ class DashboardFragment :
      */
     private fun createAdapters(savedInstanceState: Bundle?) {
 
+        // FIXME Something wrong with RV pool. It's causing other ViewBinder's
+        //  layoutManagerState to be null
         favoriteViewBinder = HorizontalSectionViewBinder(
             viewModel = viewModel,
-            layoutManagerState = viewModel.scrollStateFavorites.value
+            layoutManagerState = viewModel.scrollStateFavorites.value,
+//            pool =  propertyPool
         )
 
         viewedMostViewBinder = HorizontalSectionViewBinder(
@@ -88,37 +100,32 @@ class DashboardFragment :
         /*
             Favorites
          */
-        val scrollStateFavoritesFlow = MutableStateFlow(0)
-
         adapterFavoriteProperties =
-            SingleViewBinderListAdapter(favoriteViewBinder as ItemBinder)
+            SingleViewBinderAdapter(favoriteViewBinder as MappableItemBinder)
 
-        val favoriteChartViewBinder = BarChartViewBinder { position ->
-            scrollStateFavoritesFlow.value = position.toInt()
-        }
+        val favoriteChartViewBinder = BarChartViewBinder()
+//        { position ->
+//            scrollStateFavoritesFlow.value = position.toInt()
+//        }
 
-        adapterFavoriteChart = BarChartAdapter(favoriteChartViewBinder)
+        adapterFavoriteChart =
+            SingleViewBinderAdapter(favoriteChartViewBinder as MappableItemBinder)
 
         /*
             Most Viewed
          */
-
-        val scrollStateMostViewedFlow = MutableStateFlow(0)
-
         adapterMostViewedProperties =
-            HorizontalSectionAdapter(viewedMostViewBinder)
+            SingleViewBinderAdapter(viewedMostViewBinder as MappableItemBinder)
 
-        val chartMostViewedClick: ((Float) -> Unit) = { position ->
-            scrollStateMostViewedFlow.value = position.toInt()
-        }
-
-        val mostViewedChartViewBinder = BarChartViewBinder(chartMostViewedClick)
-        adapterMostViewedChart = BarChartAdapter(mostViewedChartViewBinder)
+        val mostViewedChartViewBinder = BarChartViewBinder()
+        adapterMostViewedChart =
+            SingleViewBinderAdapter(mostViewedChartViewBinder as MappableItemBinder)
 
         /*
             Recommended
          */
-        adapterRecommendedProperties = RecommendedSectionAdapter(recommendedViewBinder)
+        adapterRecommendedProperties =
+            SingleViewBinderAdapter(recommendedViewBinder as MappableItemBinder)
 
         /*
             setIsolateViewTypes(false) lets nested adapters to use same RecycledViewPool
@@ -137,36 +144,15 @@ class DashboardFragment :
                 adapterFavoriteProperties,
                 adapterFavoriteChart,
                 adapterMostViewedProperties,
-                adapterMostViewedChart,
-                adapterRecommendedProperties
+                adapterMostViewedChart
             )
     }
 
     override fun bindViews(view: View, savedInstanceState: Bundle?) {
 
-        createAdapters(savedInstanceState)
-
         viewModel.getDashboardDataCombined()
-        viewModel.combinedData.observe(
-            viewLifecycleOwner,
-            {
 
-                when (it.status) {
-                    Status.LOADING -> {
-                        dataBinding.recyclerView.visibility = View.GONE
-                        dataBinding.contentLoadingProgressBar.show()
-                    }
-                    Status.SUCCESS -> {
-                        dataBinding.recyclerView.visibility = View.VISIBLE
-                        dataBinding.contentLoadingProgressBar.hide()
-                    }
-                    else -> {
-                        dataBinding.recyclerView.visibility = View.VISIBLE
-                        dataBinding.contentLoadingProgressBar.hide()
-                    }
-                }
-            }
-        )
+        createAdapters(savedInstanceState)
 
         // Check if RecyclerView has reached the bottom
         dataBinding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -179,7 +165,7 @@ class DashboardFragment :
                     newState == RecyclerView.SCROLL_STATE_IDLE &&
                     fetchRecommendedItems
                 ) {
-
+                    viewModel.getRecommendedProperties()
                     fetchRecommendedItems = false
                 }
             }
@@ -201,98 +187,33 @@ class DashboardFragment :
             }
         }
 
-        subscribeFavorites(adapterFavoriteProperties, adapterFavoriteChart)
-        subscribeMostViewed(adapterMostViewedProperties, adapterMostViewedChart)
+//        subscribeDashboardData()
+        subscribeAdapterToData(adapterFavoriteProperties, viewModel.propertiesFavorite)
+        subscribeAdapterToData(adapterFavoriteChart, viewModel.chartFavoriteViewState)
+        subscribeAdapterToData(adapterMostViewedProperties, viewModel.propertiesMostViewed)
+        subscribeAdapterToData(adapterMostViewedChart, viewModel.chartMostViewedViewState)
+
         subscribeRecommendedProperties(adapterRecommendedProperties)
         subscribeEvents()
     }
 
-    private fun subscribeFavorites(
-        adapter: SingleViewBinderListAdapter,
-        adapterChartAdapter: BarChartAdapter
+    private fun <T> subscribeAdapterToData(
+        adapter: SingleViewBinderAdapter,
+        liveData: LiveData<ViewState<List<T>>>,
     ) {
-        viewModel.propertiesFavorite.observe(
-            viewLifecycleOwner
-        ) {
-            when (it.status) {
 
-                Status.SUCCESS -> {
-                    if (!it.data.isNullOrEmpty()) {
-                        adapter.submitList(it.data)
-                    }
-                }
-                else -> {
+        liveData.observe(
+            viewLifecycleOwner,
+            { viewState ->
+
+                if (viewState.status == Status.SUCCESS && !viewState.data.isNullOrEmpty()) {
+                    adapter.submitList(viewState.data)
                 }
             }
-        }
-
-        viewModel.chartFavoriteViewState.observe(
-            viewLifecycleOwner
-        ) {
-            when (it.status) {
-
-                Status.SUCCESS -> {
-                    if (!it.data.isNullOrEmpty()) {
-                        adapterChartAdapter.submitList(it.data)
-                    }
-                }
-                else -> {
-                }
-            }
-        }
+        )
     }
 
-    private fun subscribeMostViewed(
-        adapter: HorizontalSectionAdapter,
-        adapterChartAdapter: BarChartAdapter
-    ) {
-        viewModel.propertiesMostViewed.observe(
-            viewLifecycleOwner
-        ) {
-            when (it.status) {
-
-                Status.SUCCESS -> {
-                    if (!it.data.isNullOrEmpty()) {
-                        adapter.submitList(it.data)
-                    }
-                }
-                else -> {
-                }
-            }
-        }
-
-        viewModel.chartMostViewedViewState.observe(
-            viewLifecycleOwner
-        ) {
-            when (it.status) {
-
-                Status.SUCCESS -> {
-                    if (!it.data.isNullOrEmpty()) {
-                        adapterChartAdapter.submitList(it.data)
-                    }
-                }
-                else -> {
-                }
-            }
-        }
-    }
-
-    override fun onDestroyView() {
-
-        if (::favoriteViewBinder.isInitialized) {
-            viewModel.scrollStateFavorites.value = favoriteViewBinder.layoutManagerState
-        }
-        if (::viewedMostViewBinder.isInitialized) {
-            viewModel.scrollStateMostViewed.value = viewedMostViewBinder.layoutManagerState
-        }
-        if (::recommendedViewBinder.isInitialized) {
-            viewModel.scrollStateRecommended.value = recommendedViewBinder.layoutManagerState
-        }
-
-        super.onDestroyView()
-    }
-
-    private fun subscribeRecommendedProperties(adapter: RecommendedSectionAdapter) {
+    private fun subscribeRecommendedProperties(adapter: SingleViewBinderAdapter) {
 
         viewModel.propertiesRecommended.observe(
             viewLifecycleOwner
@@ -301,12 +222,12 @@ class DashboardFragment :
                 Status.LOADING -> {
 
                     val loadingAdapter =
-                        SingleViewBinderListAdapter(LoadingViewBinder() as ItemBinder)
+                        SingleViewBinderAdapter(LoadingViewBinder() as MappableItemBinder)
                             .apply { submitList(listOf(LoadingIndicator)) }
 
                     concatAdapter.addAdapter(loadingAdapter)
                     dataBinding.recyclerView
-                        .smoothScrollToPosition(concatAdapter.adapters.size - 2)
+                        .smoothScrollToPosition(concatAdapter.adapters.size - 1)
                 }
                 Status.SUCCESS -> {
                     if (!it.data.isNullOrEmpty()) {
@@ -369,5 +290,22 @@ class DashboardFragment :
             fragment = this
         )
             .inject(this)
+    }
+
+    override fun onDestroyView() {
+
+        dataBinding.viewModel = null
+
+        if (::favoriteViewBinder.isInitialized) {
+            viewModel.scrollStateFavorites.value = favoriteViewBinder.layoutManagerState
+        }
+        if (::viewedMostViewBinder.isInitialized) {
+            viewModel.scrollStateMostViewed.value = viewedMostViewBinder.layoutManagerState
+        }
+        if (::recommendedViewBinder.isInitialized) {
+            viewModel.scrollStateRecommended.value = recommendedViewBinder.layoutManagerState
+        }
+
+        super.onDestroyView()
     }
 }

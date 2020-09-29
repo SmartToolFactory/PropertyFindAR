@@ -14,6 +14,7 @@ import dagger.Component
 )
 interface HomeComponent {
 
+    // Fragments of ViewPager2 in Home Fragment
     fun inject(fragment: PropertyListFragment)
     fun inject(fragment: PropertyListFragmentRxJava3)
     fun inject(fragment: PagedPropertyListFragment)

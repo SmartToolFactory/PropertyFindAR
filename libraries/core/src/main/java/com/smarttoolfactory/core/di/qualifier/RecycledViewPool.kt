@@ -1,10 +1,10 @@
-package com.smarttoolfactory.dashboard.di
+package com.smarttoolfactory.core.di.qualifier
 
 import javax.inject.Qualifier
 
 @Qualifier
 @Retention(AnnotationRetention.RUNTIME)
-annotation class RecycledViewPoolQualifier(val value: Type) {
+annotation class RecycledViewPool(val value: Type) {
 
     enum class Type {
         PROPERTY_ITEM,

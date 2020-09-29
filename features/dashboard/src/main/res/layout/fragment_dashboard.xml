@@ -18,7 +18,7 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
-            visibilityBasedOn="@{viewModel.combinedData.success}"
+            visibilityBasedOn="@{viewModel.combinedEventData.contentIfNotHandled.success}"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="18dp"
@@ -31,7 +31,7 @@
         <androidx.core.widget.ContentLoadingProgressBar
             android:id="@+id/contentLoadingProgressBar"
             style="?android:attr/progressBarStyle"
-            showWhen="@{viewModel.combinedData.loading}"
+            showWhen="@{viewModel.combinedEventData.contentIfNotHandled.loading}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="visible"

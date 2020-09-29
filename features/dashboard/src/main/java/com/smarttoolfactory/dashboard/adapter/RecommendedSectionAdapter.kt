@@ -3,9 +3,9 @@ package com.smarttoolfactory.dashboard.adapter
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import com.smarttoolfactory.core.ui.recyclerview.itemcallback.DefaultItemCallback
+import com.smarttoolfactory.dashboard.adapter.model.RecommendedSectionModel
 import com.smarttoolfactory.dashboard.adapter.viewholder.RecommendedSectionViewBinder
 import com.smarttoolfactory.dashboard.adapter.viewholder.RecommendedSectionViewHolder
-import com.smarttoolfactory.dashboard.model.RecommendedSectionModel
 
 class RecommendedSectionAdapter(private val gridSectionViewBinder: RecommendedSectionViewBinder) :
     ListAdapter<RecommendedSectionModel, RecommendedSectionViewHolder>(

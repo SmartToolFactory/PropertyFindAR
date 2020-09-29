@@ -2,45 +2,80 @@ package com.smarttoolfactory.dashboard.adapter.viewholder
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.smarttoolfactory.core.ui.recyclerview.adapter.AbstractItemViewBinder
-import com.smarttoolfactory.dashboard.DashboardViewModel
+import com.smarttoolfactory.core.ui.recyclerview.adapter.BaseItemViewBinder
+import com.smarttoolfactory.core.util.clearResources
+import com.smarttoolfactory.core.util.executeAfter
+import com.smarttoolfactory.core.util.inflate
+import com.smarttoolfactory.dashboard.R
 import com.smarttoolfactory.dashboard.databinding.ItemRecommendedPropertyBinding
-import com.smarttoolfactory.dashboard.model.RecommendedItemModel
+import com.smarttoolfactory.domain.model.PropertyItem
 
+/**
+ * This ViewBinder cannot be used as multiple layout since it's model [PropertyItem]
+ * is same with other ViewBinder
+ */
 class RecommendedPropertyViewBinder(
-    private val viewModel: DashboardViewModel
-) : AbstractItemViewBinder<RecommendedItemModel, RecommendedItemViewHolder>(
-    RecommendedItemModel::class.java
-) {
-    override fun createViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
-        TODO("Not yet implemented")
+    private val onItemClicked: ((PropertyItem) -> Unit)? = null,
+) : BaseItemViewBinder<PropertyItem, RecommendedItemViewHolder>() {
+    override fun createViewHolder(parent: ViewGroup): RecommendedItemViewHolder {
+        return RecommendedItemViewHolder(
+            parent.inflate(getItemLayoutResource()),
+            onItemClicked,
+        )
     }
 
     override fun bindViewHolder(
-        model: RecommendedItemModel,
+        model: PropertyItem,
         viewHolder: RecommendedItemViewHolder
     ) {
-        TODO("Not yet implemented")
+        viewHolder.bind(model)
     }
 
-    override fun getItemLayoutResource(): Int {
-        TODO("Not yet implemented")
-    }
+    override fun getItemLayoutResource() = R.layout.item_recommended_property
 
     override fun areItemsTheSame(
-        oldItem: RecommendedItemModel,
-        newItem: RecommendedItemModel
+        oldItem: PropertyItem,
+        newItem: PropertyItem
     ): Boolean {
-        TODO("Not yet implemented")
+        return oldItem.id == newItem.id
     }
 
     override fun areContentsTheSame(
-        oldItem: RecommendedItemModel,
-        newItem: RecommendedItemModel
+        oldItem: PropertyItem,
+        newItem: PropertyItem
     ): Boolean {
-        TODO("Not yet implemented")
+        return oldItem == newItem
+    }
+
+    override fun onViewRecycled(viewHolder: RecommendedItemViewHolder) {
+        viewHolder.onViewRecycled()
+        super.onViewRecycled(viewHolder)
     }
 }
 
-class RecommendedItemViewHolder(val binding: ItemRecommendedPropertyBinding) :
-    RecyclerView.ViewHolder(binding.root)
+class RecommendedItemViewHolder(
+    private val binding: ItemRecommendedPropertyBinding,
+    private val onItemClicked: ((PropertyItem) -> Unit)? = null,
+) : RecyclerView.ViewHolder(binding.root) {
+
+    fun bind(item: PropertyItem) {
+
+        binding.executeAfter {
+
+            this.item = item
+
+            root.setOnClickListener {
+                onItemClicked?.let { onItemClick ->
+                    onItemClick(item)
+                }
+            }
+        }
+    }
+
+    fun onViewRecycled() {
+        binding.root.setOnClickListener(null)
+        binding.ivThumbnail.clearResources()
+        binding.item = null
+        binding.unbind()
+    }
+}

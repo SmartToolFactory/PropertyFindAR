@@ -7,7 +7,7 @@
 
         <variable
             name="propertyListModel"
-            type="com.smarttoolfactory.dashboard.model.PropertyListModel" />
+            type="com.smarttoolfactory.dashboard.adapter.model.PropertyListModel" />
 
         <variable
             name="viewModel"

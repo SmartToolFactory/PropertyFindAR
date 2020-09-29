@@ -3,7 +3,7 @@ package com.smarttoolfactory.core.ui.recyclerview.adapter
 import androidx.recyclerview.widget.DiffUtil
 
 class ItemDiffCallback(
-    private val viewBinders: Map<ItemClazz, ItemBinder>
+    private val viewBinders: Map<ItemClazz, MappableItemBinder>
 ) : DiffUtil.ItemCallback<Any>() {
 
     override fun areItemsTheSame(oldItem: Any, newItem: Any): Boolean {

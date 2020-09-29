@@ -46,7 +46,7 @@
 
         <argument
             android:name="propertyListModel"
-            app:argType="com.smarttoolfactory.dashboard.model.PropertyListModel" />
+            app:argType="com.smarttoolfactory.dashboard.adapter.model.PropertyListModel" />
 
     </fragment>
 

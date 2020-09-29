@@ -2,10 +2,9 @@
 <layout xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
         <variable
             name="propertyListModel"
-            type="com.smarttoolfactory.dashboard.model.PropertyListModel" />
+            type="com.smarttoolfactory.dashboard.adapter.model.PropertyListModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"

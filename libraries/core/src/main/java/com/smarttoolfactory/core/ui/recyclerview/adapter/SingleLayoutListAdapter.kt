@@ -1,6 +1,5 @@
 package com.smarttoolfactory.core.ui.recyclerview.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
@@ -58,10 +57,7 @@ abstract class SingleLayoutListAdapter<ItemType>(
         }
     }
 
-    override fun onBindViewHolder(holder: BaseItemViewHolder, position: Int) {
-        println("🔥🔥")
-        Log.d(SingleLayoutListAdapter::class.toString(), "onBindViewHolder")
-    }
+    override fun onBindViewHolder(holder: BaseItemViewHolder, position: Int) = Unit
 
     /**
      * Called when a ViewHolder is created. ViewHolder is either created first time or

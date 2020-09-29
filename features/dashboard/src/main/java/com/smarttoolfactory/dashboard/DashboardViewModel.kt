@@ -6,23 +6,27 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.smarttoolfactory.core.util.Event
 import com.smarttoolfactory.core.util.convertToFlowViewState
 import com.smarttoolfactory.core.viewstate.Status
 import com.smarttoolfactory.core.viewstate.ViewState
-import com.smarttoolfactory.dashboard.model.ChartSectionModel
-import com.smarttoolfactory.dashboard.model.PropertyListModel
-import com.smarttoolfactory.dashboard.model.RecommendedSectionModel
+import com.smarttoolfactory.dashboard.adapter.model.ChartSectionModel
+import com.smarttoolfactory.dashboard.adapter.model.PropertyListModel
+import com.smarttoolfactory.dashboard.adapter.model.RecommendedSectionModel
 import com.smarttoolfactory.domain.model.PropertyItem
 import com.smarttoolfactory.domain.usecase.property.GetDashboardStatsUseCase
 import com.smarttoolfactory.domain.usecase.property.SetPropertyStatsUseCase
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
+
+typealias CombinedData = ViewState<Array<Any?>>
 
 class DashboardViewModel @ViewModelInject constructor(
     @Assisted private val savedStateHandle: SavedStateHandle,
@@ -59,7 +63,11 @@ class DashboardViewModel @ViewModelInject constructor(
     val goToSeeAllListScreen: LiveData<Event<PropertyListModel>>
         get() = _goToSeeAllScreen
 
-    val combinedData = MutableLiveData<ViewState<Array<Any?>>>()
+    val combinedData = MutableLiveData<CombinedData>()
+
+    val combinedEventData: LiveData<Event<CombinedData>> = Transformations.map(combinedData) {
+        Event(it)
+    }
 
     /*
         Favorites Section
@@ -112,7 +120,10 @@ class DashboardViewModel @ViewModelInject constructor(
             dashboardStatsUseCase.getFavoriteChartItems()
                 .map { listOf(ChartSectionModel(it, "Favorites")) }
                 .convertToFlowViewState()
-                .onStart { _chartFavoriteViewState.value = ViewState(status = Status.LOADING) }
+                .onStart {
+                    _chartFavoriteViewState.value = ViewState(status = Status.LOADING)
+                    delay(400)
+                }
                 .onEach { _chartFavoriteViewState.value = it },
 
             dashboardStatsUseCase.getMostViewedProperties()
@@ -124,7 +135,10 @@ class DashboardViewModel @ViewModelInject constructor(
             dashboardStatsUseCase.getMostViewedChartItems()
                 .map { listOf(ChartSectionModel(it, "Viewed Most")) }
                 .convertToFlowViewState()
-                .onStart { _chartMostViewedViewState.value = ViewState(status = Status.LOADING) }
+                .onStart {
+                    _chartMostViewedViewState.value = ViewState(status = Status.LOADING)
+                    delay(400)
+                }
                 .onEach { _chartMostViewedViewState.value = it }
 
         ) { propFavs, chartFavs, propViews, chartViews ->

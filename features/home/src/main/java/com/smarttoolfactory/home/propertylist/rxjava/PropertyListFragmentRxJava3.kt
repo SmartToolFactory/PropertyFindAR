@@ -95,6 +95,7 @@ class PropertyListFragmentRxJava3 : DynamicNavigationFragment<FragmentPropertyLi
             }
         }
     }
+
     private fun subscribeGoToDetailScreen() {
 
         viewModel.goToDetailScreen.observe(

@@ -11,15 +11,15 @@ import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
-import com.smarttoolfactory.core.ui.recyclerview.adapter.AbstractItemViewBinder
+import com.smarttoolfactory.core.ui.recyclerview.adapter.MappableItemViewBinder
 import com.smarttoolfactory.core.util.inflate
 import com.smarttoolfactory.dashboard.R
+import com.smarttoolfactory.dashboard.adapter.model.ChartSectionModel
 import com.smarttoolfactory.dashboard.databinding.ItemChartBarBinding
-import com.smarttoolfactory.dashboard.model.ChartSectionModel
 
 class BarChartViewBinder(
     private val onChartItemClicked: ((Float) -> Unit)? = null
-) : AbstractItemViewBinder<ChartSectionModel, BarChartViewHolder>(
+) : MappableItemViewBinder<ChartSectionModel, BarChartViewHolder>(
     ChartSectionModel::class.java
 ) {
 

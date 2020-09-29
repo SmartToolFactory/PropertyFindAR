@@ -1,4 +1,4 @@
-package com.smarttoolfactory.dashboard.model
+package com.smarttoolfactory.dashboard.adapter.model
 
 import android.os.Parcelable
 import com.smarttoolfactory.domain.model.PropertyItem

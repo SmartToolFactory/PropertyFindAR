@@ -1,6 +1,7 @@
 package com.smarttoolfactory.dashboard.di
 
 import androidx.recyclerview.widget.RecyclerView
+import com.smarttoolfactory.core.di.qualifier.RecycledViewPool
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -20,15 +21,11 @@ class DashboardModule {
         Shared RecycledViewPool to lower number of inflation counts in inner RecyclerViews
         that use same Views
      */
-    @RecycledViewPoolQualifier(value = RecycledViewPoolQualifier.Type.PROPERTY_HORIZONTAL)
+    @RecycledViewPool(value = RecycledViewPool.Type.PROPERTY_HORIZONTAL)
     @Provides
     fun provideHorizontalRecycledViewPool() = RecyclerView.RecycledViewPool()
 
-    @RecycledViewPoolQualifier(value = RecycledViewPoolQualifier.Type.PROPERTY_ITEM)
-    @Provides
-    fun providePropertyItemRecycledViewPool() = RecyclerView.RecycledViewPool()
-
-    @RecycledViewPoolQualifier(value = RecycledViewPoolQualifier.Type.CHART_ITEM)
+    @RecycledViewPool(value = RecycledViewPool.Type.CHART_ITEM)
     @Provides
     fun provideChartItemRecycledViewPool() = RecyclerView.RecycledViewPool()
 }

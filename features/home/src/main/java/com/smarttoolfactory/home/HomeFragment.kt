@@ -1,7 +1,6 @@
 package com.smarttoolfactory.home
 
 import android.app.Dialog
-import android.content.DialogInterface
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AlertDialog
@@ -129,8 +128,7 @@ class HomeFragment : DynamicNavigationFragment<FragmentHomeBinding>() {
     private fun subscribeAppbarNavigation() {
         navControllerViewModel.currentNavController.observe(
             viewLifecycleOwner,
-            { it ->
-
+            {
                 it?.let { event: Event<NavController?> ->
                     event.getContentIfNotHandled()?.let { navController ->
                         val appBarConfig = AppBarConfiguration(navController.graph)
@@ -143,9 +141,7 @@ class HomeFragment : DynamicNavigationFragment<FragmentHomeBinding>() {
 
     override fun onDestroyView() {
 
-        // ViewPager2
         val viewPager2 = dataBinding.viewPager
-        // TabLayout
         val tabLayout = dataBinding.tabLayout
 
         /*
@@ -209,19 +205,11 @@ class SortDialogFragment : DialogFragment() {
             ) { _, which ->
                 checkedItem = which
 
-                // Alternative 1 works as soon as user changes the option
                 if (currentItem != checkedItem) {
                     viewModel.queryBySort.value = Event(viewModel.sortPropertyList[checkedItem])
+                    dismiss()
                 }
             }
         return builder.create()
-    }
-
-    override fun onDismiss(dialog: DialogInterface) {
-        super.onDismiss(dialog)
-        // Alternative works after dialog is dismissed
-//        if (currentItem != checkedItem && !canceled) {
-//            viewModel.queryBySort.value = Event(viewModel.sortPropertyList[checkedItem])
-//        }
     }
 }

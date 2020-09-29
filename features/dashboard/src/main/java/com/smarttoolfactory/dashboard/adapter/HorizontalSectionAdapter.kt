@@ -3,9 +3,9 @@ package com.smarttoolfactory.dashboard.adapter
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import com.smarttoolfactory.core.ui.recyclerview.itemcallback.DefaultItemCallback
+import com.smarttoolfactory.dashboard.adapter.model.PropertyListModel
 import com.smarttoolfactory.dashboard.adapter.viewholder.HorizontalSectionViewBinder
 import com.smarttoolfactory.dashboard.adapter.viewholder.HorizontalSectionViewHolder
-import com.smarttoolfactory.dashboard.model.PropertyListModel
 
 class HorizontalSectionAdapter(
     private val horizontalSectionViewBinder: HorizontalSectionViewBinder

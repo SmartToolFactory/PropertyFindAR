@@ -57,7 +57,7 @@ fun DependencyHandler.addAppModuleDependencies() {
     implementation(Deps.COROUTINES_ANDROID)
 
     // Leak Canary
-    debugImplementation(Deps.LEAK_CANARY)
+//    debugImplementation(Deps.LEAK_CANARY)
 
     // Room
     implementation(Deps.ROOM_RUNTIME)
@@ -128,6 +128,10 @@ fun DependencyHandler.addCoreModuleDependencies() {
     // Coroutines
     implementation(Deps.COROUTINES_CORE)
     implementation(Deps.COROUTINES_ANDROID)
+
+    // Glide
+    implementation(Deps.GLIDE)
+    kapt(Deps.GLIDE_COMPILER)
 }
 
 /**

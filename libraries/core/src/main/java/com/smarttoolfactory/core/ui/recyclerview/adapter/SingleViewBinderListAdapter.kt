@@ -9,13 +9,13 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.smarttoolfactory.core.ui.recyclerview.itemcallback.DefaultItemCallback
 
 /**
- * RecyclerView adapter for setting list with one type of layout using [AbstractItemViewBinder].
+ * RecyclerView adapter for setting list with one type of layout using [BaseItemViewBinder].
  *
- * [AbstractItemViewBinder] class is responsible for creation of [ViewHolder], and handling
+ * [BaseItemViewBinder] class is responsible for creation of [ViewHolder], and handling
  * lifecycle of [ViewHolder].
  *
  */
-class SingleViewBinderListAdapter(
+class SingleViewBinderAdapter(
     private val viewBinder: ItemBinder,
     stateRestorationPolicy: StateRestorationPolicy = StateRestorationPolicy.PREVENT_WHEN_EMPTY,
     private val recycleChildrenOnDetach: Boolean = false

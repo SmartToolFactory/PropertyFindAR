@@ -2,6 +2,8 @@ package com.smarttoolfactory.home.di
 
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.RecyclerView
+import com.smarttoolfactory.core.di.qualifier.RecycledViewPool
 import com.smarttoolfactory.home.propertylist.flow.PropertyListViewModel
 import com.smarttoolfactory.home.propertylist.paged.PagedPropertyListViewModel
 import com.smarttoolfactory.home.propertylist.rxjava.PropertyListViewModelRxJava3
@@ -52,4 +54,12 @@ class HomeModule {
 
     @Provides
     fun provideCoroutineScope() = CoroutineScope(Dispatchers.Main.immediate + SupervisorJob())
+
+    /**
+     * Shared RecycledViewPool to lower number of inflation counts in inner RecyclerViews
+     * that use same Views
+     */
+    @RecycledViewPool(value = RecycledViewPool.Type.PROPERTY_ITEM)
+    @Provides
+    fun providePropertyItemRecycledViewPool() = RecyclerView.RecycledViewPool()
 }

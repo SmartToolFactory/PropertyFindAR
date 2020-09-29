@@ -8,8 +8,8 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.smarttoolfactory.core.ui.fragment.DynamicNavigationFragment
 import com.smarttoolfactory.dashboard.adapter.PropertyListAdapter
+import com.smarttoolfactory.dashboard.adapter.model.PropertyListModel
 import com.smarttoolfactory.dashboard.databinding.FragmentDashboardSeeAllBinding
-import com.smarttoolfactory.dashboard.model.PropertyListModel
 import com.smarttoolfactory.domain.model.PropertyItem
 
 class DashboardSeeAllFragment : DynamicNavigationFragment<FragmentDashboardSeeAllBinding>() {

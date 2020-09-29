@@ -5,21 +5,21 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.smarttoolfactory.core.ui.recyclerview.adapter.AbstractItemViewBinder
+import com.smarttoolfactory.core.ui.recyclerview.adapter.ItemBinder
+import com.smarttoolfactory.core.ui.recyclerview.adapter.MappableItemViewBinder
+import com.smarttoolfactory.core.ui.recyclerview.adapter.SingleViewBinderAdapter
 import com.smarttoolfactory.core.util.executeAfter
 import com.smarttoolfactory.core.util.inflate
-import com.smarttoolfactory.dashboard.BR
 import com.smarttoolfactory.dashboard.DashboardViewModel
 import com.smarttoolfactory.dashboard.R
-import com.smarttoolfactory.dashboard.adapter.PropertyListAdapter
 import com.smarttoolfactory.dashboard.adapter.layoutmanager.ScaledHorizontalGridLayoutManager
+import com.smarttoolfactory.dashboard.adapter.model.RecommendedSectionModel
 import com.smarttoolfactory.dashboard.databinding.ItemRecommendedSectionBinding
-import com.smarttoolfactory.dashboard.model.RecommendedSectionModel
 
 class RecommendedSectionViewBinder(
     private val viewModel: DashboardViewModel,
     var layoutManagerState: Parcelable? = null
-) : AbstractItemViewBinder<RecommendedSectionModel, RecommendedSectionViewHolder>(
+) : MappableItemViewBinder<RecommendedSectionModel, RecommendedSectionViewHolder>(
     RecommendedSectionModel::class.java
 ) {
 
@@ -99,14 +99,14 @@ class RecommendedSectionViewHolder(
 
     internal fun getLayoutManagerState(): Parcelable? = layoutManager?.onSaveInstanceState()
 
-    fun bind(item: RecommendedSectionModel, layoutManagerState: Parcelable?) {
+    fun bind(model: RecommendedSectionModel, layoutManagerState: Parcelable?) {
 
         println("🚌 RecommendedSectionViewHolder bind() holder: $this")
 
         binding.executeAfter {
 
-            setVariable(BR.propertyListModel, item)
-            setVariable(BR.viewModel, this@RecommendedSectionViewHolder.viewModel)
+            binding.recommendedSectionModel = model
+            binding.viewModel = this@RecommendedSectionViewHolder.viewModel
 
             recyclerView.apply {
 
@@ -133,7 +133,12 @@ class RecommendedSectionViewHolder(
                 val onItemClick = viewModel?.let { it::onItemClick }
 
                 val itemListAdapter =
-                    PropertyListAdapter(R.layout.item_recommended_property, onItemClick)
+                    SingleViewBinderAdapter(
+                        RecommendedPropertyViewBinder(onItemClick) as ItemBinder
+                    )
+
+//                val itemListAdapter =
+//                    PropertyListAdapter(R.layout.item_property_horizontal, onItemClick)
 
                 this.adapter = itemListAdapter
 
@@ -153,7 +158,7 @@ class RecommendedSectionViewHolder(
     internal fun onViewRecycled() {
         binding.root.setOnClickListener(null)
         binding.viewModel = null
-        binding.propertyListModel = null
+        binding.recommendedSectionModel = null
         binding.unbind()
     }
 }

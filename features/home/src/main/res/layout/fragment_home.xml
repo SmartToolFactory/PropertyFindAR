@@ -13,34 +13,34 @@
             android:elevation="5dp"
             android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
 
-            <com.google.android.material.appbar.CollapsingToolbarLayout
-                android:id="@+id/collapsingToolbar"
+<!--            <com.google.android.material.appbar.CollapsingToolbarLayout-->
+<!--                android:id="@+id/collapsingToolbar"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                app:contentScrim="@color/white"-->
+<!--                app:expandedTitleMarginEnd="64dp"-->
+<!--                app:expandedTitleMarginStart="48dp"-->
+<!--                app:layout_scrollFlags="scroll|exitUntilCollapsed">-->
+
+<!--              -->
+
+<!--            </com.google.android.material.appbar.CollapsingToolbarLayout>-->
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/white"
+                app:layout_collapseMode="pin"
+                app:titleTextColor="@color/black" />
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:contentScrim="@color/white"
-                app:expandedTitleMarginEnd="64dp"
-                app:expandedTitleMarginStart="48dp"
-                app:layout_scrollFlags="scroll|exitUntilCollapsed">
-
-                <com.google.android.material.appbar.MaterialToolbar
-                    android:id="@+id/toolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    android:background="@color/white"
-                    app:layout_collapseMode="pin"
-                    app:titleTextColor="@color/black" />
-
-                <com.google.android.material.tabs.TabLayout
-                    android:id="@+id/tabLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:layout_scrollFlags="scroll|enterAlways"
-                    android:layout_gravity="bottom"
-                    app:tabMode="scrollable" />
-
-            </com.google.android.material.appbar.CollapsingToolbarLayout>
-
-
+                app:layout_scrollFlags="scroll|enterAlways"
+                android:layout_gravity="bottom"
+                app:tabMode="scrollable" />
 
         </com.google.android.material.appbar.AppBarLayout>
 

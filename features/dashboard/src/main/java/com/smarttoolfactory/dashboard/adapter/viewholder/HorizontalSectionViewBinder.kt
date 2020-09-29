@@ -4,16 +4,16 @@ import android.os.Parcelable
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.smarttoolfactory.core.ui.recyclerview.adapter.AbstractItemViewBinder
+import com.smarttoolfactory.core.ui.recyclerview.adapter.ItemBinder
+import com.smarttoolfactory.core.ui.recyclerview.adapter.MappableItemViewBinder
+import com.smarttoolfactory.core.ui.recyclerview.adapter.SingleViewBinderAdapter
 import com.smarttoolfactory.core.util.executeAfter
 import com.smarttoolfactory.core.util.inflate
-import com.smarttoolfactory.dashboard.BR
 import com.smarttoolfactory.dashboard.DashboardViewModel
 import com.smarttoolfactory.dashboard.R
-import com.smarttoolfactory.dashboard.adapter.PropertyListAdapter
 import com.smarttoolfactory.dashboard.adapter.layoutmanager.ScaledLinearLayoutManager
+import com.smarttoolfactory.dashboard.adapter.model.PropertyListModel
 import com.smarttoolfactory.dashboard.databinding.ItemPropertySectionHorizontalBinding
-import com.smarttoolfactory.dashboard.model.PropertyListModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -26,7 +26,7 @@ class HorizontalSectionViewBinder(
     private val coroutineScope: CoroutineScope? = null,
     private val scrollPositionStateFlow: MutableStateFlow<Int>? = null
 ) :
-    AbstractItemViewBinder<PropertyListModel, HorizontalSectionViewHolder>(
+    MappableItemViewBinder<PropertyListModel, HorizontalSectionViewHolder>(
         PropertyListModel::class.java
     ) {
 
@@ -42,14 +42,14 @@ class HorizontalSectionViewBinder(
 
         println("😂 HorizontalSectionViewBinder createViewHolder() $holder")
 
-        holder.binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                super.onScrollStateChanged(recyclerView, newState)
-                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    saveInstanceState(holder)
-                }
-            }
-        })
+//        holder.binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+//            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+//                super.onScrollStateChanged(recyclerView, newState)
+//                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+//                    saveInstanceState(holder)
+//                }
+//            }
+//        })
 
         return holder
     }
@@ -109,28 +109,37 @@ class HorizontalSectionViewHolder(
 
     internal fun getLayoutManagerState(): Parcelable? = layoutManager?.onSaveInstanceState()
 
-    fun bind(item: PropertyListModel, layoutManagerState: Parcelable?) {
+    fun bind(model: PropertyListModel, layoutManagerState: Parcelable?) {
 
         println("🚕 HorizontalSectionViewHolder bind() holder: $this")
 
         binding.executeAfter {
 
-            setVariable(BR.propertyListModel, item)
-            setVariable(BR.viewModel, viewModel)
+            propertyListModel = model
+            this.viewModel = this@HorizontalSectionViewHolder.viewModel
 
             // Set RecyclerView
             recyclerView.apply {
 
+                // Set shared RecycledView Pool
+                setRecycledViewPool(pool)
+
                 // Set Layout manager
                 this.layoutManager =
                     ScaledLinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
+                        .apply {
+                            recycleChildrenOnDetach = true
+                        }
 
-                // Set RecyclerViewAdapter
-
+                // Click listener for items
                 val onItemClick = viewModel?.let { it::onItemClick }
 
+                // Set RecyclerViewAdapter
                 val itemListAdapter =
-                    PropertyListAdapter(R.layout.item_property_horizontal, onItemClick)
+                    SingleViewBinderAdapter(HorizontalPropertyViewBinder(onItemClick) as ItemBinder)
+
+//                val itemListAdapter =
+//                    PropertyListAdapter(R.layout.item_property_horizontal, onItemClick)
 
                 this.adapter = itemListAdapter
 
@@ -152,7 +161,7 @@ class HorizontalSectionViewHolder(
             // Set see all touch listener
             tvSeeAll.setOnClickListener {
                 viewModel?.let {
-                    (it::onSeeAllClick)(item)
+                    (it::onSeeAllClick)(model)
                 }
             }
         }

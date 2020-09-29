@@ -2,43 +2,89 @@ package com.smarttoolfactory.dashboard.adapter.viewholder
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.smarttoolfactory.core.ui.recyclerview.adapter.AbstractItemViewBinder
-import com.smarttoolfactory.dashboard.DashboardViewModel
-import com.smarttoolfactory.dashboard.databinding.ItemRecommendedPropertyBinding
-import com.smarttoolfactory.dashboard.model.PropertyItemModel
+import com.smarttoolfactory.core.ui.recyclerview.adapter.BaseItemViewBinder
+import com.smarttoolfactory.core.util.clearResources
+import com.smarttoolfactory.core.util.executeAfter
+import com.smarttoolfactory.core.util.inflate
+import com.smarttoolfactory.dashboard.R
+import com.smarttoolfactory.dashboard.databinding.ItemPropertyHorizontalBinding
+import com.smarttoolfactory.domain.model.PropertyItem
 
+/**
+ * This ViewBinder cannot be used as multiple layout since it's model [PropertyItem]
+ * is same with other ViewBinder
+ */
 class HorizontalPropertyViewBinder(
-    private val viewModel: DashboardViewModel
-) : AbstractItemViewBinder<PropertyItemModel, HorizontalPropertyViewHolder>(
-    PropertyItemModel::class.java
-) {
+    private val onItemClicked: ((PropertyItem) -> Unit)? = null,
+) : BaseItemViewBinder<PropertyItem, HorizontalItemViewHolder>() {
 
-    override fun createViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
-        TODO("Not yet implemented")
+    override fun createViewHolder(parent: ViewGroup): HorizontalItemViewHolder {
+
+        val holder = HorizontalItemViewHolder(
+            parent.inflate(getItemLayoutResource()),
+            onItemClicked,
+        )
+
+        println("🍔 HorizontalPropertyViewBinder createViewHolder() $holder")
+
+        return holder
     }
 
     override fun bindViewHolder(
-        model: PropertyItemModel,
-        viewHolder: HorizontalPropertyViewHolder
+        model: PropertyItem,
+        viewHolder: HorizontalItemViewHolder
     ) {
-        TODO("Not yet implemented")
+        println("🍜 HorizontalPropertyViewBinder bindViewHolder() $viewHolder")
+
+        viewHolder.bind(model)
     }
 
-    override fun getItemLayoutResource(): Int {
-        TODO("Not yet implemented")
-    }
+    override fun getItemLayoutResource() = R.layout.item_property_horizontal
 
-    override fun areItemsTheSame(oldItem: PropertyItemModel, newItem: PropertyItemModel): Boolean {
-        TODO("Not yet implemented")
+    override fun areItemsTheSame(
+        oldItem: PropertyItem,
+        newItem: PropertyItem
+    ): Boolean {
+        return oldItem.id == newItem.id
     }
 
     override fun areContentsTheSame(
-        oldItem: PropertyItemModel,
-        newItem: PropertyItemModel
+        oldItem: PropertyItem,
+        newItem: PropertyItem
     ): Boolean {
-        TODO("Not yet implemented")
+        return oldItem == newItem
+    }
+
+    override fun onViewRecycled(viewHolder: HorizontalItemViewHolder) {
+        viewHolder.onViewRecycled()
+        super.onViewRecycled(viewHolder)
     }
 }
 
-class HorizontalPropertyViewHolder(val binding: ItemRecommendedPropertyBinding) :
-    RecyclerView.ViewHolder(binding.root)
+class HorizontalItemViewHolder(
+    private val binding: ItemPropertyHorizontalBinding,
+    private val onItemClicked: ((PropertyItem) -> Unit)? = null,
+) : RecyclerView.ViewHolder(binding.root) {
+
+    fun bind(item: PropertyItem) {
+
+        binding.executeAfter {
+
+            this.item = item
+
+            root.setOnClickListener {
+                onItemClicked?.let { onItemClick ->
+                    onItemClick(item)
+                }
+            }
+        }
+    }
+
+    fun onViewRecycled() {
+        println("👻 HorizontalPropertyViewBinder onViewRecycled()")
+        binding.root.setOnClickListener(null)
+        binding.ivBanner.clearResources()
+        binding.item = null
+        binding.unbind()
+    }
+}
