@@ -6,6 +6,25 @@
     app:moduleName="home"
     app:startDestination="@id/homeFragment">
 
+
+    <!-- TODO For Testing performance without ViewPager2 -->
+<!--        <fragment-->
+<!--            android:id="@+id/homeFragment"-->
+<!--            android:name="com.smarttoolfactory.home.propertylist.flow.PropertyListFlowFragment"-->
+<!--            android:label="HomeFragment"-->
+<!--            tools:layout="@layout/fragment_home">-->
+
+<!--            <action-->
+<!--                android:id="@+id/action_home_dest_to_propertyDetailFragment"-->
+<!--                app:destination="@id/nav_graph_property_detail"-->
+<!--                app:enterAnim="@anim/slide_in_right"-->
+<!--                app:exitAnim="@anim/slide_out_left"-->
+<!--                app:popEnterAnim="@anim/slide_in_left"-->
+<!--                app:popExitAnim="@anim/slide_out_right" />-->
+
+<!--        </fragment>-->
+
+
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.smarttoolfactory.home.HomeFragment"

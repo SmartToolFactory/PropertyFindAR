@@ -15,9 +15,6 @@ const val ORDER_BY_PRICE_DESCENDING = "pd"
 const val ORDER_BY_BEDS_ASCENDING = "ba"
 const val ORDER_BY_DES_DESCENDING = "bd"
 
-// User Account
-const val NO_ACCOUNT = -1L
-
 /*
     DBConstants
  */

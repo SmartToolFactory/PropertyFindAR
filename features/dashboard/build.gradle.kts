@@ -65,13 +65,16 @@ dependencies {
     implementation(Deps.APPCOMPAT)
     implementation(Deps.MATERIAL)
     implementation(Deps.CONSTRAINT_LAYOUT)
+    implementation(Deps.RECYCLER_VIEW)
+    implementation(Deps.VIEWPAGER2)
+    implementation(Deps.SWIPE_REFRESH_LAYOUT)
 
     // Glide
     implementation(Deps.GLIDE)
     kapt(Deps.GLIDE_COMPILER)
 
-    // Lottie
-    implementation(Deps.LOTTIE)
+    // MpChart
+    implementation(Deps.MP_CHART)
 
     // Unit Tests
     addUnitTestDependencies()

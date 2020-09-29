@@ -4,8 +4,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentContainerView
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
-import com.smarttoolfactory.core.ui.adapter.NavigableFragmentStateAdapter
 import com.smarttoolfactory.core.ui.fragment.navhost.NavHostContainerFragment
+import com.smarttoolfactory.core.ui.viewpager2.NavigableFragmentStateAdapter
 import com.smarttoolfactory.propertyfindar.R
 
 /**

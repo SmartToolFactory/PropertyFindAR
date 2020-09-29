@@ -2,11 +2,8 @@ package com.smarttoolfactory.core.ui.fragment.navhost
 
 import android.os.Bundle
 import androidx.annotation.NavigationRes
-import androidx.fragment.app.activityViewModels
 import androidx.navigation.dynamicfeatures.fragment.DynamicNavHostFragment
 import com.smarttoolfactory.core.error.NavigationException
-import com.smarttoolfactory.core.util.Event
-import com.smarttoolfactory.core.viewmodel.NavControllerViewModel
 
 /**
  * [DynamicNavHostFragment] creator class which
@@ -15,18 +12,18 @@ import com.smarttoolfactory.core.viewmodel.NavControllerViewModel
  */
 class BaseDynamicNavHostFragment : DynamicNavHostFragment() {
 
-    private val navControllerViewModel by activityViewModels<NavControllerViewModel>()
-
-    override fun onResume() {
-        super.onResume()
-        // Set this navController as ViewModel's navController
-        navControllerViewModel.currentNavController.value = Event(navController)
-    }
-
-    override fun onDestroyView() {
-        navControllerViewModel.currentNavController.value = Event(null)
-        super.onDestroyView()
-    }
+//    private val navControllerViewModel by activityViewModels<NavControllerViewModel>()
+//
+//    override fun onResume() {
+//        super.onResume()
+//        // Set this navController as ViewModel's navController
+//        navControllerViewModel.currentNavController.value = Event(navController)
+//    }
+//
+//    override fun onDestroyView() {
+//        navControllerViewModel.currentNavController.value = Event(null)
+//        super.onDestroyView()
+//    }
 
     companion object {
 

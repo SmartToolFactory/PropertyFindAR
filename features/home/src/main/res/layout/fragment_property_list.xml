@@ -22,7 +22,7 @@
             android:layout_height="match_parent">
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_view"
+                android:id="@+id/recyclerView"
                 visibilityBasedOn="@{viewModel.propertyListViewState.success}"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -36,7 +36,7 @@
 
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tv_error"
+                android:id="@+id/tvError"
                 visibilityBasedOn="@{viewModel.propertyListViewState.shouldShowErrorMessage()}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -44,17 +44,19 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/recycler_view" />
+                app:layout_constraintTop_toTopOf="@+id/recyclerView" />
 
-            <ProgressBar
-                android:id="@+id/progress_bar"
-                visibilityBasedOn="@{viewModel.propertyListViewState.loading}"
+            <androidx.core.widget.ContentLoadingProgressBar
+                android:id="@+id/contentLoadingProgressBar"
+                showWhen="@{viewModel.propertyListViewState.loading}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                style="?android:attr/progressBarStyle"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/recycler_view" />
+                android:visibility="visible"
+                app:layout_constraintTop_toTopOf="@+id/recyclerView" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

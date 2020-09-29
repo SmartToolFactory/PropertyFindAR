@@ -7,7 +7,7 @@ import com.smarttoolfactory.domain.usecase.property.GetPropertiesUseCasePaged
 import com.smarttoolfactory.domain.usecase.property.GetPropertiesUseCaseRxJava3
 import com.smarttoolfactory.domain.usecase.property.SetPropertyStatsUseCase
 import com.smarttoolfactory.domain.usecase.property.SetPropertyStatsUseCaseRxJava3
-import com.smarttoolfactory.home.propertylist.flow.PropertyListViewModelFlow
+import com.smarttoolfactory.home.propertylist.flow.PropertyListViewModel
 import com.smarttoolfactory.home.propertylist.paged.PagedPropertyListViewModel
 import com.smarttoolfactory.home.propertylist.rxjava.PropertyListViewModelRxJava3
 import javax.inject.Inject
@@ -22,11 +22,11 @@ class PropertyListFlowViewModelFactory @Inject constructor(
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
 
-        if (modelClass != PropertyListViewModelFlow::class.java) {
+        if (modelClass != PropertyListViewModel::class.java) {
             throw IllegalArgumentException("Unknown ViewModel class")
         }
 
-        return PropertyListViewModelFlow(
+        return PropertyListViewModel(
             coroutineScope,
             getPropertiesUseCase,
             setPropertyStatsUseCase

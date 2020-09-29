@@ -16,6 +16,8 @@ object Plugins {
     const val CLASSPATH_NAV_SAFE_ARGS =
         "androidx.navigation:navigation-safe-args-gradle-plugin:${PluginVersion.NAV_SAFE_ARGS_VERSION}"
 
+    const val CLASSPATH_MP_CHART = "com.github.dcendents:android-maven-gradle-plugin:2.1"
+
     /*
         Module Level
      */

@@ -24,13 +24,16 @@ class MainFragment : DynamicNavigationFragment<FragmentMainBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val binding = dataBinding!!
+        val binding = dataBinding
 
         val viewPager2 = binding.viewPager
         val bottomNavigationView = binding.bottomNav
 
         // Cancel ViewPager swipe
-        viewPager2.isUserInputEnabled = false
+        viewPager2.apply {
+            isUserInputEnabled = false
+            offscreenPageLimit = 4
+        }
 
         // Set viewpager adapter
         viewPager2.adapter =
@@ -46,7 +49,7 @@ class MainFragment : DynamicNavigationFragment<FragmentMainBinding>() {
                     return@setOnNavigationItemSelectedListener true
                 }
 
-                R.id.nav_graph_dfm_dashboar_start -> {
+                R.id.nav_graph_dfm_dashboard_start -> {
                     viewPager2.setCurrentItem(1, false)
                     return@setOnNavigationItemSelectedListener true
                 }

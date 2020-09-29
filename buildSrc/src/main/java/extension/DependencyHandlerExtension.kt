@@ -13,6 +13,7 @@ fun DependencyHandler.addAppModuleDependencies() {
 
     implementation(Deps.KOTLIN)
     implementation(Deps.ANDROIDX_CORE_KTX)
+    implementation(Deps.ANDROIDX_FRAGMENT_KTX)
 
     // Support and Widgets
     implementation(Deps.APPCOMPAT)
@@ -28,7 +29,10 @@ fun DependencyHandler.addAppModuleDependencies() {
     // Lifecycle, LiveData, ViewModel
     implementation(Deps.LIFECYCLE_LIVEDATA_KTX)
     implementation(Deps.LIFECYCLE_VIEWMODEL_KTX)
-    implementation(Deps.LIFECYCLE_EXTENSIONS)
+    implementation(Deps.LIFECYCLE_VIEWMODEL_SAVEDSTATE)
+    implementation(Deps.LIFECYCLE_COMMON_JAVA8)
+    implementation(Deps.LIFECYCLE_SERVICE)
+    implementation(Deps.LIFECYCLE_PROCESS)
 
     // Navigation Components
     implementation(Deps.NAVIGATION_FRAGMENT)
@@ -85,6 +89,7 @@ fun DependencyHandler.addAppModuleDependencies() {
 fun DependencyHandler.addCoreModuleDependencies() {
     implementation(Deps.KOTLIN)
     implementation(Deps.ANDROIDX_CORE_KTX)
+    implementation(Deps.ANDROIDX_FRAGMENT_KTX)
 
     // Support and Widgets
     implementation(Deps.APPCOMPAT)
@@ -97,7 +102,10 @@ fun DependencyHandler.addCoreModuleDependencies() {
     // Lifecycle, LiveData, ViewModel
     implementation(Deps.LIFECYCLE_LIVEDATA_KTX)
     implementation(Deps.LIFECYCLE_VIEWMODEL_KTX)
-    implementation(Deps.LIFECYCLE_EXTENSIONS)
+    implementation(Deps.LIFECYCLE_VIEWMODEL_SAVEDSTATE)
+    implementation(Deps.LIFECYCLE_COMMON_JAVA8)
+    implementation(Deps.LIFECYCLE_SERVICE)
+    implementation(Deps.LIFECYCLE_PROCESS)
 
     // Navigation Components
     implementation(Deps.NAVIGATION_FRAGMENT)
@@ -105,9 +113,12 @@ fun DependencyHandler.addCoreModuleDependencies() {
     implementation(Deps.NAVIGATION_RUNTIME)
     implementation(Deps.NAVIGATION_DYNAMIC)
 
-    // Dagger
+    // Dagger Hilt
     implementation(Deps.DAGGER_HILT_ANDROID)
     kapt(Deps.DAGGER_HILT_COMPILER)
+    // Dagger Hilt AndroidX & ViewModel
+    implementation(Deps.DAGGER_HILT_VIEWMODEL)
+    kapt(Deps.DAGGER_HILT_ANDROIDX_HILT_COMPILER)
 
     // RxJava
     implementation(Deps.RX_JAVA3)
@@ -117,6 +128,10 @@ fun DependencyHandler.addCoreModuleDependencies() {
     // Coroutines
     implementation(Deps.COROUTINES_CORE)
     implementation(Deps.COROUTINES_ANDROID)
+
+    // Glide
+    implementation(Deps.GLIDE)
+    kapt(Deps.GLIDE_COMPILER)
 }
 
 /**
@@ -127,11 +142,14 @@ fun DependencyHandler.addCoreModuleDependencies() {
 fun DependencyHandler.addBaseDynamicFeatureModuleDependencies() {
     implementation(Deps.KOTLIN)
     implementation(Deps.ANDROIDX_CORE_KTX)
+    implementation(Deps.ANDROIDX_FRAGMENT_KTX)
 
     // Lifecycle, LiveData, ViewModel
     implementation(Deps.LIFECYCLE_LIVEDATA_KTX)
     implementation(Deps.LIFECYCLE_VIEWMODEL_KTX)
-    implementation(Deps.LIFECYCLE_EXTENSIONS)
+    implementation(Deps.LIFECYCLE_COMMON_JAVA8)
+//    implementation(Deps.LIFECYCLE_SERVICE)
+//    implementation(Deps.LIFECYCLE_PROCESS)
 
     // Navigation Components
     implementation(Deps.NAVIGATION_FRAGMENT)

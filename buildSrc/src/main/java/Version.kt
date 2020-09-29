@@ -20,13 +20,13 @@ object AndroidVersion {
 object Version {
 
     const val CORE_KTX_VERSION = "1.3.1"
-    const val FRAGMENT_KTX_VERSION = "1.1.0-rc01"
+    const val FRAGMENT_KTX_VERSION = "1.2.5"
 
     // Appcompat
     const val APPCOMPAT_VERSION = "1.2.0"
 
     // Material
-    const val MATERIAL_VERSION = "1.3.0-alpha01"
+    const val MATERIAL_VERSION = "1.3.0-alpha02"
 
     // ConstraintLayout
     const val CONSTRAINT_LAYOUT_VERSION = "2.0.1"
@@ -41,7 +41,7 @@ object Version {
     const val VIEWPAGER2_VERSION = "1.1.0-alpha01"
 
     //SwipeRefreshLayout
-    const val SWIPE_REFRESH_LAYOUT_VERSION = "1.1.0"
+    const val SWIPE_REFRESH_LAYOUT_VERSION = "1.2.0-alpha01"
 
     // Architecture MVVM & LiveData
     const val LIFECYCLE_VERSION = "2.2.0"
@@ -81,13 +81,16 @@ object Version {
     const val RX_JAVA3_ANDROID_VERSION = "3.0.0"
 
     // Coroutines
-    const val COROUTINES_VERSION = "1.3.5"
+    const val COROUTINES_VERSION = "1.3.7"
 
     // Glide
-    const val GLIDE_VERSION = "4.9.0"
+    const val GLIDE_VERSION = "4.11.0"
 
     // Lottie
     const val LOTTIE_VERSION ="3.4.2"
+
+    // MpChart
+    const val MP_CHART_VERSION = "3.1.0"
 
     // Preference Manager
     const val PREFERENCE_MANAGER_VERSION ="1.1.1"

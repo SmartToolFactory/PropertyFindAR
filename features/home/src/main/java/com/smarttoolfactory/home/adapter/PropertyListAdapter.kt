@@ -4,22 +4,22 @@ import android.graphics.Color
 import android.widget.ImageButton
 import androidx.annotation.LayoutRes
 import androidx.databinding.ViewDataBinding
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.smarttoolfactory.core.ui.adapter.BaseListAdapter
+import com.smarttoolfactory.core.ui.recyclerview.adapter.SingleLayoutListAdapter
+import com.smarttoolfactory.core.ui.recyclerview.itemcallback.PropertyItemCallback
 import com.smarttoolfactory.domain.model.PropertyItem
 import com.smarttoolfactory.home.BR
 import com.smarttoolfactory.home.R
-import com.smarttoolfactory.home.databinding.RowPropertyBinding
+import com.smarttoolfactory.home.databinding.ItemPropertyListBinding
 
-class PropertyItemListAdapter(
+class PropertyListAdapter(
     @LayoutRes private val layoutId: Int,
     private val onItemClicked: ((PropertyItem) -> Unit)? = null,
     private val onLikeButtonClicked: ((PropertyItem) -> Unit)? = null
 ) :
-    BaseListAdapter<PropertyItem>(
+    SingleLayoutListAdapter<PropertyItem>(
         layoutId,
-        PropertyItemDiffCallback()
+        PropertyItemCallback()
     ) {
 
     override fun onViewHolderBound(
@@ -47,7 +47,7 @@ class PropertyItemListAdapter(
             }
         }
 
-        if (binding is RowPropertyBinding) {
+        if (binding is ItemPropertyListBinding) {
 
             binding.ivLike.setOnClickListener { likeButton ->
                 onLikeButtonClicked?.let { onLikeButtonClick ->
@@ -71,22 +71,5 @@ class PropertyItemListAdapter(
                 }
             }
         }
-    }
-}
-
-/**
- * Callback for calculating the diff between two non-null items in a list.
- *
- * Used by ListAdapter to calculate the minimum number of changes between and old list and a new
- * list that's been passed to `submitList`.
- */
-class PropertyItemDiffCallback : DiffUtil.ItemCallback<PropertyItem>() {
-
-    override fun areItemsTheSame(oldItem: PropertyItem, newItem: PropertyItem): Boolean {
-        return oldItem.id == newItem.id
-    }
-
-    override fun areContentsTheSame(oldItem: PropertyItem, newItem: PropertyItem): Boolean {
-        return oldItem == newItem
     }
 }

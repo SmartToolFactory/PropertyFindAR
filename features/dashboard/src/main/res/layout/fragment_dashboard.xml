@@ -1,37 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.smarttoolfactory.dashboard.DashboardViewModel" />
+    </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tvTitle"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            visibilityBasedOn="@{viewModel.combinedEventData.contentIfNotHandled.success}"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="FAVORITES\n Under Construction"
-            android:textSize="30dp"
-            android:textStyle="bold"
+            android:layout_height="match_parent"
+            android:layout_marginTop="18dp"
+            android:scrollbars="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/lavUnderConstruction"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/lavUnderConstruction"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+        <androidx.core.widget.ContentLoadingProgressBar
+            android:id="@+id/contentLoadingProgressBar"
+            style="?android:attr/progressBarStyle"
+            showWhen="@{viewModel.combinedEventData.contentIfNotHandled.loading}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent=".6"
-            app:lottie_autoPlay="true"
-            app:lottie_fileName="construction_process.json" />
+            app:layout_constraintTop_toTopOf="@+id/recyclerView" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </layout>

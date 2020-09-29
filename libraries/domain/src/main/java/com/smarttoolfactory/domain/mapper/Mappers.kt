@@ -7,6 +7,7 @@ import com.smarttoolfactory.data.model.local.BrokerEntity
 import com.smarttoolfactory.data.model.local.InteractivePropertyEntity
 import com.smarttoolfactory.data.model.local.PagedPropertyEntity
 import com.smarttoolfactory.data.model.local.PropertyEntity
+import com.smarttoolfactory.data.model.local.PropertyWithFavorites
 import com.smarttoolfactory.data.model.remote.BrokerDTO
 import com.smarttoolfactory.data.model.remote.PropertyDTO
 import com.smarttoolfactory.domain.model.BrokerItem
@@ -273,6 +274,74 @@ class PagedEntityToItemListMapper @Inject constructor() :
                 // Maps List<String>
                 leadEmailReceivers = input.leadEmailReceivers,
                 reference = input.reference,
+            )
+        }
+    }
+}
+
+class FavoriteEntityToItemListMapper @Inject constructor() :
+    ListMapper<PropertyWithFavorites, PropertyItem> {
+
+    override fun map(input: List<PropertyWithFavorites>): List<PropertyItem> {
+
+        return input.map { input ->
+
+            PropertyItem(
+                id = input.property.id,
+                update = input.property.update,
+                categoryId = input.property.categoryId,
+                title = input.property.title,
+                subject = input.property.subject,
+                type = input.property.type,
+                typeId = input.property.typeId,
+                thumbnail = input.property.thumbnail,
+                thumbnailBig = input.property.thumbnailBig,
+                imageCount = input.property.imageCount,
+                price = input.property.price,
+                pricePeriod = input.property.pricePeriod,
+                pricePeriodRaw = input.property.pricePeriodRaw,
+                priceLabel = input.property.priceLabel,
+                priceValue = input.property.priceValue,
+                priceValueRaw = input.property.priceValueRaw,
+                currency = input.property.currency,
+                featured = input.property.featured,
+                location = input.property.location,
+                area = input.property.area,
+                poa = input.property.poa,
+                reraPermit = input.property.reraPermit,
+                bathrooms = input.property.bathrooms,
+                bedrooms = input.property.bedrooms,
+                dateInsert = input.property.dateInsert,
+                dateUpdate = input.property.dateUpdate,
+                agentName = input.property.agentName,
+                brokerName = input.property.brokerName,
+                agentLicense = input.property.agentLicense,
+                locationId = input.property.locationId,
+                hideLocation = input.property.hideLocation,
+
+                // Maps BrokerEntity
+                broker =
+                    MapperFactory
+                        .createMapper<BrokerEntityToItemMapper>().map(input.property.broker),
+                // Maps List<String>
+                amenities = input.property.amenities,
+                amenitiesKeys = input.property.amenitiesKeys,
+
+                latitude = input.property.latitude,
+                longitude = input.property.longitude,
+                premium = input.property.premium,
+                livingrooms = input.property.livingrooms,
+                verified = input.property.verified,
+
+                // Maps List<String>
+                gallery = input.property.gallery,
+                phone = input.property.phone,
+
+                // Maps List<String>
+                leadEmailReceivers = input.property.leadEmailReceivers,
+                reference = input.property.reference,
+                viewCount = input.viewCount,
+                isFavorite = input.liked
             )
         }
     }

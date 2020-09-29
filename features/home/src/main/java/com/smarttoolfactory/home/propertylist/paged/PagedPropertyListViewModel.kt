@@ -43,13 +43,11 @@ class PagedPropertyListViewModel @ViewModelInject constructor(
     private fun getOrderByKey(): Flow<String?> {
         return getPropertiesUseCase.getCurrentSortKey()
             .onEach {
-                println("🍏 AbstractPropertyListVM init orderKey: $it")
                 _orderByKey = it ?: _orderByKey
                 orderKey.postValue(_orderByKey)
             }
             .catch {
                 orderKey.postValue(_orderByKey)
-                println("❌ AbstractPropertyListVM init error: $it")
             }
     }
 

@@ -9,7 +9,57 @@
     <fragment
         android:id="@+id/dashboardFragment"
         android:name="com.smarttoolfactory.dashboard.DashboardFragment"
-        android:label="Account Fragment"
-        tools:layout="@layout/fragment_dashboard" />
+        android:label="Dashboard Fragment"
+        tools:layout="@layout/fragment_dashboard">
 
+        <action
+            android:id="@+id/action_dashboardFragment_to_nav_graph_property_detail"
+            app:destination="@id/nav_graph_property_detail"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
+        <action
+            android:id="@+id/action_dashboardFragment_to_dashboardSeeAllFragment"
+            app:destination="@id/dashboardSeeAllFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/dashboardSeeAllFragment"
+        android:name="com.smarttoolfactory.dashboard.DashboardSeeAllFragment"
+        android:label="DashboardSeeAllFragment"
+        tools:layout="@layout/fragment_dashboard_see_all">
+
+        <action
+            android:id="@+id/action_dashboardSeeAllFragment_to_nav_graph_property_detail"
+            app:destination="@id/nav_graph_property_detail"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
+        <argument
+            android:name="propertyListModel"
+            app:argType="com.smarttoolfactory.dashboard.adapter.model.PropertyListModel" />
+
+    </fragment>
+
+
+    <include-dynamic
+        android:id="@id/nav_graph_property_detail"
+        android:name="com.smarttoolfactory.property_detail"
+        app:graphResName="nav_graph_property_detail"
+        app:moduleName="property_detail">
+
+        <argument
+            android:name="property"
+            app:argType="com.smarttoolfactory.domain.model.PropertyItem" />
+
+    </include-dynamic>
 </navigation>
