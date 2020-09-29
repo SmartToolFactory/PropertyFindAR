@@ -18,7 +18,7 @@ import com.smarttoolfactory.core.ui.recyclerview.adapter.MappableItemBinder
 import com.smarttoolfactory.core.ui.recyclerview.adapter.SingleViewBinderAdapter
 import com.smarttoolfactory.core.viewstate.Status
 import com.smarttoolfactory.core.viewstate.ViewState
-import com.smarttoolfactory.dashboard.adapter.viewholder.BarChartViewBinder
+import com.smarttoolfactory.dashboard.adapter.viewholder.ChartSectionViewBinder
 import com.smarttoolfactory.dashboard.adapter.viewholder.HorizontalSectionViewBinder
 import com.smarttoolfactory.dashboard.adapter.viewholder.LoadingIndicator
 import com.smarttoolfactory.dashboard.adapter.viewholder.LoadingViewBinder
@@ -101,7 +101,7 @@ class DashboardFragment :
         adapterFavoriteProperties =
             SingleViewBinderAdapter(favoriteViewBinder as MappableItemBinder)
 
-        val favoriteChartViewBinder = BarChartViewBinder()
+        val favoriteChartViewBinder = ChartSectionViewBinder()
 //        { position ->
 //            scrollStateFavoritesFlow.value = position.toInt()
 //        }
@@ -115,7 +115,7 @@ class DashboardFragment :
         adapterMostViewedProperties =
             SingleViewBinderAdapter(viewedMostViewBinder as MappableItemBinder)
 
-        val mostViewedChartViewBinder = BarChartViewBinder()
+        val mostViewedChartViewBinder = ChartSectionViewBinder()
         adapterMostViewedChart =
             SingleViewBinderAdapter(mostViewedChartViewBinder as MappableItemBinder)
 
@@ -178,6 +178,21 @@ class DashboardFragment :
 
         subscribeRecommendedProperties(adapterRecommendedProperties)
         subscribeEvents()
+
+        viewModel.combinedEventData.observe(
+            viewLifecycleOwner,
+            {
+                it.getContentIfNotHandled()?.status?.let { status ->
+                    if (status == Status.LOADING) {
+                        dataBinding.recyclerView.visibility = View.GONE
+                        dataBinding.contentLoadingProgressBar.visibility = View.VISIBLE
+                    } else {
+                        dataBinding.contentLoadingProgressBar.visibility = View.GONE
+                        dataBinding.recyclerView.visibility = View.VISIBLE
+                    }
+                }
+            }
+        )
     }
 
     private fun <T> subscribeAdapterToData(

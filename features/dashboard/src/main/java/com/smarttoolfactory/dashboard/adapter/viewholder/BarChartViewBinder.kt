@@ -1,6 +1,5 @@
 package com.smarttoolfactory.dashboard.adapter.viewholder
 
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.github.mikephil.charting.components.Legend
@@ -13,7 +12,7 @@ import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import com.github.mikephil.charting.utils.ColorTemplate
-import com.smarttoolfactory.core.ui.recyclerview.adapter.MappableItemViewBinder
+import com.smarttoolfactory.core.ui.recyclerview.adapter.BaseItemViewBinder
 import com.smarttoolfactory.core.util.executeAfter
 import com.smarttoolfactory.core.util.inflate
 import com.smarttoolfactory.dashboard.R
@@ -22,9 +21,7 @@ import com.smarttoolfactory.dashboard.databinding.ItemChartBarBinding
 
 class BarChartViewBinder(
     private val onChartItemClicked: ((Float) -> Unit)? = null
-) : MappableItemViewBinder<ChartSectionModel, BarChartViewHolder>(
-    ChartSectionModel::class.java
-) {
+) : BaseItemViewBinder<ChartSectionModel, BarChartViewHolder>() {
 
     override fun createViewHolder(parent: ViewGroup): BarChartViewHolder {
         return BarChartViewHolder(
@@ -70,14 +67,7 @@ class BarChartViewHolder(
 
     fun bind(model: ChartSectionModel) {
         binding.executeAfter {
-            if (model.items.isNullOrEmpty()) {
-                binding.chartLayout.visibility = View.GONE
-                binding.cardView.visibility = View.GONE
-            } else {
-                binding.chartLayout.visibility = View.VISIBLE
-                binding.cardView.visibility = View.VISIBLE
-                createChart(model)
-            }
+            createChart(model)
         }
     }
 

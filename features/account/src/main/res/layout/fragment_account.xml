@@ -29,7 +29,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintWidth_percent=".6"
             app:lottie_autoPlay="true"
-            app:lottie_fileName="construction_process.json" />
+            app:lottie_fileName="home.json" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
