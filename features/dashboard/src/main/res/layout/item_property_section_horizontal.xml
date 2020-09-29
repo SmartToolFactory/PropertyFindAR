@@ -16,10 +16,9 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        visibilityBasedOn="@{!propertyListModel.items.isEmpty()}"
+        android:id="@+id/horizontalSectionLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tvType"

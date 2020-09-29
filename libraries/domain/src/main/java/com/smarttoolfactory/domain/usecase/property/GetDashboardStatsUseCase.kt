@@ -79,6 +79,7 @@ class GetDashboardStatsUseCase @Inject constructor(
                         id = propertyItem.id,
                         title = propertyItem.title,
                         price = propertyItem.priceValueRaw.toFloat(),
+                        currency = propertyItem.currency,
                         beds = propertyItem.bedrooms,
                         baths = propertyItem.bathrooms,
                         location = propertyItem.location
@@ -96,6 +97,7 @@ class GetDashboardStatsUseCase @Inject constructor(
                         id = propertyItem.id,
                         title = propertyItem.title,
                         price = propertyItem.priceValueRaw.toFloat(),
+                        currency = propertyItem.currency,
                         beds = propertyItem.bedrooms,
                         baths = propertyItem.bathrooms,
                         location = propertyItem.location

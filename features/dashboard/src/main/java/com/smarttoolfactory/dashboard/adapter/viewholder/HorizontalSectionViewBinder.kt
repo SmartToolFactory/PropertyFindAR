@@ -1,6 +1,7 @@
 package com.smarttoolfactory.dashboard.adapter.viewholder
 
 import android.os.Parcelable
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -42,14 +43,14 @@ class HorizontalSectionViewBinder(
 
         println("😂 HorizontalSectionViewBinder createViewHolder() $holder")
 
-//        holder.binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-//            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-//                super.onScrollStateChanged(recyclerView, newState)
-//                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-//                    saveInstanceState(holder)
-//                }
-//            }
-//        })
+        holder.binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    saveInstanceState(holder)
+                }
+            }
+        })
 
         return holder
     }
@@ -93,6 +94,7 @@ class HorizontalSectionViewBinder(
             return
         }
         layoutManagerState = viewHolder.getLayoutManagerState()
+        println("😍 Horizontal saveInstance() $layoutManagerState")
     }
 }
 
@@ -111,8 +113,20 @@ class HorizontalSectionViewHolder(
 
     fun bind(model: PropertyListModel, layoutManagerState: Parcelable?) {
 
-        println("🚕 HorizontalSectionViewHolder bind() holder: $this")
+        if (model.items.isNullOrEmpty()) {
+            binding.horizontalSectionLayout.visibility = View.GONE
+        } else {
+            binding.horizontalSectionLayout.visibility = View.VISIBLE
+            setUpHorizontalList(model, layoutManagerState)
+        }
 
+//        listenScrollStateFlow()
+    }
+
+    private fun setUpHorizontalList(
+        model: PropertyListModel,
+        layoutManagerState: Parcelable?
+    ) {
         binding.executeAfter {
 
             propertyListModel = model
@@ -121,14 +135,15 @@ class HorizontalSectionViewHolder(
             // Set RecyclerView
             recyclerView.apply {
 
-                // Set shared RecycledView Pool
-                setRecycledViewPool(pool)
-
                 // Set Layout manager
                 this.layoutManager =
                     ScaledLinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
                         .apply {
-                            recycleChildrenOnDetach = true
+                            pool?.let {
+                                // Set shared RecycledView Pool
+                                setRecycledViewPool(pool)
+                                recycleChildrenOnDetach = true
+                            }
                         }
 
                 // Click listener for items
@@ -138,17 +153,10 @@ class HorizontalSectionViewHolder(
                 val itemListAdapter =
                     SingleViewBinderAdapter(HorizontalPropertyViewBinder(onItemClick) as ItemBinder)
 
-//                val itemListAdapter =
-//                    PropertyListAdapter(R.layout.item_property_horizontal, onItemClick)
-
                 this.adapter = itemListAdapter
 
-//                itemAnimator = null
-//                isNestedScrollingEnabled = false
-
-                pool?.let {
-                    this.setRecycledViewPool(pool)
-                }
+                //                itemAnimator = null
+                //                isNestedScrollingEnabled = false
             }
 
             layoutManager = binding.recyclerView.layoutManager
@@ -165,8 +173,6 @@ class HorizontalSectionViewHolder(
                 }
             }
         }
-
-//        listenScrollStateFlow()
     }
 
     internal fun listenScrollStateFlow() {

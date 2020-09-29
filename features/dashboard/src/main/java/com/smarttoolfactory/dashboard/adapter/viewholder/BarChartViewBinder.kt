@@ -1,5 +1,6 @@
 package com.smarttoolfactory.dashboard.adapter.viewholder
 
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.github.mikephil.charting.components.Legend
@@ -11,7 +12,9 @@ import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
+import com.github.mikephil.charting.utils.ColorTemplate
 import com.smarttoolfactory.core.ui.recyclerview.adapter.MappableItemViewBinder
+import com.smarttoolfactory.core.util.executeAfter
 import com.smarttoolfactory.core.util.inflate
 import com.smarttoolfactory.dashboard.R
 import com.smarttoolfactory.dashboard.adapter.model.ChartSectionModel
@@ -40,7 +43,7 @@ class BarChartViewBinder(
         oldItem: ChartSectionModel,
         newItem: ChartSectionModel
     ): Boolean {
-        return oldItem.data == newItem.data
+        return oldItem.items == newItem.items
     }
 
     override fun areContentsTheSame(
@@ -48,6 +51,11 @@ class BarChartViewBinder(
         newItem: ChartSectionModel
     ): Boolean {
         return false
+    }
+
+    override fun onViewRecycled(viewHolder: BarChartViewHolder) {
+        viewHolder.onViewRecycled()
+        super.onViewRecycled(viewHolder)
     }
 }
 
@@ -60,7 +68,20 @@ class BarChartViewHolder(
     private val onChartItemClicked: ((Float) -> Unit)? = null
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(chartItem: ChartSectionModel) {
+    fun bind(model: ChartSectionModel) {
+        binding.executeAfter {
+            if (model.items.isNullOrEmpty()) {
+                binding.chartLayout.visibility = View.GONE
+                binding.cardView.visibility = View.GONE
+            } else {
+                binding.chartLayout.visibility = View.VISIBLE
+                binding.cardView.visibility = View.VISIBLE
+                createChart(model)
+            }
+        }
+    }
+
+    private fun createChart(chartItem: ChartSectionModel) {
 
         val chart = binding.barChart
 
@@ -80,13 +101,13 @@ class BarChartViewHolder(
 
         // modify the legend ...
 
-//        l.form = LegendForm.LINE
-//
+        //        l.form = LegendForm.LINE
+        //
         val xAxis: XAxis = chart.xAxis
 
-//        xAxis.setDrawGridLines(false)
-//        xAxis.setAvoidFirstLastClipping(true)
-//        xAxis.isEnabled = false
+        xAxis.setDrawGridLines(false)
+        xAxis.setAvoidFirstLastClipping(true)
+        xAxis.isEnabled = false
 
         val leftAxis: YAxis = chart.axisLeft
         leftAxis.setDrawGridLines(false)
@@ -96,16 +117,21 @@ class BarChartViewHolder(
         rightAxis.isEnabled = false
         rightAxis.setDrawGridLines(false)
 
-        val entries = chartItem.data.mapIndexed { index, item ->
+        val entries = chartItem.items.mapIndexed { index, item ->
             BarEntry(index.toFloat(), item.price)
         }
 
-        val dataSet = BarDataSet(entries, "Chart")
+        val dataSet = BarDataSet(entries, "Indices")
+        dataSet.setColors(*ColorTemplate.JOYFUL_COLORS)
 
         val chartData = BarData(dataSet)
 
         chart.data = chartData
+//        chart.animateXY(500, 500)
+    }
 
-        binding.executePendingBindings()
+    fun onViewRecycled() {
+//        binding.barChart.setOnChartValueSelectedListener(null)
+//        binding.unbind()
     }
 }

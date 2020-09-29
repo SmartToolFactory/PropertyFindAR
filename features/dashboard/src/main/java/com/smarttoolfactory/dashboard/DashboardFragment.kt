@@ -70,7 +70,7 @@ class DashboardFragment :
     override fun onCreate(savedInstanceState: Bundle?) {
         initCoreDependentInjection()
         super.onCreate(savedInstanceState)
-//        createAdapters(savedInstanceState)
+        createAdapters(savedInstanceState)
     }
 
     /**
@@ -79,12 +79,10 @@ class DashboardFragment :
      */
     private fun createAdapters(savedInstanceState: Bundle?) {
 
-        // FIXME Something wrong with RV pool. It's causing other ViewBinder's
-        //  layoutManagerState to be null
         favoriteViewBinder = HorizontalSectionViewBinder(
             viewModel = viewModel,
             layoutManagerState = viewModel.scrollStateFavorites.value,
-//            pool =  propertyPool
+            pool = propertyPool
         )
 
         viewedMostViewBinder = HorizontalSectionViewBinder(
@@ -152,24 +150,10 @@ class DashboardFragment :
 
         viewModel.getDashboardDataCombined()
 
-        createAdapters(savedInstanceState)
+//        createAdapters(savedInstanceState)
 
         // Check if RecyclerView has reached the bottom
-        dataBinding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                super.onScrollStateChanged(recyclerView, newState)
-
-                // Check if scrolled to bottom of RecyclerView and not fetched recommended data
-                if (!recyclerView.canScrollVertically(1) &&
-                    newState == RecyclerView.SCROLL_STATE_IDLE &&
-                    fetchRecommendedItems
-                ) {
-                    viewModel.getRecommendedProperties()
-                    fetchRecommendedItems = false
-                }
-            }
-        })
+        dataBinding.recyclerView.addOnScrollListener(scrollListener)
 
         dataBinding.viewModel = viewModel
 
@@ -187,7 +171,6 @@ class DashboardFragment :
             }
         }
 
-//        subscribeDashboardData()
         subscribeAdapterToData(adapterFavoriteProperties, viewModel.propertiesFavorite)
         subscribeAdapterToData(adapterFavoriteChart, viewModel.chartFavoriteViewState)
         subscribeAdapterToData(adapterMostViewedProperties, viewModel.propertiesMostViewed)
@@ -231,12 +214,20 @@ class DashboardFragment :
                 }
                 Status.SUCCESS -> {
                     if (!it.data.isNullOrEmpty()) {
+                        val recyclerView = dataBinding.recyclerView
                         val adapters = concatAdapter.adapters
-                        concatAdapter.removeAdapter(adapters[adapters.size - 1])
-                        concatAdapter.addAdapter(adapter)
-                        adapter.submitList(it.data)
-                        dataBinding.recyclerView
-                            .smoothScrollToPosition(concatAdapter.adapters.size - 1)
+                        if (!adapters.contains(adapter)) {
+
+                            concatAdapter.removeAdapter(adapters[adapters.size - 1])
+                            concatAdapter.addAdapter(adapter)
+                            adapter.submitList(it.data)
+
+                            if (!recyclerView.canScrollVertically(1) &&
+                                recyclerView.scrollState == RecyclerView.SCROLL_STATE_IDLE
+                            )
+                                dataBinding.recyclerView
+                                    .smoothScrollToPosition(concatAdapter.adapters.size - 1)
+                        }
                     }
                 }
                 else -> {
@@ -266,9 +257,7 @@ class DashboardFragment :
         ) {
             it.getContentIfNotHandled()?.let { propertyListModel ->
 
-                val bundle = bundleOf(
-                    "propertyListModel" to propertyListModel
-                )
+                val bundle = bundleOf("propertyListModel" to propertyListModel)
 
                 findNavController().navigate(
                     R.id.action_dashboardFragment_to_dashboardSeeAllFragment,
@@ -293,9 +282,6 @@ class DashboardFragment :
     }
 
     override fun onDestroyView() {
-
-        dataBinding.viewModel = null
-
         if (::favoriteViewBinder.isInitialized) {
             viewModel.scrollStateFavorites.value = favoriteViewBinder.layoutManagerState
         }
@@ -306,6 +292,25 @@ class DashboardFragment :
             viewModel.scrollStateRecommended.value = recommendedViewBinder.layoutManagerState
         }
 
+        dataBinding.recyclerView.removeOnScrollListener(scrollListener)
+        dataBinding.viewModel = null
+
         super.onDestroyView()
+    }
+
+    private val scrollListener = object : RecyclerView.OnScrollListener() {
+
+        override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+            super.onScrollStateChanged(recyclerView, newState)
+
+            // Check if scrolled to bottom of RecyclerView and not fetched recommended data
+            if (!recyclerView.canScrollVertically(1) &&
+                newState == RecyclerView.SCROLL_STATE_IDLE &&
+                fetchRecommendedItems
+            ) {
+                viewModel.getRecommendedProperties()
+                fetchRecommendedItems = false
+            }
+        }
     }
 }

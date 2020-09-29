@@ -122,7 +122,6 @@ class DashboardViewModel @ViewModelInject constructor(
                 .convertToFlowViewState()
                 .onStart {
                     _chartFavoriteViewState.value = ViewState(status = Status.LOADING)
-                    delay(400)
                 }
                 .onEach { _chartFavoriteViewState.value = it },
 
@@ -137,11 +136,13 @@ class DashboardViewModel @ViewModelInject constructor(
                 .convertToFlowViewState()
                 .onStart {
                     _chartMostViewedViewState.value = ViewState(status = Status.LOADING)
-                    delay(400)
                 }
                 .onEach { _chartMostViewedViewState.value = it }
 
         ) { propFavs, chartFavs, propViews, chartViews ->
+
+            propFavs.data
+
             val array = arrayOfNulls<Any?>(4)
 
             array[0] = propFavs
@@ -151,7 +152,10 @@ class DashboardViewModel @ViewModelInject constructor(
 
             array
         }
-            .onStart { combinedData.value = ViewState(status = Status.LOADING) }
+            .onStart {
+                combinedData.value = ViewState(status = Status.LOADING)
+                delay(500)
+            }
             .onEach { combinedData.value = ViewState(status = Status.SUCCESS, data = it) }
             .launchIn(coroutineScope)
     }

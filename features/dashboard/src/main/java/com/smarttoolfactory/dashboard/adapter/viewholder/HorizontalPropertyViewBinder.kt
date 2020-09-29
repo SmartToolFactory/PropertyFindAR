@@ -20,22 +20,16 @@ class HorizontalPropertyViewBinder(
 
     override fun createViewHolder(parent: ViewGroup): HorizontalItemViewHolder {
 
-        val holder = HorizontalItemViewHolder(
+        return HorizontalItemViewHolder(
             parent.inflate(getItemLayoutResource()),
             onItemClicked,
         )
-
-        println("🍔 HorizontalPropertyViewBinder createViewHolder() $holder")
-
-        return holder
     }
 
     override fun bindViewHolder(
         model: PropertyItem,
         viewHolder: HorizontalItemViewHolder
     ) {
-        println("🍜 HorizontalPropertyViewBinder bindViewHolder() $viewHolder")
-
         viewHolder.bind(model)
     }
 
@@ -81,7 +75,6 @@ class HorizontalItemViewHolder(
     }
 
     fun onViewRecycled() {
-        println("👻 HorizontalPropertyViewBinder onViewRecycled()")
         binding.root.setOnClickListener(null)
         binding.ivBanner.clearResources()
         binding.item = null

@@ -4,6 +4,7 @@ data class PropertyChartItem(
     val id: Int,
     val title: String,
     val price: Float,
+    val currency: String,
     private val beds: String = "",
     private val baths: String = "",
     val location: String
