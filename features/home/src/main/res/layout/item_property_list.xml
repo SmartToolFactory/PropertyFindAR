@@ -98,8 +98,8 @@
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/ivLike"
             favoriteImageSrc="@{item.isFavorite}"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
             android:background="#00ffffff"
             android:padding="2dp"
             android:src="@drawable/avd_heart_empty"
