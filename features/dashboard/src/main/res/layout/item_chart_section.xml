@@ -36,10 +36,13 @@
                     android:id="@+id/tvType"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="12dp"
                     android:text="Title"
+                    android:background="@color/gray_500"
+                    android:textColor="@color/white"
                     android:textSize="16sp"
+                    android:paddingTop="2dp"
+                    android:paddingStart="12dp"
+                    android:paddingBottom="2dp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -61,9 +64,9 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:tabIndicatorColor="#FB8C00"
+                    app:tabIndicatorColor="@color/orange_700"
                     app:tabIndicatorHeight="4dp"
-                    app:tabTextColor="#FB8C00" />
+                    app:tabTextColor="@color/orange_700" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>

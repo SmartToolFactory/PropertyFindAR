@@ -7,4 +7,9 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="background_alt">#F5F5F5</color>
+    <color name="gray_500">#9E9E9E</color>
+    <color name="gray_300">#E0E0E0</color>
+    <color name="orange_700">#F57C00</color>
+    <color name="inline_action_icon">#ff757575</color> <!-- grey 600 -->
 </resources>

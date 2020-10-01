@@ -17,7 +17,7 @@ class ScaledHorizontalGridLayoutManager constructor(
     private val totalItems: Int = 1,
 ) : GridLayoutManager(context, spanCount, orientation, reverseLayout) {
 
-    private val partialVisibilityRatio = 0.3f
+    private val partialVisibilityRatio = 0.4f
 
     private val horizontalSpace get() = width - paddingStart - paddingEnd
 

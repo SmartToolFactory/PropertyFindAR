@@ -1,8 +1,9 @@
 package com.smarttoolfactory.home.adapter
 
-import android.graphics.Color
+import android.graphics.drawable.AnimatedVectorDrawable
 import android.widget.ImageButton
 import androidx.annotation.LayoutRes
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 import com.smarttoolfactory.core.ui.recyclerview.adapter.SingleLayoutListAdapter
@@ -57,16 +58,26 @@ class PropertyListAdapter(
                         isFavorite = !isFavorite
                         onLikeButtonClick(this)
 
-                        // Set image source of like button
-                        val likeImageButton = (likeButton as? ImageButton)
-                        val imageResource = if (isFavorite) {
-                            likeImageButton?.setColorFilter(Color.rgb(244, 81, 30))
-                            R.drawable.ic_baseline_favorite_30
-                        } else {
-                            likeImageButton?.setColorFilter(Color.rgb(41, 182, 246))
-                            R.drawable.ic_baseline_favorite_border_30
+                        // Set AnimatedVectorDrawable for like button
+                        (likeButton as? ImageButton)?.apply {
+
+                            val animatedVectorDrawable = if (isFavorite) {
+                                AppCompatResources.getDrawable(
+                                    context,
+                                    R.drawable.avd_heart_empty
+                                ) as? AnimatedVectorDrawable
+                            } else {
+                                AppCompatResources.getDrawable(
+                                    context,
+                                    R.drawable.avd_heart_favorite
+                                ) as? AnimatedVectorDrawable
+                            }
+
+                            animatedVectorDrawable?.apply {
+                                likeButton.setImageDrawable(this)
+                                start()
+                            }
                         }
-                        likeImageButton?.setImageResource(imageResource)
                     }
                 }
             }

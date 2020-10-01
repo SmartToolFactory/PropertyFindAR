@@ -106,7 +106,6 @@ class PropertyListViewModel @ViewModelInject constructor(
     }
 
     fun onLikeButtonClick(item: PropertyItem) {
-        println("🔥 Like: $item")
         setPropertyStatsUseCase
             .updatePropertyStatus(property = item)
             .launchIn(coroutineScope)

@@ -102,8 +102,7 @@
             android:layout_height="40dp"
             android:background="#00ffffff"
             android:padding="2dp"
-            android:src="@drawable/ic_baseline_favorite_border_30"
-            android:tint="#29B6F6"
+            android:src="@drawable/avd_heart_empty"
             app:layout_constraintBottom_toBottomOf="@+id/tvPrice"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tvTitle" />

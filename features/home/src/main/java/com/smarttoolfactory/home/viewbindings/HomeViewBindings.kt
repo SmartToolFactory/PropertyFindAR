@@ -1,8 +1,9 @@
 package com.smarttoolfactory.home.viewbindings
 
-import android.graphics.Color
+import android.graphics.drawable.AnimatedVectorDrawable
 import android.widget.ImageButton
 import android.widget.ImageView
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -36,14 +37,16 @@ fun setImageUrl(view: ImageView, path: String?) {
 @BindingAdapter("favoriteImageSrc")
 fun ImageButton.setFavoriteImageSrc(favorite: Boolean) {
 
-    if (favorite) {
-        setColorFilter(Color.rgb(244, 81, 30))
+    val animatedVectorDrawable = if (favorite) {
+        AppCompatResources.getDrawable(
+            context,
+            R.drawable.avd_heart_favorite
+        ) as? AnimatedVectorDrawable
     } else {
-        setColorFilter(Color.rgb(41, 182, 246))
+        AppCompatResources.getDrawable(
+            context,
+            R.drawable.avd_heart_empty
+        ) as? AnimatedVectorDrawable
     }
-
-    val imageResource = if (favorite) R.drawable.ic_baseline_favorite_30
-    else R.drawable.ic_baseline_favorite_border_30
-
-    setImageResource(imageResource)
+    setImageDrawable(animatedVectorDrawable)
 }

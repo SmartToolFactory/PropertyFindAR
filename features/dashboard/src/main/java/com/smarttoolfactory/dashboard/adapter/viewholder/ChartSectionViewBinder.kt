@@ -40,7 +40,7 @@ class ChartSectionViewBinder(
         oldItem: ChartSectionModel,
         newItem: ChartSectionModel
     ): Boolean {
-        return oldItem.items == newItem.items
+        return oldItem.chartTitle == newItem.chartTitle
     }
 
     override fun areContentsTheSame(

@@ -19,7 +19,6 @@ import com.smarttoolfactory.domain.model.PropertyItem
 import com.smarttoolfactory.domain.usecase.property.GetDashboardStatsUseCase
 import com.smarttoolfactory.domain.usecase.property.SetPropertyStatsUseCase
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -154,7 +153,7 @@ class DashboardViewModel @ViewModelInject constructor(
         }
             .onStart {
                 combinedData.value = ViewState(status = Status.LOADING)
-                delay(500)
+//                delay(500)
             }
             .onEach { combinedData.value = ViewState(status = Status.SUCCESS, data = it) }
             .launchIn(coroutineScope)

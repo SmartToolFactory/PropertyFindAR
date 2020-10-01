@@ -59,6 +59,9 @@ class HorizontalSectionViewBinder(
         model: PropertyListModel,
         viewHolder: HorizontalSectionViewHolder
     ) {
+
+        println("🤔 HorizontalSectionViewBinder bindViewHolder() $viewHolder")
+
         viewHolder.bind(model, layoutManagerState)
     }
 
@@ -68,7 +71,7 @@ class HorizontalSectionViewBinder(
         oldItem: PropertyListModel,
         newItem: PropertyListModel
     ): Boolean {
-        return oldItem.items == newItem.items
+        return oldItem.title == newItem.title
     }
 
     override fun areContentsTheSame(
@@ -81,12 +84,12 @@ class HorizontalSectionViewBinder(
     override fun onViewRecycled(viewHolder: HorizontalSectionViewHolder) {
         saveInstanceState(viewHolder)
         viewHolder.onViewRecycled()
-        println("👻 Horizontal onViewRecycled: $viewHolder")
+        println("👻 HorizontalSectionViewBinder onViewRecycled: $viewHolder")
     }
 
     override fun onViewDetachedFromWindow(viewHolder: HorizontalSectionViewHolder) {
         saveInstanceState(viewHolder)
-        println("💀 Horizontal onViewDetachedFromWindow: $viewHolder")
+        println("💀 HorizontalSectionViewBinder onViewDetachedFromWindow: $viewHolder")
     }
 
     private fun saveInstanceState(viewHolder: HorizontalSectionViewHolder) {

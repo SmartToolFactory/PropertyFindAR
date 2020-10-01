@@ -53,7 +53,7 @@ abstract class BaseDataBindingFragment<ViewBinding : ViewDataBinding> : Fragment
     ): View? {
 
         onCreateViewStartTime = System.currentTimeMillis()
-//        println("🤣 ${this.javaClass.simpleName} #${this.hashCode()} onCreateView()")
+        println("🤣 ${this.javaClass.simpleName} #${this.hashCode()} onCreateView()")
 
         // Each fragment can have it's separate toolbar menu
         setHasOptionsMenu(true)
@@ -111,11 +111,11 @@ abstract class BaseDataBindingFragment<ViewBinding : ViewDataBinding> : Fragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        println("😀 ${this.javaClass.simpleName} #${this.hashCode()}  onCreate()")
+        println("😀 ${this.javaClass.simpleName} #${this.hashCode()}  onCreate()")
     }
 
     override fun onDestroy() {
         super.onDestroy()
-//        println("🥶 ${this.javaClass.simpleName} #${this.hashCode()}  onDestroy()")
+        println("🥶 ${this.javaClass.simpleName} #${this.hashCode()}  onDestroy()")
     }
 }
