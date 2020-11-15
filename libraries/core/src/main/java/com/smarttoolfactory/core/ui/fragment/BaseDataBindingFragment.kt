@@ -8,6 +8,7 @@ import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
+import kotlin.system.measureTimeMillis
 
 /**
  * BaseFragment to avoid writing data-binding code over again for each fragment.
@@ -76,26 +77,33 @@ abstract class BaseDataBindingFragment<ViewBinding : ViewDataBinding> : Fragment
         super.onViewCreated(view, savedInstanceState)
         onViewCreatedStartTime = System.currentTimeMillis()
 
-//        println(
-//            "🍏  ${this.javaClass.simpleName} #${this.hashCode()}  onViewCreated() " +
-//                "START took ${onViewCreatedStartTime - onCreateViewStartTime} ms"
-//        )
+        println(
+            "🍏  ${this.javaClass.simpleName} #${this.hashCode()}  onViewCreated() " +
+                "START took ${onViewCreatedStartTime - onCreateViewStartTime} ms"
+        )
 
-        bindViews(view, savedInstanceState)
+        val time = measureTimeMillis {
+            bindViews(view, savedInstanceState)
+        }
 
-//        println(
-//            "🍏  ${this.javaClass.simpleName} #${this.hashCode()}  onViewCreated() " +
-//                "FINISH took ${System.currentTimeMillis() - onCreateViewStartTime} ms"
-//        )
+        println(
+            "🍏  ${this.javaClass.simpleName} #${this.hashCode()}  onViewCreated() " +
+                "bindViews() took $time ms"
+        )
+
+        println(
+            "🍏  ${this.javaClass.simpleName} #${this.hashCode()}  onViewCreated() " +
+                "FINISH took ${System.currentTimeMillis() - onCreateViewStartTime} ms"
+        )
     }
 
     override fun onResume() {
         super.onResume()
         totalInitTime = System.currentTimeMillis() - onCreateViewStartTime
-//        println(
-//            "🍎  ${this.javaClass.simpleName} #${this.hashCode()}  onResume() " +
-//                "TOTAL: ${System.currentTimeMillis() - onCreateViewStartTime} ms"
-//        )
+        println(
+            "🍎  ${this.javaClass.simpleName} #${this.hashCode()}  onResume() " +
+                "TOTAL: ${System.currentTimeMillis() - onCreateViewStartTime} ms"
+        )
     }
 
     override fun onDestroyView() {

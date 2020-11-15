@@ -16,6 +16,7 @@
         android:layout_height="140dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
+        android:background="?selectableItemBackground"
         android:layout_marginBottom="6dp"
         android:padding="2dp">
 
@@ -102,7 +103,8 @@
             android:layout_height="56dp"
             android:background="#00ffffff"
             android:padding="2dp"
-            android:src="@drawable/avd_heart_empty"
+            android:src="@drawable/asl_heart_break"
+            tools:src="@drawable/asl_heart_break"
             app:layout_constraintBottom_toBottomOf="@+id/tvPrice"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tvTitle" />

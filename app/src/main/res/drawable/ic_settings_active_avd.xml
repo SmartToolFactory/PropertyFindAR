@@ -1,0 +1,63 @@
+<animated-vector xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    tools:targetApi="lollipop">
+    <aapt:attr name="android:drawable">
+        <vector
+            android:name="vector"
+            android:width="24dp"
+            android:height="24dp"
+            android:viewportWidth="24"
+            android:viewportHeight="24">
+            <path
+                android:name="circle"
+                android:pathData="M 12 15 C 10.35 15 9 13.65 9 12 C 9 10.35 10.35 9 12 9 C 13.65 9 15 10.35 15 12 C 15 13.65 13.65 15 12 15 Z"
+                android:fillColor="#4a4a4a"
+                android:strokeWidth="1"
+                android:fillType="evenOdd"/>
+            <group
+                android:name="animate"
+                android:pivotX="12"
+                android:pivotY="12">
+                <path
+                    android:name="gear"
+                    android:pathData="M 19.641 12.98 C 19.682 12.66 19.713 12.34 19.713 12 C 19.713 11.66 19.682 11.34 19.641 11.02 L 21.81 9.37 C 22.005 9.22 22.057 8.95 21.933 8.73 L 19.877 5.27 C 19.785 5.11 19.61 5.02 19.425 5.02 C 19.363 5.02 19.301 5.03 19.25 5.05 L 16.69 6.05 C 16.156 5.65 15.58 5.32 14.953 5.07 L 14.562 2.42 C 14.531 2.18 14.315 2 14.058 2 L 9.946 2 C 9.689 2 9.473 2.18 9.442 2.42 L 9.052 5.07 C 8.425 5.32 7.849 5.66 7.314 6.05 L 4.754 5.05 C 4.693 5.03 4.631 5.02 4.569 5.02 C 4.395 5.02 4.22 5.11 4.127 5.27 L 2.071 8.73 C 1.938 8.95 1.999 9.22 2.195 9.37 L 4.364 11.02 C 4.323 11.34 4.292 11.67 4.292 12 C 4.292 12.33 4.323 12.66 4.364 12.98 L 2.195 14.63 C 1.999 14.78 1.948 15.05 2.071 15.27 L 4.127 18.73 C 4.22 18.89 4.395 18.98 4.58 18.98 C 4.641 18.98 4.703 18.97 4.754 18.95 L 7.314 17.95 C 7.849 18.35 8.425 18.68 9.052 18.93 L 9.442 21.58 C 9.473 21.82 9.689 22 9.946 22 L 14.058 22 C 14.315 22 14.531 21.82 14.562 21.58 L 14.953 18.93 C 15.58 18.68 16.156 18.34 16.69 17.95 L 19.25 18.95 C 19.312 18.97 19.373 18.98 19.435 18.98 C 19.61 18.98 19.785 18.89 19.877 18.73 L 21.933 15.27 C 22.057 15.05 22.005 14.78 21.81 14.63 L 19.641 12.98 Z M 18.025 11.215 C 18.07 11.549 18.081 11.774 18.081 12 C 18.081 12.226 18.059 12.462 18.025 12.785 L 17.871 13.999 L 18.854 14.752 L 20.048 15.655 L 19.274 16.956 L 17.871 16.407 L 16.721 15.956 L 15.727 16.687 C 15.251 17.031 14.798 17.289 14.345 17.472 L 13.174 17.934 L 12.997 19.149 L 12.776 20.6 L 11.229 20.6 L 11.019 19.149 L 10.842 17.934 L 9.67 17.472 C 9.195 17.278 8.753 17.031 8.311 16.709 L 7.305 15.956 L 6.134 16.418 L 4.73 16.966 L 3.957 15.666 L 5.15 14.763 L 6.134 14.01 L 5.979 12.796 C 5.946 12.462 5.924 12.215 5.924 12 C 5.924 11.785 5.946 11.538 5.979 11.215 L 6.134 10.001 L 5.15 9.248 L 3.957 8.345 L 4.73 7.044 L 6.134 7.593 L 7.283 8.044 L 8.278 7.313 C 8.753 6.969 9.206 6.711 9.659 6.528 L 10.831 6.066 L 11.008 4.851 L 11.229 3.4 L 12.765 3.4 L 12.975 4.851 L 13.152 6.066 L 14.323 6.528 C 14.798 6.722 15.24 6.969 15.682 7.292 L 16.688 8.044 L 17.86 7.582 L 19.263 7.034 L 20.037 8.334 L 18.854 9.248 L 17.871 10.001 L 18.025 11.215 Z"
+                    android:fillColor="#4a4a4a"
+                    android:strokeWidth="1"/>
+            </group>
+        </vector>
+    </aapt:attr>
+    <target android:name="animate">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:propertyName="rotation"
+                android:duration="800"
+                android:valueFrom="0"
+                android:valueTo="270"
+                android:valueType="floatType"
+                android:interpolator="@android:anim/accelerate_decelerate_interpolator"/>
+        </aapt:attr>
+    </target>
+    <target android:name="gear">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:propertyName="fillColor"
+                android:duration="800"
+                android:valueFrom="#4a4a4a"
+                android:valueTo="#490e6f"
+                android:valueType="colorType"
+                android:interpolator="@android:interpolator/fast_out_slow_in"/>
+        </aapt:attr>
+    </target>
+    <target android:name="circle">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:propertyName="fillColor"
+                android:duration="800"
+                android:valueFrom="#4a4a4a"
+                android:valueTo="#3db7e4"
+                android:valueType="colorType"
+                android:interpolator="@android:interpolator/fast_out_slow_in"/>
+        </aapt:attr>
+    </target>
+</animated-vector>

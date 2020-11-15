@@ -1,16 +1,13 @@
 package com.smarttoolfactory.home.adapter
 
-import android.graphics.drawable.AnimatedVectorDrawable
 import android.widget.ImageButton
 import androidx.annotation.LayoutRes
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 import com.smarttoolfactory.core.ui.recyclerview.adapter.SingleLayoutListAdapter
 import com.smarttoolfactory.core.ui.recyclerview.itemcallback.PropertyItemCallback
 import com.smarttoolfactory.domain.model.PropertyItem
 import com.smarttoolfactory.home.BR
-import com.smarttoolfactory.home.R
 import com.smarttoolfactory.home.databinding.ItemPropertyListBinding
 
 class PropertyListAdapter(
@@ -61,22 +58,26 @@ class PropertyListAdapter(
                         // Set AnimatedVectorDrawable for like button
                         (likeButton as? ImageButton)?.apply {
 
-                            val animatedVectorDrawable = if (isFavorite) {
-                                AppCompatResources.getDrawable(
-                                    context,
-                                    R.drawable.avd_heart_empty
-                                ) as? AnimatedVectorDrawable
-                            } else {
-                                AppCompatResources.getDrawable(
-                                    context,
-                                    R.drawable.avd_heart_favorite
-                                ) as? AnimatedVectorDrawable
-                            }
+                            val stateSet =
+                                intArrayOf(android.R.attr.state_checked * if (isFavorite) 1 else -1)
+                            setImageState(stateSet, true)
 
-                            animatedVectorDrawable?.apply {
-                                likeButton.setImageDrawable(this)
-                                start()
-                            }
+//                            val animatedVectorDrawable = if (isFavorite) {
+//                                AppCompatResources.getDrawable(
+//                                    context,
+//                                    R.drawable.avd_heart_empty
+//                                ) as? AnimatedVectorDrawable
+//                            } else {
+//                                AppCompatResources.getDrawable(
+//                                    context,
+//                                    R.drawable.avd_heart_favorite
+//                                ) as? AnimatedVectorDrawable
+//                            }
+//
+//                            animatedVectorDrawable?.apply {
+//                                likeButton.setImageDrawable(this)
+//                                start()
+//                            }
                         }
                     }
                 }

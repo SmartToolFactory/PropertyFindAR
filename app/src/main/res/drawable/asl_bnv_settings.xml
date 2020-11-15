@@ -4,14 +4,14 @@
     tools:targetApi="lollipop">
     <!-- provide a different drawable for each state-->
     <item android:id="@+id/state_on"
-        android:drawable="@drawable/avd_heart_favorite"
+        android:drawable="@drawable/ic_setting_active"
         android:state_checked="true"/>
     <item android:id="@+id/state_off"
-        android:drawable="@drawable/avd_heart_empty"/>
+        android:drawable="@drawable/ic_settings_inactive"/>
 
     <!-- specify transitions -->
     <transition
-        android:drawable="@drawable/avd_heart_favorite"
+        android:drawable="@drawable/ic_settings_active_avd"
         android:fromId="@id/state_off"
         android:toId="@id/state_on" />
 
