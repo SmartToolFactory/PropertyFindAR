@@ -72,9 +72,6 @@ class PropertyListFragment : DynamicNavigationFragment<FragmentPropertyListBindi
                 PropertyListViewBinder(
                     { propertyItem: PropertyItem, binding: ItemPropertyListBinding ->
 
-//                        binding.cardView.transitionName =
-//                            "${PropertyListFragment::class.java.simpleName}${propertyItem.id}"
-
                         val direction: NavDirections = PropertyListFragmentDirections
                             .actionPropertyListFragmentToNavGraphPropertyDetail(propertyItem)
 

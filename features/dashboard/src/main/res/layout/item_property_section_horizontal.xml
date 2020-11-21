@@ -47,7 +47,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             tools:text="See all" />
 
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
@@ -55,12 +54,12 @@
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
             app:items="@{propertyListModel.items}"
+            android:orientation="horizontal"
+            tools:listitem="@layout/item_property_horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvType" />
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

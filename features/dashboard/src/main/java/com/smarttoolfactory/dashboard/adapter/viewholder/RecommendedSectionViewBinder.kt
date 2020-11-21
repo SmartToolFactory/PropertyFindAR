@@ -30,8 +30,6 @@ class RecommendedSectionViewBinder(
             viewModel
         )
 
-        println("😂 RecommendedSectionViewBinder createViewHolder() $holder")
-
         holder.binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
@@ -136,9 +134,6 @@ class RecommendedSectionViewHolder(
                     SingleViewBinderAdapter(
                         RecommendedPropertyViewBinder(onItemClick) as ItemBinder
                     )
-
-//                val itemListAdapter =
-//                    PropertyListAdapter(R.layout.item_property_horizontal, onItemClick)
 
                 this.adapter = itemListAdapter
 

@@ -3,17 +3,24 @@ package com.smarttoolfactory.home.propertylist.rxjava
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.NavDirections
+import androidx.navigation.fragment.FragmentNavigatorExtras
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.smarttoolfactory.core.di.CoreModuleDependencies
 import com.smarttoolfactory.core.ui.fragment.DynamicNavigationFragment
+import com.smarttoolfactory.core.ui.recyclerview.adapter.ItemBinder
+import com.smarttoolfactory.core.ui.recyclerview.adapter.SingleViewBinderAdapter
 import com.smarttoolfactory.core.util.Event
 import com.smarttoolfactory.core.util.observe
 import com.smarttoolfactory.core.viewmodel.PropertyDetailNavigationVM
+import com.smarttoolfactory.domain.model.PropertyItem
 import com.smarttoolfactory.home.R
-import com.smarttoolfactory.home.adapter.PropertyListAdapter
+import com.smarttoolfactory.home.adapter.viewholder.PropertyListViewBinder
 import com.smarttoolfactory.home.databinding.FragmentPropertyListBinding
+import com.smarttoolfactory.home.databinding.ItemPropertyListBinding
 import com.smarttoolfactory.home.di.DaggerHomeComponent
+import com.smarttoolfactory.home.propertylist.flow.PropertyListFragmentDirections
 import com.smarttoolfactory.home.viewmodel.HomeToolbarVM
 import dagger.hilt.android.EntryPointAccessors
 import javax.inject.Inject
@@ -24,9 +31,6 @@ class PropertyListFragmentRxJava3 : DynamicNavigationFragment<FragmentPropertyLi
     lateinit var viewModel: PropertyListViewModelRxJava3
 
     private val propertyDetailNavigationVM by activityViewModels<PropertyDetailNavigationVM>()
-
-    lateinit var itemListAdapter: PropertyListAdapter
-
     /**
      * ViewModel for setting sort filter on top menu and property list fragments
      */
@@ -51,18 +55,26 @@ class PropertyListFragmentRxJava3 : DynamicNavigationFragment<FragmentPropertyLi
             this.layoutManager =
                 LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
 
-            // Set RecyclerViewAdapter
-            itemListAdapter = PropertyListAdapter(
-                R.layout.item_property_list,
-                viewModel::onClick,
-                viewModel::onLikeButtonClick
+            val propertyListViewBinder =
+                PropertyListViewBinder(
+                    { propertyItem: PropertyItem, binding: ItemPropertyListBinding ->
 
-            )
+                        val direction: NavDirections = PropertyListFragmentDirections
+                            .actionPropertyListFragmentToNavGraphPropertyDetail(propertyItem)
 
-            itemListAdapter.stateRestorationPolicy =
-                RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+                        val extras = FragmentNavigatorExtras(
+                            binding.cardView to binding.cardView.transitionName
+                        )
 
-            this.adapter = itemListAdapter
+                        findNavController().navigate(direction, extras)
+                    },
+                    viewModel::onLikeButtonClick
+                )
+
+            val singleViewBinderAdapter =
+                SingleViewBinderAdapter(propertyListViewBinder as ItemBinder)
+
+            this.adapter = singleViewBinderAdapter
         }
 
         val swipeRefreshLayout = dataBinding.swipeRefreshLayout

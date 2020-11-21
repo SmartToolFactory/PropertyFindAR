@@ -10,7 +10,6 @@
             type="com.smarttoolfactory.domain.model.PropertyItem" />
     </data>
 
-
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardView"
         android:layout_width="match_parent"

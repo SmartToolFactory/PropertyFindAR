@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@id/nav_graph_home"
     app:moduleName="home"
-    app:startDestination="@id/propertyListFragment">
+    app:startDestination="@id/homeFragment">
 
 
     <!-- TODO For Testing performance without ViewPager2 -->
