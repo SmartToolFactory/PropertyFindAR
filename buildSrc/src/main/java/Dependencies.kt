@@ -154,7 +154,7 @@ object Deps {
 
     // Chucker
     const val CHUCKER_DEBUG = "com.github.chuckerteam.chucker:library:${Version.CHUCKER_VERSION}"
-    const val CHUCKER_RELEASE =
+    const val CHUCKER_RELEASE_NO_OP =
         "com.github.chuckerteam.chucker:library-no-op:${Version.CHUCKER_VERSION}"
 
     // Leak Canary

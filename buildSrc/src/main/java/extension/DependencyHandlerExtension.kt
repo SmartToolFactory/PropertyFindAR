@@ -77,6 +77,7 @@ fun DependencyHandler.addAppModuleDependencies() {
     // Gson
     implementation(Deps.GSON)
     implementation(Deps.CHUCKER_DEBUG)
+    implementation(Deps.CHUCKER_RELEASE_NO_OP)
 
     // Glide
     implementation(Deps.GLIDE)
