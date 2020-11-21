@@ -16,7 +16,6 @@ import com.google.android.material.transition.MaterialElevationScale
 import com.smarttoolfactory.core.ui.fragment.DynamicNavigationFragment
 import com.smarttoolfactory.core.ui.recyclerview.adapter.ItemBinder
 import com.smarttoolfactory.core.ui.recyclerview.adapter.SingleViewBinderAdapter
-import com.smarttoolfactory.dashboard.adapter.model.PropertyListModel
 import com.smarttoolfactory.dashboard.adapter.viewholder.PropertySeeAllListViewBinder
 import com.smarttoolfactory.dashboard.databinding.FragmentDashboardSeeAllBinding
 import com.smarttoolfactory.dashboard.databinding.ItemPropertySeeAllBinding
@@ -36,7 +35,7 @@ class DashboardSeeAllFragment : DynamicNavigationFragment<FragmentDashboardSeeAl
 
             val propertyListViewBinder =
                 PropertySeeAllListViewBinder { propertyItem: PropertyItem,
-                    binding: ItemPropertySeeAllBinding ->
+                                               binding: ItemPropertySeeAllBinding ->
 
                     val direction: NavDirections = DashboardSeeAllFragmentDirections
                         .actionDashboardSeeAllFragmentToNavGraphPropertyDetail(propertyItem)
@@ -58,8 +57,9 @@ class DashboardSeeAllFragment : DynamicNavigationFragment<FragmentDashboardSeeAl
             addItemDecoration(verticalDivider)
 
             // Set data
+            val args = requireArguments()
             val propertyItemListModel =
-                arguments?.get("propertyListModel") as PropertyListModel
+                DashboardSeeAllFragmentArgs.fromBundle(args).propertyListModelArgs
 
             itemListAdapter.submitList(propertyItemListModel.items)
         }
@@ -99,7 +99,7 @@ class DashboardSeeAllFragment : DynamicNavigationFragment<FragmentDashboardSeeAl
         returnTransition =
             Slide(Gravity.BOTTOM)
                 .apply {
-                    duration = 500
+                    duration = 300
                 }
     }
 }

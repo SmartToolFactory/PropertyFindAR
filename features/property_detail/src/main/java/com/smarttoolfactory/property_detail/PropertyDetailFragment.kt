@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.view.doOnNextLayout
 import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.activityViewModels
@@ -58,13 +57,7 @@ class PropertyDetailFragment : DynamicNavigationFragment<FragmentPropertyDetailB
 
         // Get Post from navigation component arguments
         dataBinding.item = propertyItem
-        dataBinding.cardView.transitionName = propertyItem.id.toString()
-
-        Toast.makeText(
-            requireContext(),
-            "Detail transition id: ${dataBinding.cardView.transitionName}",
-            Toast.LENGTH_SHORT
-        ).show()
+        dataBinding.cardView.transitionName = propertyItem.transitionName
 
         val requestOptions = RequestOptions()
         requestOptions.placeholder(R.drawable.placeholder)

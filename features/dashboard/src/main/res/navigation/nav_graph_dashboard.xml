@@ -33,7 +33,7 @@
             app:destination="@id/nav_graph_property_detail" />
 
         <argument
-            android:name="propertyListModel"
+            android:name="propertyListModelArgs"
             app:argType="com.smarttoolfactory.dashboard.adapter.model.PropertyListModel" />
 
     </fragment>

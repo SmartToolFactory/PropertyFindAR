@@ -66,7 +66,7 @@ class PropertyListItemViewHolder(
         binding.executeAfter {
 
             this.item = item
-            binding.cardView.transitionName = item.id.toString()
+            binding.cardView.transitionName = item.transitionName
 
             root.setOnClickListener {
                 onItemClicked?.let { onItemClick ->

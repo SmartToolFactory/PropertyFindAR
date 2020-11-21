@@ -9,6 +9,8 @@ import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.observe
+import androidx.navigation.NavDirections
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -52,7 +54,7 @@ class DashboardFragment :
     lateinit var propertyPool: RecyclerView.RecycledViewPool
 
     private val viewModel: DashboardViewModel
-    by viewModels { withFactory(dashboardViewModelFactory) }
+            by viewModels { withFactory(dashboardViewModelFactory) }
 
     override fun getLayoutRes(): Int = R.layout.fragment_dashboard
 
@@ -84,19 +86,13 @@ class DashboardFragment :
 
         exitTransition =
             MaterialFadeThrough()
-//            MaterialSharedAxis(MaterialSharedAxis.X,true)
         MaterialElevationScale(false)
-            //            Slide(Gravity.TOP)
-
             .apply {
                 duration = 500
             }
 
         reenterTransition =
-//            MaterialFadeThrough()
-            MaterialSharedAxis(MaterialSharedAxis.X, true)
-//            MaterialElevationScale(true)
-//            Slide(Gravity.BOTTOM)
+            MaterialSharedAxis(MaterialSharedAxis.Z, true)
                 .apply {
                     duration = 500
                 }
@@ -308,10 +304,17 @@ class DashboardFragment :
         ) {
             it.getContentIfNotHandled()?.let { propertyItem ->
                 val bundle = bundleOf("property" to propertyItem)
-                findNavController().navigate(
-                    R.id.action_dashboardFragment_to_nav_graph_property_detail,
-                    bundle
+
+                val direction: NavDirections =
+                    DashboardFragmentDirections
+                        .actionDashboardFragmentToNavGraphPropertyDetail(propertyItem)
+
+                val extras = FragmentNavigatorExtras(
+//                    binding.cardView to binding.cardView.transitionName
                 )
+
+                findNavController().navigate(direction, extras)
+
             }
         }
 
@@ -320,12 +323,14 @@ class DashboardFragment :
         ) {
             it.getContentIfNotHandled()?.let { propertyListModel ->
 
-                val bundle = bundleOf("propertyListModel" to propertyListModel)
+                val direction: NavDirections = DashboardFragmentDirections
+                    .actionDashboardFragmentToDashboardSeeAllFragment(propertyListModel)
 
-                findNavController().navigate(
-                    R.id.action_dashboardFragment_to_dashboardSeeAllFragment,
-                    bundle
+                val extras = FragmentNavigatorExtras(
+//                    binding.cardView to binding.cardView.transitionName
                 )
+
+                findNavController().navigate(direction, extras)
             }
         }
     }
