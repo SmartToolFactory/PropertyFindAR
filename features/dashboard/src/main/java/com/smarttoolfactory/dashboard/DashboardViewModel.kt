@@ -153,7 +153,7 @@ class DashboardViewModel @ViewModelInject constructor(
         }
             .onStart {
                 combinedData.value = ViewState(status = Status.LOADING)
-//                delay(500)
+//                delay(550)
             }
             .onEach { combinedData.value = ViewState(status = Status.SUCCESS, data = it) }
             .launchIn(coroutineScope)

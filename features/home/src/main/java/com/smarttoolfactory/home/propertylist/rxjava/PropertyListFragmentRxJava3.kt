@@ -139,6 +139,7 @@ class PropertyListFragmentRxJava3 : DynamicNavigationFragment<FragmentPropertyLi
 
     override fun onDestroyView() {
         dataBinding.swipeRefreshLayout.setOnRefreshListener(null)
+        dataBinding.recyclerView.adapter = null
         super.onDestroyView()
     }
 }

@@ -59,5 +59,6 @@ data class PropertyItem(
     val reference: String,
 
     var viewCount: Int = 0,
-    var isFavorite: Boolean = false
+    var isFavorite: Boolean = false,
+    var transitionName: String = id.toString()
 ) : Parcelable

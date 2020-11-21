@@ -48,6 +48,7 @@ class PropertyListAdapter(
         if (binding is ItemPropertyListBinding) {
 
             binding.ivLike.setOnClickListener { likeButton ->
+
                 onLikeButtonClicked?.let { onLikeButtonClick ->
 
                     getItem(viewHolder.bindingAdapterPosition).apply {
@@ -61,23 +62,6 @@ class PropertyListAdapter(
                             val stateSet =
                                 intArrayOf(android.R.attr.state_checked * if (isFavorite) 1 else -1)
                             setImageState(stateSet, true)
-
-//                            val animatedVectorDrawable = if (isFavorite) {
-//                                AppCompatResources.getDrawable(
-//                                    context,
-//                                    R.drawable.avd_heart_empty
-//                                ) as? AnimatedVectorDrawable
-//                            } else {
-//                                AppCompatResources.getDrawable(
-//                                    context,
-//                                    R.drawable.avd_heart_favorite
-//                                ) as? AnimatedVectorDrawable
-//                            }
-//
-//                            animatedVectorDrawable?.apply {
-//                                likeButton.setImageDrawable(this)
-//                                start()
-//                            }
                         }
                     }
                 }

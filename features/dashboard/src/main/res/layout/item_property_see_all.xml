@@ -11,175 +11,181 @@
     </data>
 
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardView"
         android:layout_width="match_parent"
-        android:layout_height="140dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="6dp"
-        android:padding="2dp">
+        android:layout_height="wrap_content">
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cvThumbnail"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginTop="2dp"
-            android:layout_marginBottom="2dp"
-            app:cardCornerRadius="0dp"
-            app:cardElevation="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent=".4">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="140dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="6dp"
+            android:padding="2dp">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cvThumbnail"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                app:cardCornerRadius="0dp"
+                app:cardElevation="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_percent=".4">
+
+                <ImageView
+                    imageSrc="@{item.thumbnail}"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/placeholder"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:layout_constraintStart_toStartOf="@+id/cvThumbnail"
+                app:layout_constraintTop_toTopOf="@+id/cvThumbnail">
+
+                <TextView
+                    visibilityBasedOn="@{item.verified}"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="-4dp"
+                    android:background="#66BB6A"
+                    android:paddingStart="8dp"
+                    android:paddingTop="1dp"
+                    android:paddingEnd="8dp"
+                    android:paddingBottom="1dp"
+                    android:text="VERIFIED"
+                    android:textColor="@color/white"
+                    android:textSize="10sp"
+                    android:translationZ="5dp" />
+            </androidx.cardview.widget.CardView>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tvType"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:maxLines="1"
+                android:text="@{item.type}"
+                android:textColor="#aaa"
+                android:textSize="16sp"
+                app:layout_constraintStart_toEndOf="@+id/cvThumbnail"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Whole Building" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tvPrice"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:maxLines="1"
+                android:text="@{item.price + ` `+ item.currency}"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/tvType"
+                app:layout_constraintTop_toBottomOf="@+id/tvType"
+                tools:text="249,000 AED" />
+
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tvLocation"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:maxLines="2"
+                android:text="@{item.location}"
+                android:textColor="#000"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/tvType"
+                app:layout_constraintTop_toBottomOf="@+id/tvPrice"
+                tools:text="Casa, Arabian Ranches 2, Dubai" />
 
             <ImageView
-                imageSrc="@{item.thumbnail}"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="fitXY"
-                android:src="@drawable/placeholder"
-                app:layout_constraintBottom_toBottomOf="parent" />
+                android:id="@+id/ivBeds"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginTop="8dp"
+                android:src="@drawable/ic_baseline_hotel_24"
+                app:layout_constraintStart_toStartOf="@+id/tvType"
+                app:layout_constraintTop_toBottomOf="@+id/tvLocation"
+                app:tint="@color/black" />
 
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            app:layout_constraintStart_toStartOf="@+id/cvThumbnail"
-            app:layout_constraintTop_toTopOf="@+id/cvThumbnail">
-
-            <TextView
-                visibilityBasedOn="@{item.verified}"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="-4dp"
-                android:background="#66BB6A"
-                android:paddingStart="8dp"
-                android:paddingTop="1dp"
-                android:paddingEnd="8dp"
-                android:paddingBottom="1dp"
-                android:text="VERIFIED"
-                android:textColor="@color/white"
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tvBeds"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@{item.bedrooms}"
+                android:textColor="@color/black"
                 android:textSize="10sp"
-                android:translationZ="5dp" />
-        </androidx.cardview.widget.CardView>
-
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tvType"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:maxLines="1"
-            android:text="@{item.type}"
-            android:textColor="#aaa"
-            android:textSize="16sp"
-            app:layout_constraintStart_toEndOf="@+id/cvThumbnail"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="Whole Building" />
-
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tvPrice"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:maxLines="1"
-            android:text="@{item.price + ` `+ item.currency}"
-            android:textColor="@color/black"
-            android:textSize="18sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/tvType"
-            app:layout_constraintTop_toBottomOf="@+id/tvType"
-            tools:text="249,000 AED" />
+                app:layout_constraintBottom_toBottomOf="@id/ivBeds"
+                app:layout_constraintStart_toEndOf="@+id/ivBeds"
+                app:layout_constraintTop_toTopOf="@+id/ivBeds"
+                tools:text="1" />
 
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tvLocation"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="3dp"
-            android:maxLines="2"
-            android:text="@{item.location}"
-            android:textColor="#000"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/tvType"
-            app:layout_constraintTop_toBottomOf="@+id/tvPrice"
-            tools:text="Casa, Arabian Ranches 2, Dubai" />
+            <ImageView
+                android:id="@+id/ivBathrooms"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="32dp"
+                android:src="@drawable/ic_baseline_bathtub_24"
+                app:layout_constraintStart_toEndOf="@id/tvBeds"
+                app:layout_constraintTop_toBottomOf="@+id/tvLocation"
+                app:layout_constraintTop_toTopOf="@+id/ivBeds"
+                app:tint="@color/black" />
 
-        <ImageView
-            android:id="@+id/ivBeds"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginTop="8dp"
-            android:src="@drawable/ic_baseline_hotel_24"
-            app:layout_constraintStart_toStartOf="@+id/tvType"
-            app:layout_constraintTop_toBottomOf="@+id/tvLocation"
-            app:tint="@color/black" />
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tvBathrooms"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@{item.bathrooms}"
+                android:textColor="@color/black"
+                android:textSize="10sp"
+                app:layout_constraintBottom_toBottomOf="@id/ivBathrooms"
+                app:layout_constraintStart_toEndOf="@+id/ivBathrooms"
+                app:layout_constraintTop_toTopOf="@+id/ivBathrooms"
+                tools:text="1" />
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tvBeds"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:text="@{item.bedrooms}"
-            android:textColor="@color/black"
-            android:textSize="10sp"
-            app:layout_constraintBottom_toBottomOf="@id/ivBeds"
-            app:layout_constraintStart_toEndOf="@+id/ivBeds"
-            app:layout_constraintTop_toTopOf="@+id/ivBeds"
-            tools:text="1" />
+            <ImageView
+                android:id="@+id/ivArea"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="32dp"
+                android:src="@drawable/ic_baseline_architecture_24"
+                app:layout_constraintStart_toEndOf="@id/tvBathrooms"
+                app:layout_constraintTop_toBottomOf="@+id/tvLocation"
+                app:layout_constraintTop_toTopOf="@+id/ivBeds"
+                app:tint="@color/black" />
 
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tvArea"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@{item.area + ` sqft`}"
+                android:textColor="@color/black"
+                android:textSize="10sp"
+                app:layout_constraintBottom_toBottomOf="@id/ivArea"
+                app:layout_constraintStart_toEndOf="@+id/ivArea"
+                app:layout_constraintTop_toTopOf="@+id/ivArea"
+                tools:text="1" />
 
-        <ImageView
-            android:id="@+id/ivBathrooms"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginStart="32dp"
-            android:src="@drawable/ic_baseline_bathtub_24"
-            app:layout_constraintStart_toEndOf="@id/tvBeds"
-            app:layout_constraintTop_toBottomOf="@+id/tvLocation"
-            app:layout_constraintTop_toTopOf="@+id/ivBeds"
-            app:tint="@color/black" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tvBathrooms"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:text="@{item.bathrooms}"
-            android:textColor="@color/black"
-            android:textSize="10sp"
-            app:layout_constraintBottom_toBottomOf="@id/ivBathrooms"
-            app:layout_constraintStart_toEndOf="@+id/ivBathrooms"
-            app:layout_constraintTop_toTopOf="@+id/ivBathrooms"
-            tools:text="1" />
-
-        <ImageView
-            android:id="@+id/ivArea"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginStart="32dp"
-            android:src="@drawable/ic_baseline_architecture_24"
-            app:layout_constraintStart_toEndOf="@id/tvBathrooms"
-            app:layout_constraintTop_toBottomOf="@+id/tvLocation"
-            app:layout_constraintTop_toTopOf="@+id/ivBeds"
-            app:tint="@color/black" />
-
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tvArea"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:text="@{item.area + ` sqft`}"
-            android:textColor="@color/black"
-            android:textSize="10sp"
-            app:layout_constraintBottom_toBottomOf="@id/ivArea"
-            app:layout_constraintStart_toEndOf="@+id/ivArea"
-            app:layout_constraintTop_toTopOf="@+id/ivArea"
-            tools:text="1" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
+    </com.google.android.material.card.MaterialCardView>
 
 </layout>

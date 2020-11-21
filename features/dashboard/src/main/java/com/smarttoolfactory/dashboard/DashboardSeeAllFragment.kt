@@ -1,15 +1,25 @@
 package com.smarttoolfactory.dashboard
 
 import android.os.Bundle
+import android.view.Gravity
 import android.view.View
-import androidx.core.os.bundleOf
+import android.view.ViewGroup
+import androidx.core.view.doOnNextLayout
+import androidx.core.view.doOnPreDraw
+import androidx.navigation.NavDirections
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.transition.Slide
+import com.google.android.material.transition.MaterialElevationScale
 import com.smarttoolfactory.core.ui.fragment.DynamicNavigationFragment
-import com.smarttoolfactory.dashboard.adapter.PropertyListAdapter
+import com.smarttoolfactory.core.ui.recyclerview.adapter.ItemBinder
+import com.smarttoolfactory.core.ui.recyclerview.adapter.SingleViewBinderAdapter
 import com.smarttoolfactory.dashboard.adapter.model.PropertyListModel
+import com.smarttoolfactory.dashboard.adapter.viewholder.PropertySeeAllListViewBinder
 import com.smarttoolfactory.dashboard.databinding.FragmentDashboardSeeAllBinding
+import com.smarttoolfactory.dashboard.databinding.ItemPropertySeeAllBinding
 import com.smarttoolfactory.domain.model.PropertyItem
 
 class DashboardSeeAllFragment : DynamicNavigationFragment<FragmentDashboardSeeAllBinding>() {
@@ -24,19 +34,22 @@ class DashboardSeeAllFragment : DynamicNavigationFragment<FragmentDashboardSeeAl
             this.layoutManager =
                 LinearLayoutManager(this.context, LinearLayoutManager.VERTICAL, false)
 
-            val onItemClick: ((PropertyItem) -> Unit) = { propertyItem ->
+            val propertyListViewBinder =
+                PropertySeeAllListViewBinder { propertyItem: PropertyItem,
+                    binding: ItemPropertySeeAllBinding ->
 
-                val bundle = bundleOf("property" to propertyItem)
+                    val direction: NavDirections = DashboardSeeAllFragmentDirections
+                        .actionDashboardSeeAllFragmentToNavGraphPropertyDetail(propertyItem)
 
-                navigateWithInstallMonitor(
-                    findNavController(),
-                    R.id.action_dashboardSeeAllFragment_to_nav_graph_property_detail,
-                    bundle
-                )
-            }
+                    val extras = FragmentNavigatorExtras(
+                        binding.cardView to binding.cardView.transitionName
+                    )
 
-            // Set RecyclerViewAdapter
-            val itemListAdapter = PropertyListAdapter(R.layout.item_property_see_all, onItemClick)
+                    findNavController().navigate(direction, extras)
+                }
+
+            val itemListAdapter =
+                SingleViewBinderAdapter(propertyListViewBinder as ItemBinder)
 
             this.adapter = itemListAdapter
 
@@ -50,5 +63,43 @@ class DashboardSeeAllFragment : DynamicNavigationFragment<FragmentDashboardSeeAl
 
             itemListAdapter.submitList(propertyItemListModel.items)
         }
+
+        // Set up transition for exiting and re-entering this fragment
+        prepareTransitions()
+        postponeEnterTransition()
+
+        view.doOnNextLayout {
+            (it.parent as? ViewGroup)?.doOnPreDraw {
+                startPostponedEnterTransition()
+            }
+        }
+    }
+
+    private fun prepareTransitions() {
+
+        // exitTransition and reEnterTransition are for navigating to/from PropertyDetailFragment
+        exitTransition = MaterialElevationScale(false)
+            .apply {
+                duration = 500
+            }
+
+        reenterTransition =
+            MaterialElevationScale(true)
+                .apply {
+                    duration = 500
+                }
+
+        // enterTransition and returnTransition are for navigating from/to DashboardFragment
+        enterTransition =
+            MaterialElevationScale(true)
+                .apply {
+                    duration = 500
+                }
+
+        returnTransition =
+            Slide(Gravity.BOTTOM)
+                .apply {
+                    duration = 500
+                }
     }
 }

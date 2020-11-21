@@ -2,18 +2,32 @@ package com.smarttoolfactory.home.propertylist.flow
 
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.app.SharedElementCallback
 import androidx.core.os.bundleOf
+import androidx.core.view.doOnLayout
+import androidx.core.view.doOnNextLayout
+import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.NavDirections
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.transition.Transition
+import androidx.transition.TransitionListenerAdapter
+import com.google.android.material.transition.MaterialElevationScale
 import com.smarttoolfactory.core.di.CoreModuleDependencies
 import com.smarttoolfactory.core.ui.fragment.DynamicNavigationFragment
+import com.smarttoolfactory.core.ui.recyclerview.adapter.ItemBinder
+import com.smarttoolfactory.core.ui.recyclerview.adapter.SingleViewBinderAdapter
 import com.smarttoolfactory.core.util.observe
 import com.smarttoolfactory.core.viewmodel.PropertyDetailNavigationVM
+import com.smarttoolfactory.domain.model.PropertyItem
 import com.smarttoolfactory.home.R
-import com.smarttoolfactory.home.adapter.PropertyListAdapter
+import com.smarttoolfactory.home.adapter.viewholder.PropertyListViewBinder
 import com.smarttoolfactory.home.databinding.FragmentPropertyListBinding
+import com.smarttoolfactory.home.databinding.ItemPropertyListBinding
 import com.smarttoolfactory.home.di.DaggerHomeComponent
 import com.smarttoolfactory.home.viewmodel.HomeToolbarVM
 import dagger.hilt.android.EntryPointAccessors
@@ -35,10 +49,12 @@ class PropertyListFragment : DynamicNavigationFragment<FragmentPropertyListBindi
 
     override fun onCreate(savedInstanceState: Bundle?) {
         initCoreDependentInjection()
+
         super.onCreate(savedInstanceState)
     }
 
     override fun bindViews(view: View, savedInstanceState: Bundle?) {
+
         dataBinding.viewModel = viewModel
 
         dataBinding.contentLoadingProgressBar.show()
@@ -52,18 +68,29 @@ class PropertyListFragment : DynamicNavigationFragment<FragmentPropertyListBindi
             this.layoutManager =
                 LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
 
-            // Set RecyclerViewAdapter
-            val itemListAdapter = PropertyListAdapter(
-                R.layout.item_property_list,
-                viewModel::onClick,
-                viewModel::onLikeButtonClick
+            val propertyListViewBinder =
+                PropertyListViewBinder(
+                    { propertyItem: PropertyItem, binding: ItemPropertyListBinding ->
 
-            )
+//                        binding.cardView.transitionName =
+//                            "${PropertyListFragment::class.java.simpleName}${propertyItem.id}"
 
-            itemListAdapter.stateRestorationPolicy =
-                RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+                        val direction: NavDirections = PropertyListFragmentDirections
+                            .actionPropertyListFragmentToNavGraphPropertyDetail(propertyItem)
 
-            this.adapter = itemListAdapter
+                        val extras = FragmentNavigatorExtras(
+                            binding.cardView to binding.cardView.transitionName
+                        )
+
+                        findNavController().navigate(direction, extras)
+                    },
+                    viewModel::onLikeButtonClick
+                )
+
+            val singleViewBinderAdapter =
+                SingleViewBinderAdapter(propertyListViewBinder as ItemBinder)
+
+            this.adapter = singleViewBinderAdapter
         }
 
         val swipeRefreshLayout = dataBinding.swipeRefreshLayout
@@ -73,9 +100,90 @@ class PropertyListFragment : DynamicNavigationFragment<FragmentPropertyListBindi
             viewModel.refreshPropertyList()
         }
 
+        viewModel.propertyListViewState.observe(
+            viewLifecycleOwner,
+            {
+                println("LIVEDATA SUBMITTED status: ${it.status}")
+            }
+        )
+
         subscribeViewModelSortChange()
 
         subscribeGoToDetailScreen()
+
+        // Set up transition for exiting and re-entering this fragment
+        prepareTransitions()
+        postponeEnterTransition()
+
+        view.doOnLayout {
+            println("🔥 onLayout")
+        }
+        view.doOnNextLayout {
+
+            (it.parent as? ViewGroup)?.doOnPreDraw {
+                startPostponedEnterTransition()
+                println("💗 doOnPreDraw()")
+//                dataBinding.swipeRefreshLayout.visibility = View.INVISIBLE
+//                TransitionManager.beginDelayedTransition(dataBinding.swipeRefreshLayout, MaterialElevationScale(true)
+//                    .apply { duration = 1300 })
+//                dataBinding.swipeRefreshLayout.visibility = View.VISIBLE
+            }
+        }
+
+        dataBinding.recyclerView.doOnPreDraw {
+            println("RV onPreDraw")
+        }
+    }
+
+    private fun prepareTransitions() {
+
+        setExitSharedElementCallback(object : SharedElementCallback() {
+
+            override fun onMapSharedElements(
+                names: MutableList<String>?,
+                sharedElements: MutableMap<String, View>?
+            ) {
+                super.onMapSharedElements(names, sharedElements)
+                Toast.makeText(
+                    requireContext(),
+                    "onMapSharedElements " +
+                        "names: $names",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        })
+
+        exitTransition = MaterialElevationScale(false)
+            .apply {
+                duration = 300
+            }
+
+        reenterTransition =
+
+            MaterialElevationScale(true)
+//            Slide(Gravity.BOTTOM)
+                .apply {
+                    duration = 300
+                }
+                .addListener(object : TransitionListenerAdapter() {
+
+                    override fun onTransitionStart(transition: Transition) {
+                        super.onTransitionStart(transition)
+                        Toast.makeText(
+                            requireContext(),
+                            "Transition start", Toast.LENGTH_SHORT
+                        ).show()
+                    }
+
+                    override fun onTransitionEnd(transition: Transition) {
+                        super.onTransitionEnd(transition)
+                        Toast.makeText(
+                            requireContext(),
+                            "Transition End: $transition",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                })
     }
 
     /**
@@ -141,6 +249,7 @@ class PropertyListFragment : DynamicNavigationFragment<FragmentPropertyListBindi
 
     override fun onDestroyView() {
         dataBinding.swipeRefreshLayout.setOnRefreshListener(null)
+        dataBinding.recyclerView.adapter = null
         super.onDestroyView()
     }
 }

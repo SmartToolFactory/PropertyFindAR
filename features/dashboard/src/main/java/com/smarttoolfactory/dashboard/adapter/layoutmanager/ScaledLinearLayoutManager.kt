@@ -13,10 +13,9 @@ class ScaledLinearLayoutManager constructor(
     context: Context?,
     @RecyclerView.Orientation orientation: Int = RecyclerView.HORIZONTAL,
     reverseLayout: Boolean = false,
-    private val totalItems: Int = 1
+    private val totalItems: Int = 1,
+    private val partialVisibilityRatio: Float = 0.6f
 ) : LinearLayoutManager(context, orientation, reverseLayout) {
-
-    private val partialVisibilityRatio = 0.6f
 
     private val horizontalSpace get() = width - paddingStart - paddingEnd
 

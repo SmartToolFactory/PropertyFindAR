@@ -2,7 +2,10 @@ package com.smarttoolfactory.dashboard
 
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.core.view.doOnNextLayout
+import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.observe
@@ -10,6 +13,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.transition.MaterialElevationScale
+import com.google.android.material.transition.MaterialFadeThrough
+import com.google.android.material.transition.MaterialSharedAxis
 import com.smarttoolfactory.core.di.CoreModuleDependencies
 import com.smarttoolfactory.core.di.qualifier.RecycledViewPool
 import com.smarttoolfactory.core.ui.fragment.DynamicNavigationFragment
@@ -27,6 +33,7 @@ import com.smarttoolfactory.dashboard.databinding.FragmentDashboardBinding
 import com.smarttoolfactory.dashboard.di.DaggerDashboardComponent
 import com.smarttoolfactory.dashboard.di.withFactory
 import dagger.hilt.android.EntryPointAccessors
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @Suppress("UNCHECKED_CAST")
@@ -71,6 +78,34 @@ class DashboardFragment :
         initCoreDependentInjection()
         super.onCreate(savedInstanceState)
         createAdapters(savedInstanceState)
+    }
+
+    private fun prepareTransitions() {
+
+        exitTransition =
+            MaterialFadeThrough()
+//            MaterialSharedAxis(MaterialSharedAxis.X,true)
+        MaterialElevationScale(false)
+            //            Slide(Gravity.TOP)
+
+            .apply {
+                duration = 500
+            }
+
+        reenterTransition =
+//            MaterialFadeThrough()
+            MaterialSharedAxis(MaterialSharedAxis.X, true)
+//            MaterialElevationScale(true)
+//            Slide(Gravity.BOTTOM)
+                .apply {
+                    duration = 500
+                }
+
+        enterTransition =
+            MaterialFadeThrough()
+                .apply {
+                    duration = 500
+                }
     }
 
     /**
@@ -148,9 +183,11 @@ class DashboardFragment :
 
     override fun bindViews(view: View, savedInstanceState: Bundle?) {
 
-        viewModel.getDashboardDataCombined()
-
-//        createAdapters(savedInstanceState)
+//        val time = measureTimeMillis {
+//            createAdapters(savedInstanceState)
+//        }
+//
+//        Toast.makeText(requireContext(), "Dashboard createAdapter() time: $time", Toast.LENGTH_SHORT).show()
 
         // Check if RecyclerView has reached the bottom
         dataBinding.recyclerView.addOnScrollListener(scrollListener)
@@ -193,6 +230,12 @@ class DashboardFragment :
                 }
             }
         )
+
+        viewModel.getDashboardDataCombined()
+
+        // Set up transition for exiting and re-entering this fragment
+        prepareTransitions()
+        postponeEnterTransition(600, TimeUnit.MILLISECONDS)
     }
 
     private fun <T> subscribeAdapterToData(
@@ -206,6 +249,11 @@ class DashboardFragment :
 
                 if (viewState.status == Status.SUCCESS && !viewState.data.isNullOrEmpty()) {
                     adapter.submitList(viewState.data)
+                    dataBinding.recyclerView.doOnNextLayout {
+                        (it.parent as? ViewGroup)?.doOnPreDraw {
+                            startPostponedEnterTransition()
+                        }
+                    }
                 }
             }
         )

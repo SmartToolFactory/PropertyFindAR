@@ -178,6 +178,7 @@ class PagedPropertyListFragment :
 
     override fun onDestroyView() {
         dataBinding.swipeRefreshLayout.setOnRefreshListener(null)
+        dataBinding.recyclerView.adapter = null
         super.onDestroyView()
     }
 }
