@@ -91,7 +91,6 @@ class PagedPropertyListFragment :
             this.addOnScrollListener(endlessScrollListener)
         }
 
-
         val swipeRefreshLayout = dataBinding.swipeRefreshLayout
 
         swipeRefreshLayout.setOnRefreshListener {
