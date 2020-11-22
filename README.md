@@ -37,7 +37,7 @@ Unit tests are written with JUnit4, JUnit5, MockK, Truth, MockWebServer. Data(in
 * Dashboard module contains list with different type of layouts using **ViewBinder** classes, and Recommendations based on users history and **ConcatAdapter** to
 merge different type of Adapters.
 
-<img src="/./screenshots/property.gif" align="right" width="32%"/>
+<img src="/./screenshots/property_overview.gif" align="right" width="32%"/>
 
 ## Built With 🛠
 
