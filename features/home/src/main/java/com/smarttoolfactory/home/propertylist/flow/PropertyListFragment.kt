@@ -260,21 +260,21 @@ class PropertyListFragment : DynamicNavigationFragment<FragmentPropertyListBindi
 //                     */
 //
 //                    // Alternative 1 getting grand grand parent fragment of this fragment
-////                    try {
-////                        val homeFragment = parentFragment?.parentFragment?.parentFragment
-////
-////                        (homeFragment as? HomeFragment)?.findNavController()?.navigate(
-////                            R.id.action_home_dest_to_propertyDetailFragment,
-////                            bundle
-////                        )
-////
-////                    } catch (e: Exception) {
-////                        findNavController()
-////                            .navigate(
-////                                R.id.action_propertyListFragment_to_nav_graph_property_detail,
-////                                bundle
-////                            )
-////                    }
+// //                    try {
+// //                        val homeFragment = parentFragment?.parentFragment?.parentFragment
+// //
+// //                        (homeFragment as? HomeFragment)?.findNavController()?.navigate(
+// //                            R.id.action_home_dest_to_propertyDetailFragment,
+// //                            bundle
+// //                        )
+// //
+// //                    } catch (e: Exception) {
+// //                        findNavController()
+// //                            .navigate(
+// //                                R.id.action_propertyListFragment_to_nav_graph_property_detail,
+// //                                bundle
+// //                            )
+// //                    }
 //
 //                    // Alternative 2 use ViewModel
 //                    propertyDetailNavigationVM.goToPropertyDetailFromMain.value =
