@@ -15,7 +15,7 @@ Unit tests are written with JUnit4, JUnit5, MockK, Truth, MockWebServer. Data(in
 
 | Flow      | RxJava3   | Pagination |
 | ----------|-----------| -----------|
-| <img src="./screenshots/property_flow.png"/> | <img src="./screenshots/property_rxjava3.png"/> | <img src="./screenshots/property_pagination.png"/> |
+| <img src="./screenshots/property_flow.gif"/> | <img src="./screenshots/property_rxjava3.gif"/> | <img src="./screenshots/property_pagination.gif"/> |
 
 | Dashboard | Notification   | Account |
 | ----------|----------------| --------|
