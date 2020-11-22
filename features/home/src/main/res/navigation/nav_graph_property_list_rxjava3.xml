@@ -14,7 +14,6 @@
         <action
             android:id="@+id/action_propertyListFragment_to_nav_graph_property_detail"
             app:destination="@id/nav_graph_property_detail" />
-
     </fragment>
 
     <include-dynamic

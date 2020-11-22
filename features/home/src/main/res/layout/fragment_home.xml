@@ -19,7 +19,7 @@
                 android:layout_height="?attr/actionBarSize"
                 android:background="@color/white"
                 app:layout_collapseMode="pin"
-                app:layout_scrollFlags="scroll|enterAlwaysCollapsed"
+                app:layout_scrollFlags="scroll|enterAlways"
                 app:titleTextColor="@color/black" />
 
             <com.google.android.material.tabs.TabLayout

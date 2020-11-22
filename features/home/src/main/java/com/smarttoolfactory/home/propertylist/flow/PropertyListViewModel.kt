@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 
@@ -72,6 +73,13 @@ class PropertyListViewModel @ViewModelInject constructor(
             .flatMapConcat {
                 setPropertyStatsUseCase.getStatusOfPropertiesForUser(properties = it)
             }
+            // Since we have multiple tabs with same data with same transition id
+            // map it to something unique to this tab for shared transition to work
+            .map {
+                it.onEach { propertyItem ->
+                    propertyItem.transitionName = "TabFlow${propertyItem.id}"
+                }
+            }
             .convertToFlowViewState()
             .onStart {
                 _propertyViewState.value = ViewState(status = Status.LOADING)
@@ -88,6 +96,13 @@ class PropertyListViewModel @ViewModelInject constructor(
             .flatMapConcat {
                 setPropertyStatsUseCase.getStatusOfPropertiesForUser(properties = it)
             }
+            // Since we have multiple tabs with same data with same transition id
+            // map it to something unique to this tab for shared transition to work
+            .map {
+                it.onEach { propertyItem ->
+                    propertyItem.transitionName = "TabFlow${propertyItem.id}"
+                }
+            }
             .convertToFlowViewState()
             .onStart {
                 _propertyViewState.value = ViewState(status = Status.LOADING)
@@ -99,9 +114,10 @@ class PropertyListViewModel @ViewModelInject constructor(
     }
 
     override fun onClick(item: PropertyItem) {
-        _goToDetailScreen.value = Event(item)
+//        _goToDetailScreen.value = Event(item)
         item.viewCount++
-        setPropertyStatsUseCase.updatePropertyStatus(property = item)
+        setPropertyStatsUseCase
+            .updatePropertyStatus(property = item)
             .launchIn(coroutineScope)
     }
 

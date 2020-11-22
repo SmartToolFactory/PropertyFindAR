@@ -35,7 +35,7 @@ class DashboardSeeAllFragment : DynamicNavigationFragment<FragmentDashboardSeeAl
 
             val propertyListViewBinder =
                 PropertySeeAllListViewBinder { propertyItem: PropertyItem,
-                                               binding: ItemPropertySeeAllBinding ->
+                    binding: ItemPropertySeeAllBinding ->
 
                     val direction: NavDirections = DashboardSeeAllFragmentDirections
                         .actionDashboardSeeAllFragmentToNavGraphPropertyDetail(propertyItem)

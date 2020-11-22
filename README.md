@@ -1,7 +1,7 @@
 # 🏘  Real Estate App with MVVM Clean Architecture RxJava3+Coroutines Flow, Static Code Analysis, Dagger Hilt, Dynamic Features
 
 [![ktlint](https://img.shields.io/badge/code%20style-%E2%9D%A4-FF4081.svg)](https://ktlint.github.io/)
-[![Kotlin Version](https://img.shields.io/badge/kotlin-1.4.0-blue.svg)](https://kotlinlang.org)
+[![Kotlin Version](https://img.shields.io/badge/kotlin-1.4.20-blue.svg)](https://kotlinlang.org)
 [![API](https://img.shields.io/badge/API-21%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=21)
 
 

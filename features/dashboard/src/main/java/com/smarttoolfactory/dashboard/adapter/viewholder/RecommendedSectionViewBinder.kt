@@ -1,6 +1,7 @@
 package com.smarttoolfactory.dashboard.adapter.viewholder
 
 import android.os.Parcelable
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
@@ -10,15 +11,15 @@ import com.smarttoolfactory.core.ui.recyclerview.adapter.MappableItemViewBinder
 import com.smarttoolfactory.core.ui.recyclerview.adapter.SingleViewBinderAdapter
 import com.smarttoolfactory.core.util.executeAfter
 import com.smarttoolfactory.core.util.inflate
-import com.smarttoolfactory.dashboard.DashboardViewModel
 import com.smarttoolfactory.dashboard.R
 import com.smarttoolfactory.dashboard.adapter.layoutmanager.ScaledHorizontalGridLayoutManager
 import com.smarttoolfactory.dashboard.adapter.model.RecommendedSectionModel
 import com.smarttoolfactory.dashboard.databinding.ItemRecommendedSectionBinding
+import com.smarttoolfactory.domain.model.PropertyItem
 
 class RecommendedSectionViewBinder(
-    private val viewModel: DashboardViewModel,
-    var layoutManagerState: Parcelable? = null
+    var layoutManagerState: Parcelable? = null,
+    private val onItemClicked: ((PropertyItem, View?) -> Unit)? = null
 ) : MappableItemViewBinder<RecommendedSectionModel, RecommendedSectionViewHolder>(
     RecommendedSectionModel::class.java
 ) {
@@ -27,7 +28,7 @@ class RecommendedSectionViewBinder(
 
         val holder = RecommendedSectionViewHolder(
             parent.inflate(getItemLayoutResource()),
-            viewModel
+            onItemClicked
         )
 
         holder.binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -90,7 +91,7 @@ class RecommendedSectionViewBinder(
  */
 class RecommendedSectionViewHolder(
     internal val binding: ItemRecommendedSectionBinding,
-    private val viewModel: DashboardViewModel,
+    private val onItemClicked: ((PropertyItem, View?) -> Unit)? = null
 ) : RecyclerView.ViewHolder(binding.root) {
 
     private var layoutManager: RecyclerView.LayoutManager? = null
@@ -104,7 +105,6 @@ class RecommendedSectionViewHolder(
         binding.executeAfter {
 
             binding.recommendedSectionModel = model
-            binding.viewModel = this@RecommendedSectionViewHolder.viewModel
 
             recyclerView.apply {
 
@@ -128,11 +128,9 @@ class RecommendedSectionViewHolder(
 
                 // Set RecyclerViewAdapter
 
-                val onItemClick = viewModel?.let { it::onItemClick }
-
                 val itemListAdapter =
                     SingleViewBinderAdapter(
-                        RecommendedPropertyViewBinder(onItemClick) as ItemBinder
+                        RecommendedPropertyViewBinder(onItemClicked) as ItemBinder
                     )
 
                 this.adapter = itemListAdapter
@@ -152,7 +150,6 @@ class RecommendedSectionViewHolder(
 
     internal fun onViewRecycled() {
         binding.root.setOnClickListener(null)
-        binding.viewModel = null
         binding.recommendedSectionModel = null
         binding.unbind()
     }

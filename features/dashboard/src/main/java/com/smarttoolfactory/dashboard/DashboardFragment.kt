@@ -3,7 +3,7 @@ package com.smarttoolfactory.dashboard
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
+import androidx.cardview.widget.CardView
 import androidx.core.view.doOnNextLayout
 import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.viewModels
@@ -26,6 +26,7 @@ import com.smarttoolfactory.core.ui.recyclerview.adapter.MappableItemBinder
 import com.smarttoolfactory.core.ui.recyclerview.adapter.SingleViewBinderAdapter
 import com.smarttoolfactory.core.viewstate.Status
 import com.smarttoolfactory.core.viewstate.ViewState
+import com.smarttoolfactory.dashboard.adapter.model.PropertyListModel
 import com.smarttoolfactory.dashboard.adapter.viewholder.ChartSectionViewBinder
 import com.smarttoolfactory.dashboard.adapter.viewholder.HorizontalSectionViewBinder
 import com.smarttoolfactory.dashboard.adapter.viewholder.LoadingIndicator
@@ -34,6 +35,7 @@ import com.smarttoolfactory.dashboard.adapter.viewholder.RecommendedSectionViewB
 import com.smarttoolfactory.dashboard.databinding.FragmentDashboardBinding
 import com.smarttoolfactory.dashboard.di.DaggerDashboardComponent
 import com.smarttoolfactory.dashboard.di.withFactory
+import com.smarttoolfactory.domain.model.PropertyItem
 import dagger.hilt.android.EntryPointAccessors
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -54,7 +56,7 @@ class DashboardFragment :
     lateinit var propertyPool: RecyclerView.RecycledViewPool
 
     private val viewModel: DashboardViewModel
-            by viewModels { withFactory(dashboardViewModelFactory) }
+    by viewModels { withFactory(dashboardViewModelFactory) }
 
     override fun getLayoutRes(): Int = R.layout.fragment_dashboard
 
@@ -111,18 +113,30 @@ class DashboardFragment :
     private fun createAdapters(savedInstanceState: Bundle?) {
 
         favoriteViewBinder = HorizontalSectionViewBinder(
-            viewModel = viewModel,
+            onItemClicked = { propertyItem: PropertyItem, view: View? ->
+                goToPropertyDetailScreen(propertyItem, view)
+            },
+            onSeeAllClicked = { propertyListModel: PropertyListModel, view: View? ->
+                goToSeeAllScreen(propertyListModel, view)
+            },
             layoutManagerState = viewModel.scrollStateFavorites.value,
             pool = propertyPool
         )
 
         viewedMostViewBinder = HorizontalSectionViewBinder(
-            viewModel = viewModel,
+            onItemClicked = { propertyItem: PropertyItem, view: View? ->
+                goToPropertyDetailScreen(propertyItem, view)
+            },
+            onSeeAllClicked = { propertyListModel: PropertyListModel, view: View? ->
+                goToSeeAllScreen(propertyListModel, view)
+            },
             layoutManagerState = viewModel.scrollStateMostViewed.value
         )
 
         recommendedViewBinder = RecommendedSectionViewBinder(
-            viewModel = viewModel,
+            onItemClicked = { propertyItem: PropertyItem, view: View? ->
+                goToPropertyDetailScreen(propertyItem, view)
+            },
             layoutManagerState = viewModel.scrollStateRecommended.value
         )
 
@@ -210,7 +224,6 @@ class DashboardFragment :
         subscribeAdapterToData(adapterMostViewedChart, viewModel.chartMostViewedViewState)
 
         subscribeRecommendedProperties(adapterRecommendedProperties)
-        subscribeEvents()
 
         viewModel.combinedEventData.observe(
             viewLifecycleOwner,
@@ -297,42 +310,30 @@ class DashboardFragment :
         }
     }
 
-    private fun subscribeEvents() {
+    private fun goToPropertyDetailScreen(propertyItem: PropertyItem, view: View?) {
 
-        viewModel.goToDetailScreen.observe(
-            viewLifecycleOwner
-        ) {
-            it.getContentIfNotHandled()?.let { propertyItem ->
-                val bundle = bundleOf("property" to propertyItem)
+        val direction: NavDirections =
+            DashboardFragmentDirections
+                .actionDashboardFragmentToNavGraphPropertyDetail(propertyItem)
 
-                val direction: NavDirections =
-                    DashboardFragmentDirections
-                        .actionDashboardFragmentToNavGraphPropertyDetail(propertyItem)
+        (view as? CardView)?.let { cardView ->
+            val extras = FragmentNavigatorExtras(
+                cardView to cardView.transitionName
 
-                val extras = FragmentNavigatorExtras(
+            )
+            findNavController().navigate(direction, extras)
+        } ?: findNavController().navigate(direction)
+    }
+
+    private fun goToSeeAllScreen(propertyListModel: PropertyListModel, view: View?) {
+        val direction: NavDirections = DashboardFragmentDirections
+            .actionDashboardFragmentToDashboardSeeAllFragment(propertyListModel)
+
+        val extras = FragmentNavigatorExtras(
 //                    binding.cardView to binding.cardView.transitionName
-                )
+        )
 
-                findNavController().navigate(direction, extras)
-
-            }
-        }
-
-        viewModel.goToSeeAllListScreen.observe(
-            viewLifecycleOwner
-        ) {
-            it.getContentIfNotHandled()?.let { propertyListModel ->
-
-                val direction: NavDirections = DashboardFragmentDirections
-                    .actionDashboardFragmentToDashboardSeeAllFragment(propertyListModel)
-
-                val extras = FragmentNavigatorExtras(
-//                    binding.cardView to binding.cardView.transitionName
-                )
-
-                findNavController().navigate(direction, extras)
-            }
-        }
+        findNavController().navigate(direction, extras)
     }
 
     private fun initCoreDependentInjection() {

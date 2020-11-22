@@ -10,18 +10,26 @@ import com.smarttoolfactory.core.ui.recyclerview.adapter.MappableItemViewBinder
 import com.smarttoolfactory.core.ui.recyclerview.adapter.SingleViewBinderAdapter
 import com.smarttoolfactory.core.util.executeAfter
 import com.smarttoolfactory.core.util.inflate
-import com.smarttoolfactory.dashboard.DashboardViewModel
 import com.smarttoolfactory.dashboard.R
 import com.smarttoolfactory.dashboard.adapter.layoutmanager.ScaledLinearLayoutManager
 import com.smarttoolfactory.dashboard.adapter.model.PropertyListModel
 import com.smarttoolfactory.dashboard.databinding.ItemPropertySectionHorizontalBinding
+import com.smarttoolfactory.domain.model.PropertyItem
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
+/**
+ * ViewBinder for horizontal properties in dashboard.
+ * @param onItemClicked listener to go details when an item is clicked.
+ * Gets View which should be a cardView as parameter for transitions
+ * @param onSeeAllClicked listener to open horizontal property list as vertcial
+ * list in next fragment. View should be the RecyclerView of the current list to transform
+ */
 class HorizontalSectionViewBinder(
-    private val viewModel: DashboardViewModel,
+    private val onItemClicked: ((PropertyItem, View?) -> Unit)? = null,
+    private val onSeeAllClicked: ((PropertyListModel, View?) -> Unit)? = null,
     private val pool: RecyclerView.RecycledViewPool? = null,
     var layoutManagerState: Parcelable? = null,
     private val coroutineScope: CoroutineScope? = null,
@@ -35,7 +43,8 @@ class HorizontalSectionViewBinder(
 
         val holder = HorizontalSectionViewHolder(
             parent.inflate(getItemLayoutResource()),
-            viewModel,
+            onItemClicked,
+            onSeeAllClicked,
             pool,
             coroutineScope,
             scrollPositionStateFlow
@@ -103,7 +112,8 @@ class HorizontalSectionViewBinder(
 
 class HorizontalSectionViewHolder(
     internal val binding: ItemPropertySectionHorizontalBinding,
-    private val viewModel: DashboardViewModel,
+    private val onItemClicked: ((PropertyItem, View?) -> Unit)? = null,
+    private val onSeeAllClicked: ((PropertyListModel, View) -> Unit)? = null,
     private val pool: RecyclerView.RecycledViewPool?,
     private val coroutineScope: CoroutineScope? = null,
     private val scrollPositionStateFlow: MutableStateFlow<Int>? = null
@@ -133,7 +143,6 @@ class HorizontalSectionViewHolder(
         binding.executeAfter {
 
             propertyListModel = model
-            this.viewModel = this@HorizontalSectionViewHolder.viewModel
 
             // Set RecyclerView
             recyclerView.apply {
@@ -149,12 +158,11 @@ class HorizontalSectionViewHolder(
                             }
                         }
 
-                // Click listener for items
-                val onItemClick = viewModel?.let { it::onItemClick }
-
                 // Set RecyclerViewAdapter
                 val itemListAdapter =
-                    SingleViewBinderAdapter(HorizontalPropertyViewBinder(onItemClick) as ItemBinder)
+                    SingleViewBinderAdapter(
+                        HorizontalPropertyViewBinder(onItemClicked) as ItemBinder
+                    )
 
                 this.adapter = itemListAdapter
 
@@ -171,9 +179,7 @@ class HorizontalSectionViewHolder(
 
             // Set see all touch listener
             tvSeeAll.setOnClickListener {
-                viewModel?.let {
-                    (it::onSeeAllClick)(model)
-                }
+                onSeeAllClicked?.invoke(model, recyclerView)
             }
         }
     }
@@ -190,7 +196,6 @@ class HorizontalSectionViewHolder(
 
     internal fun onViewRecycled() {
         binding.tvSeeAll.setOnClickListener(null)
-        binding.viewModel = null
         binding.propertyListModel = null
         binding.unbind()
     }

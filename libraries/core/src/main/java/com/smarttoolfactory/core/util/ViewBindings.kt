@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 fun RecyclerView.setItems(items: List<Nothing>?) {
 
     items?.let {
+        println("ViewBinding setItems()")
         (adapter as ListAdapter<*, *>)?.submitList(items)
     }
 }

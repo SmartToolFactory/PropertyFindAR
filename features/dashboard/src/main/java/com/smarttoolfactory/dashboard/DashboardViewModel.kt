@@ -15,7 +15,6 @@ import com.smarttoolfactory.core.viewstate.ViewState
 import com.smarttoolfactory.dashboard.adapter.model.ChartSectionModel
 import com.smarttoolfactory.dashboard.adapter.model.PropertyListModel
 import com.smarttoolfactory.dashboard.adapter.model.RecommendedSectionModel
-import com.smarttoolfactory.domain.model.PropertyItem
 import com.smarttoolfactory.domain.usecase.property.GetDashboardStatsUseCase
 import com.smarttoolfactory.domain.usecase.property.SetPropertyStatsUseCase
 import kotlinx.coroutines.CoroutineScope
@@ -45,22 +44,6 @@ class DashboardViewModel @ViewModelInject constructor(
 
     val scrollStateRecommended =
         savedStateHandle.getLiveData<Parcelable?>(KEY_RECOMMENDED_LAYOUT_MANAGER_STATE)
-
-    /*
-        Go to property item detail
-     */
-    private val _goToDetailScreen = MutableLiveData<Event<PropertyItem>>()
-
-    val goToDetailScreen: LiveData<Event<PropertyItem>>
-        get() = _goToDetailScreen
-
-    /*
-        Go to display all favorite or viewed items
-     */
-    private val _goToSeeAllScreen = MutableLiveData<Event<PropertyListModel>>()
-
-    val goToSeeAllListScreen: LiveData<Event<PropertyListModel>>
-        get() = _goToSeeAllScreen
 
     val combinedData = MutableLiveData<CombinedData>()
 
@@ -166,17 +149,5 @@ class DashboardViewModel @ViewModelInject constructor(
             .onStart { _propertyRecommendationViewState.value = ViewState(status = Status.LOADING) }
             .onEach { _propertyRecommendationViewState.value = it }
             .launchIn(coroutineScope)
-    }
-
-    fun onItemClick(propertyItem: PropertyItem) {
-
-        _goToDetailScreen.value = Event(propertyItem)
-        propertyItem.viewCount++
-        setPropertyStatsUseCase.updatePropertyStatus(property = propertyItem)
-            .launchIn(coroutineScope)
-    }
-
-    fun onSeeAllClick(propertyItemListModel: PropertyListModel) {
-        _goToSeeAllScreen.value = Event(propertyItemListModel)
     }
 }

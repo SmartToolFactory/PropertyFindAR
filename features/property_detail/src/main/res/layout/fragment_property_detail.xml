@@ -53,6 +53,8 @@
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/cardView"
                     android:layout_width="match_parent"
+                    app:cardCornerRadius="0dp"
+                    app:cardElevation="0dp"
                     android:layout_height="300dp">
 
                     <androidx.constraintlayout.widget.ConstraintLayout

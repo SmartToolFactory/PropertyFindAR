@@ -11,6 +11,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.google.android.material.transition.MaterialArcMotion
 import com.google.android.material.transition.MaterialContainerTransform
 import com.smarttoolfactory.core.di.CoreModuleDependencies
 import com.smarttoolfactory.core.ui.fragment.DynamicNavigationFragment
@@ -55,7 +56,7 @@ class PropertyDetailFragment : DynamicNavigationFragment<FragmentPropertyDetailB
 
     override fun bindViews(view: View, savedInstanceState: Bundle?) {
 
-        // Get Post from navigation component arguments
+        // Get Property from navigation component arguments
         dataBinding.item = propertyItem
         dataBinding.cardView.transitionName = propertyItem.transitionName
 
@@ -77,8 +78,11 @@ class PropertyDetailFragment : DynamicNavigationFragment<FragmentPropertyDetailB
 
     private fun prepareSharedElementTransition() {
 
+        val pathMotion = MaterialArcMotion()
+
         sharedElementEnterTransition = MaterialContainerTransform()
             .apply {
+                setPathMotion(pathMotion)
                 duration = 500
                 // Scope the transition to a view in the hierarchy so we know it will be added under
                 // the bottom app bar but over the elevation scale of the exiting HomeFragment.

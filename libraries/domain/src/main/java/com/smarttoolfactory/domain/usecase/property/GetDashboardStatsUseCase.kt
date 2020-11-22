@@ -9,13 +9,13 @@ import com.smarttoolfactory.domain.mapper.FavoriteEntityToItemListMapper
 import com.smarttoolfactory.domain.mapper.PropertyDTOtoItemListMapper
 import com.smarttoolfactory.domain.model.PropertyChartItem
 import com.smarttoolfactory.domain.model.PropertyItem
+import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.zip
-import javax.inject.Inject
 
 class GetDashboardStatsUseCase @Inject constructor(
     private val propertyRepo: PagedPropertyRepository,
@@ -140,6 +140,10 @@ class GetDashboardStatsUseCase @Inject constructor(
             )
         }.map {
             mapperDTOtoItem.map(it)
+        }.map { propertyList ->
+            propertyList.onEach {
+                it.transitionName = "Recommended$it"
+            }
         }
     }
 

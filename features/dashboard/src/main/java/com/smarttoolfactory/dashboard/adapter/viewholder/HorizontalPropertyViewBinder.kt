@@ -1,5 +1,6 @@
 package com.smarttoolfactory.dashboard.adapter.viewholder
 
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.smarttoolfactory.core.ui.recyclerview.adapter.BaseItemViewBinder
@@ -15,7 +16,7 @@ import com.smarttoolfactory.domain.model.PropertyItem
  * is same with other ViewBinder
  */
 class HorizontalPropertyViewBinder(
-    private val onItemClicked: ((PropertyItem) -> Unit)? = null,
+    private val onItemClicked: ((PropertyItem, View) -> Unit)? = null,
 ) : BaseItemViewBinder<PropertyItem, HorizontalItemViewHolder>() {
 
     override fun createViewHolder(parent: ViewGroup): HorizontalItemViewHolder {
@@ -57,7 +58,7 @@ class HorizontalPropertyViewBinder(
 
 class HorizontalItemViewHolder(
     private val binding: ItemPropertyHorizontalBinding,
-    private val onItemClicked: ((PropertyItem) -> Unit)? = null,
+    private val onItemClicked: ((PropertyItem, View) -> Unit)? = null,
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(item: PropertyItem) {
@@ -65,10 +66,11 @@ class HorizontalItemViewHolder(
         binding.executeAfter {
 
             this.item = item
+            cardView.transitionName = item.transitionName
 
             root.setOnClickListener {
                 onItemClicked?.let { onItemClick ->
-                    onItemClick(item)
+                    onItemClick(item, cardView)
                 }
             }
         }
