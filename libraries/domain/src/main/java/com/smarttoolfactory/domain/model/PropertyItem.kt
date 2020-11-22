@@ -59,5 +59,10 @@ data class PropertyItem(
     val reference: String,
 
     var viewCount: Int = 0,
-    var isFavorite: Boolean = false
+    var isFavorite: Boolean = false,
+    /*
+        This should be a unique transition id for to have shared transitions between fragments.
+        For multiple RecyclerViews with same items it should have prefix to separate views.
+     */
+    var transitionName: String = id.toString()
 ) : Parcelable

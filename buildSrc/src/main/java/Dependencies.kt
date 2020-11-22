@@ -5,7 +5,7 @@ object Deps {
     const val ANDROIDX_CORE_KTX = "androidx.core:core-ktx:${Version.CORE_KTX_VERSION}"
 
     // Fragments
-    const val ANDROIDX_FRAGMENT_KTX = "androidx.core:core-ktx:${Version.FRAGMENT_KTX_VERSION}"
+    const val ANDROIDX_FRAGMENT_KTX = "androidx.fragment:fragment-ktx:${Version.FRAGMENT_KTX_VERSION}"
 
     // AppCompat
     const val APPCOMPAT = "androidx.appcompat:appcompat:${Version.APPCOMPAT_VERSION}"
@@ -154,7 +154,7 @@ object Deps {
 
     // Chucker
     const val CHUCKER_DEBUG = "com.github.chuckerteam.chucker:library:${Version.CHUCKER_VERSION}"
-    const val CHUCKER_RELEASE =
+    const val CHUCKER_RELEASE_NO_OP =
         "com.github.chuckerteam.chucker:library-no-op:${Version.CHUCKER_VERSION}"
 
     // Leak Canary

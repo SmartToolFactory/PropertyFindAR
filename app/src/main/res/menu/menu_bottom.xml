@@ -3,22 +3,22 @@
 
     <item
         android:id="@+id/nav_graph_dfm_home_start"
-        android:icon="@drawable/ic_baseline_home_24"
+        android:icon="@drawable/asl_bnv_home"
         android:title="Home" />
 
     <item
         android:id="@+id/nav_graph_dfm_dashboard_start"
-        android:icon="@drawable/ic_baseline_favorite_24"
+        android:icon="@drawable/asl_bnv_dashboard"
         android:title="Dashboard" />
 
     <item
         android:id="@+id/nav_graph_dfm_notification_start"
-        android:icon="@drawable/ic_baseline_notifications_24"
+        android:icon="@drawable/asl_bnv_notification"
         android:title="Notification" />
 
     <item
         android:id="@+id/nav_graph_dfm_account_start"
-        android:icon="@drawable/ic_baseline_account_circle_24"
+        android:icon="@drawable/asl_bnv_account"
         android:title="Login" />
 
 </menu>

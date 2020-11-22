@@ -15,9 +15,8 @@ class ScaledHorizontalGridLayoutManager constructor(
     @RecyclerView.Orientation orientation: Int = RecyclerView.HORIZONTAL,
     reverseLayout: Boolean = false,
     private val totalItems: Int = 1,
+    private val partialVisibilityRatio: Float = 0.4f
 ) : GridLayoutManager(context, spanCount, orientation, reverseLayout) {
-
-    private val partialVisibilityRatio = 0.3f
 
     private val horizontalSpace get() = width - paddingStart - paddingEnd
 

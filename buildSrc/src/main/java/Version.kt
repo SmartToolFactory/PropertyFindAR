@@ -1,5 +1,5 @@
 object PluginVersion {
-    const val KOTLIN_VERSION = "1.4.0"
+    const val KOTLIN_VERSION = "1.4.20"
     const val GRADLE_VERSION = "4.1.0-rc03"
 
     const val NAV_SAFE_ARGS_VERSION = "2.3.0"
@@ -99,7 +99,7 @@ object Version {
     const val TIMBER_VERSION = "4.7.1"
 
     // Chucker
-    const val CHUCKER_VERSION ="3.2.0"
+    const val CHUCKER_VERSION ="3.4.0"
 
     // Leak Canary
     const val LEAK_CANARY_VERSION = "2.4"

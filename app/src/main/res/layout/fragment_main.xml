@@ -20,6 +20,8 @@
             android:id="@+id/bottomNav"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:showAsAction="always|withText"
+            app:itemTextColor="@drawable/bottom_navigation_tab_selector"
             app:layout_constraintBottom_toBottomOf="parent"
             app:menu="@menu/menu_bottom" />
 

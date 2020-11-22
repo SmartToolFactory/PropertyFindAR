@@ -11,64 +11,31 @@
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/coordinator"
         android:layout_width="match_parent"
+        android:background="?android:colorBackground"
         android:layout_height="match_parent">
 
-        <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/appbar"
-            android:layout_width="match_parent"
-            android:layout_height="256dp"
-            android:fitsSystemWindows="true"
-            android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
+        <!--        <com.google.android.material.appbar.AppBarLayout-->
+        <!--            android:id="@+id/appbar"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="256dp"-->
+        <!--            android:background="@color/white"-->
+        <!--            android:fitsSystemWindows="true"-->
+        <!--            android:theme="@style/ThemeOverlay.AppCompat.ActionBar">-->
 
-            <com.google.android.material.appbar.CollapsingToolbarLayout
-                android:id="@+id/collapsingToolbar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:contentScrim="@color/white"
-                app:expandedTitleMarginEnd="64dp"
-                app:expandedTitleMarginStart="48dp"
-                app:layout_scrollFlags="scroll|exitUntilCollapsed">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <ImageView
-                        android:id="@+id/ivHeader"
-                        imageSrc="@{item.thumbnailBig}"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/placeholder"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        visibilityBasedOn="@{item.verified}"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="#66BB6A"
-                        android:paddingStart="10dp"
-                        android:paddingTop="2dp"
-                        android:paddingEnd="10dp"
-                        android:paddingBottom="2dp"
-                        android:text="VERIFIED"
-                        android:textColor="@color/white"
-                        android:textSize="16sp"
-                        android:translationZ="5dp"
-                        app:layout_constraintBottom_toBottomOf="@id/ivHeader"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-            </com.google.android.material.appbar.CollapsingToolbarLayout>
+        <!--            <com.google.android.material.appbar.CollapsingToolbarLayout-->
+        <!--                android:id="@+id/collapsingToolbar"-->
+        <!--                android:layout_width="match_parent"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                app:contentScrim="@color/white"-->
+        <!--                app:expandedTitleMarginEnd="64dp"-->
+        <!--                app:expandedTitleMarginStart="48dp"-->
+        <!--                app:layout_scrollFlags="scroll|exitUntilCollapsed">-->
 
 
-        </com.google.android.material.appbar.AppBarLayout>
+        <!--            </com.google.android.material.appbar.CollapsingToolbarLayout>-->
+        <!--        </com.google.android.material.appbar.AppBarLayout>-->
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
@@ -82,6 +49,47 @@
                 android:orientation="vertical"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardView"
+                    android:layout_width="match_parent"
+                    app:cardCornerRadius="0dp"
+                    app:cardElevation="0dp"
+                    android:layout_height="300dp">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <ImageView
+                            android:id="@+id/ivHeader"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:scaleType="centerCrop"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            visibilityBasedOn="@{item.verified}"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="#66BB6A"
+                            android:paddingStart="10dp"
+                            android:paddingTop="2dp"
+                            android:paddingEnd="10dp"
+                            android:paddingBottom="2dp"
+                            android:text="VERIFIED"
+                            android:textColor="@color/white"
+                            android:textSize="16sp"
+                            android:translationZ="5dp"
+                            app:layout_constraintBottom_toBottomOf="@id/ivHeader"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </com.google.android.material.card.MaterialCardView>
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/tvPrice"
@@ -125,7 +133,6 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="16dp"
-
                     android:gravity="center"
                     android:maxLines="2"
                     android:text="@{item.subject}"

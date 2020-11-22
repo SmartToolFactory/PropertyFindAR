@@ -14,19 +14,11 @@
 
         <action
             android:id="@+id/action_dashboardFragment_to_nav_graph_property_detail"
-            app:destination="@id/nav_graph_property_detail"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
+            app:destination="@id/nav_graph_property_detail" />
 
         <action
             android:id="@+id/action_dashboardFragment_to_dashboardSeeAllFragment"
-            app:destination="@id/dashboardSeeAllFragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
+            app:destination="@id/dashboardSeeAllFragment" />
 
     </fragment>
 
@@ -38,14 +30,10 @@
 
         <action
             android:id="@+id/action_dashboardSeeAllFragment_to_nav_graph_property_detail"
-            app:destination="@id/nav_graph_property_detail"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
+            app:destination="@id/nav_graph_property_detail" />
 
         <argument
-            android:name="propertyListModel"
+            android:name="propertyListModelArgs"
             app:argType="com.smarttoolfactory.dashboard.adapter.model.PropertyListModel" />
 
     </fragment>
@@ -58,7 +46,7 @@
         app:moduleName="property_detail">
 
         <argument
-            android:name="property"
+            android:name="propertyArgs"
             app:argType="com.smarttoolfactory.domain.model.PropertyItem" />
 
     </include-dynamic>

@@ -33,6 +33,7 @@ class GetDashboardStatsUseCase @Inject constructor(
         return getPropertiesWithStats(userId)
             .map { propertyList ->
                 propertyList.filter { property ->
+                    property.transitionName = "Favorite${property.id}"
                     property.isFavorite
                 }
                     .take(8)
@@ -47,6 +48,7 @@ class GetDashboardStatsUseCase @Inject constructor(
         return getPropertiesWithStats(userId)
             .map { propertyList ->
                 propertyList.filter { property ->
+                    property.transitionName = "MostViewed${property.id}"
                     property.viewCount > 0
                 }.sortedByDescending { property ->
                     property.viewCount
@@ -138,6 +140,10 @@ class GetDashboardStatsUseCase @Inject constructor(
             )
         }.map {
             mapperDTOtoItem.map(it)
+        }.map { propertyList ->
+            propertyList.onEach {
+                it.transitionName = "Recommended$it"
+            }
         }
     }
 

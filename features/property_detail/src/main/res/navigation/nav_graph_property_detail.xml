@@ -9,5 +9,10 @@
         android:id="@+id/propertyDetailFragment"
         android:name="com.smarttoolfactory.property_detail.PropertyDetailFragment"
         android:label="Property Detail Fragment">
+
+        <argument
+            android:name="propertyArgs"
+            app:argType="com.smarttoolfactory.domain.model.PropertyItem" />
+
     </fragment>
 </navigation>

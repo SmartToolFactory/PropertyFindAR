@@ -1,5 +1,6 @@
 package com.smarttoolfactory.dashboard.adapter.viewholder
 
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayoutMediator
@@ -40,7 +41,7 @@ class ChartSectionViewBinder(
         oldItem: ChartSectionModel,
         newItem: ChartSectionModel
     ): Boolean {
-        return oldItem.items == newItem.items
+        return oldItem.chartTitle == newItem.chartTitle
     }
 
     override fun areContentsTheSame(
@@ -60,37 +61,37 @@ class ChartSectionViewBinder(
 
 @Suppress("UNCHECKED_CAST")
 class ChartSectionViewHolder(
-    internal val binding: ItemChartSectionBinding,
+    private val binding: ItemChartSectionBinding,
     private val onChartItemClicked: ((Float) -> Unit)? = null,
     private val pool: RecyclerView.RecycledViewPool?
-) :
-    RecyclerView.ViewHolder(binding.root) {
+) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(model: ChartSectionModel) {
 
-        binding.tvType.text = model.chartTitle
+        if (model.items.isNullOrEmpty()) {
+            binding.chartLayout.visibility = View.GONE
+            binding.cardView.visibility = View.GONE
+        } else {
+            binding.chartLayout.visibility = View.VISIBLE
+            binding.cardView.visibility = View.VISIBLE
 
-        // ViewPager2
-        val viewPager = binding.viewPager
+            binding.tvType.text = model.chartTitle
 
-        // TabLayout
-        val tabLayout = binding.tabLayout
+            // ViewPager2
+            val viewPager = binding.viewPager
 
-        /*
-            Set Adapter for ViewPager inside this fragment using this Fragment,
-            more specifically childFragmentManager as param
+            // TabLayout
+            val tabLayout = binding.tabLayout
 
-            🔥 Create FragmentStateAdapter with viewLifeCycleOwner
-            https://stackoverflow.com/questions/61779776/leak-canary-detects-memory-leaks-for-tablayout-with-viewpager2
-         */
-        viewPager.adapter =
-            SingleViewBinderAdapter(BarChartViewBinder(onChartItemClicked) as ItemBinder)
-                .apply {
-                    submitList(listOf(model, model))
-                }
+            viewPager.adapter =
+                SingleViewBinderAdapter(BarChartViewBinder(onChartItemClicked) as ItemBinder)
+                    .apply {
+                        submitList(listOf(model, model))
+                    }
 
-        // Bind tabs and viewpager
-        TabLayoutMediator(tabLayout, viewPager, tabConfigurationStrategy).attach()
+            // Bind tabs and viewpager
+            TabLayoutMediator(tabLayout, viewPager, tabConfigurationStrategy).attach()
+        }
     }
 
     internal fun onViewRecycled() = Unit

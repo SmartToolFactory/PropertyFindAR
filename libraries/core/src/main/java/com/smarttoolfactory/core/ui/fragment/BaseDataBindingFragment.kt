@@ -8,6 +8,7 @@ import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
+import kotlin.system.measureTimeMillis
 
 /**
  * BaseFragment to avoid writing data-binding code over again for each fragment.
@@ -81,8 +82,15 @@ abstract class BaseDataBindingFragment<ViewBinding : ViewDataBinding> : Fragment
 //                "START took ${onViewCreatedStartTime - onCreateViewStartTime} ms"
 //        )
 
-        bindViews(view, savedInstanceState)
+        val time = measureTimeMillis {
+            bindViews(view, savedInstanceState)
+        }
 
+//        println(
+//            "🍏  ${this.javaClass.simpleName} #${this.hashCode()}  onViewCreated() " +
+//                "bindViews() took $time ms"
+//        )
+//
 //        println(
 //            "🍏  ${this.javaClass.simpleName} #${this.hashCode()}  onViewCreated() " +
 //                "FINISH took ${System.currentTimeMillis() - onCreateViewStartTime} ms"

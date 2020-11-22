@@ -3,18 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
-
-        <variable
-            name="chartItemListModel"
-            type="com.smarttoolfactory.dashboard.adapter.model.ChartSectionModel" />
-    </data>
-
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/chartLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/cardView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginLeft="16dp"
@@ -36,9 +31,12 @@
                     android:id="@+id/tvType"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="12dp"
+                    android:background="@color/gray_500"
+                    android:paddingStart="12dp"
+                    android:paddingTop="2dp"
+                    android:paddingBottom="2dp"
                     android:text="Title"
+                    android:textColor="@color/white"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
@@ -61,9 +59,9 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:tabIndicatorColor="#FB8C00"
+                    app:tabIndicatorColor="@color/orange_700"
                     app:tabIndicatorHeight="4dp"
-                    app:tabTextColor="#FB8C00" />
+                    app:tabTextColor="@color/orange_700" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>

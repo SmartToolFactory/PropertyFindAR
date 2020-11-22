@@ -8,9 +8,14 @@ plugins {
     id(Plugins.KOTLIN_ANDROID_EXTENSIONS_PLUGIN)
     id(Plugins.KOTLIN_KAPT_PLUGIN)
     id(Plugins.DAGGER_HILT_PLUGIN)
+    id(Plugins.NAVIGATION_SAFE_ARGS)
 }
 
 android {
+
+    lintOptions {
+        isCheckReleaseBuilds = false
+    }
 
     compileSdkVersion(AndroidVersion.COMPILE_SDK_VERSION)
 

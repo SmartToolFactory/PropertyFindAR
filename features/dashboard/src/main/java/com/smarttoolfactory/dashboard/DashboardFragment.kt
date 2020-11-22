@@ -2,14 +2,22 @@ package com.smarttoolfactory.dashboard
 
 import android.os.Bundle
 import android.view.View
-import androidx.core.os.bundleOf
+import android.view.ViewGroup
+import androidx.cardview.widget.CardView
+import androidx.core.view.doOnNextLayout
+import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.observe
+import androidx.navigation.NavDirections
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.transition.MaterialElevationScale
+import com.google.android.material.transition.MaterialFadeThrough
+import com.google.android.material.transition.MaterialSharedAxis
 import com.smarttoolfactory.core.di.CoreModuleDependencies
 import com.smarttoolfactory.core.di.qualifier.RecycledViewPool
 import com.smarttoolfactory.core.ui.fragment.DynamicNavigationFragment
@@ -18,6 +26,7 @@ import com.smarttoolfactory.core.ui.recyclerview.adapter.MappableItemBinder
 import com.smarttoolfactory.core.ui.recyclerview.adapter.SingleViewBinderAdapter
 import com.smarttoolfactory.core.viewstate.Status
 import com.smarttoolfactory.core.viewstate.ViewState
+import com.smarttoolfactory.dashboard.adapter.model.PropertyListModel
 import com.smarttoolfactory.dashboard.adapter.viewholder.ChartSectionViewBinder
 import com.smarttoolfactory.dashboard.adapter.viewholder.HorizontalSectionViewBinder
 import com.smarttoolfactory.dashboard.adapter.viewholder.LoadingIndicator
@@ -26,7 +35,9 @@ import com.smarttoolfactory.dashboard.adapter.viewholder.RecommendedSectionViewB
 import com.smarttoolfactory.dashboard.databinding.FragmentDashboardBinding
 import com.smarttoolfactory.dashboard.di.DaggerDashboardComponent
 import com.smarttoolfactory.dashboard.di.withFactory
+import com.smarttoolfactory.domain.model.PropertyItem
 import dagger.hilt.android.EntryPointAccessors
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @Suppress("UNCHECKED_CAST")
@@ -73,6 +84,28 @@ class DashboardFragment :
         createAdapters(savedInstanceState)
     }
 
+    private fun prepareTransitions() {
+
+        exitTransition =
+            MaterialFadeThrough()
+        MaterialElevationScale(false)
+            .apply {
+                duration = 500
+            }
+
+        reenterTransition =
+            MaterialSharedAxis(MaterialSharedAxis.Z, true)
+                .apply {
+                    duration = 500
+                }
+
+        enterTransition =
+            MaterialFadeThrough()
+                .apply {
+                    duration = 500
+                }
+    }
+
     /**
      * Creates adapters for outer and  inner recyclerViews, viewBinders to create
      * each type of ViewHolder depending on layout and data type
@@ -80,18 +113,30 @@ class DashboardFragment :
     private fun createAdapters(savedInstanceState: Bundle?) {
 
         favoriteViewBinder = HorizontalSectionViewBinder(
-            viewModel = viewModel,
+            onItemClicked = { propertyItem: PropertyItem, view: View? ->
+                goToPropertyDetailScreen(propertyItem, view)
+            },
+            onSeeAllClicked = { propertyListModel: PropertyListModel, view: View? ->
+                goToSeeAllScreen(propertyListModel, view)
+            },
             layoutManagerState = viewModel.scrollStateFavorites.value,
             pool = propertyPool
         )
 
         viewedMostViewBinder = HorizontalSectionViewBinder(
-            viewModel = viewModel,
+            onItemClicked = { propertyItem: PropertyItem, view: View? ->
+                goToPropertyDetailScreen(propertyItem, view)
+            },
+            onSeeAllClicked = { propertyListModel: PropertyListModel, view: View? ->
+                goToSeeAllScreen(propertyListModel, view)
+            },
             layoutManagerState = viewModel.scrollStateMostViewed.value
         )
 
         recommendedViewBinder = RecommendedSectionViewBinder(
-            viewModel = viewModel,
+            onItemClicked = { propertyItem: PropertyItem, view: View? ->
+                goToPropertyDetailScreen(propertyItem, view)
+            },
             layoutManagerState = viewModel.scrollStateRecommended.value
         )
 
@@ -148,9 +193,11 @@ class DashboardFragment :
 
     override fun bindViews(view: View, savedInstanceState: Bundle?) {
 
-        viewModel.getDashboardDataCombined()
-
-//        createAdapters(savedInstanceState)
+//        val time = measureTimeMillis {
+//            createAdapters(savedInstanceState)
+//        }
+//
+//        Toast.makeText(requireContext(), "Dashboard createAdapter() time: $time", Toast.LENGTH_SHORT).show()
 
         // Check if RecyclerView has reached the bottom
         dataBinding.recyclerView.addOnScrollListener(scrollListener)
@@ -177,7 +224,6 @@ class DashboardFragment :
         subscribeAdapterToData(adapterMostViewedChart, viewModel.chartMostViewedViewState)
 
         subscribeRecommendedProperties(adapterRecommendedProperties)
-        subscribeEvents()
 
         viewModel.combinedEventData.observe(
             viewLifecycleOwner,
@@ -193,6 +239,12 @@ class DashboardFragment :
                 }
             }
         )
+
+        viewModel.getDashboardDataCombined()
+
+        // Set up transition for exiting and re-entering this fragment
+        prepareTransitions()
+        postponeEnterTransition(600, TimeUnit.MILLISECONDS)
     }
 
     private fun <T> subscribeAdapterToData(
@@ -206,6 +258,11 @@ class DashboardFragment :
 
                 if (viewState.status == Status.SUCCESS && !viewState.data.isNullOrEmpty()) {
                     adapter.submitList(viewState.data)
+                    dataBinding.recyclerView.doOnNextLayout {
+                        (it.parent as? ViewGroup)?.doOnPreDraw {
+                            startPostponedEnterTransition()
+                        }
+                    }
                 }
             }
         )
@@ -253,33 +310,30 @@ class DashboardFragment :
         }
     }
 
-    private fun subscribeEvents() {
+    private fun goToPropertyDetailScreen(propertyItem: PropertyItem, view: View?) {
 
-        viewModel.goToDetailScreen.observe(
-            viewLifecycleOwner
-        ) {
-            it.getContentIfNotHandled()?.let { propertyItem ->
-                val bundle = bundleOf("property" to propertyItem)
-                findNavController().navigate(
-                    R.id.action_dashboardFragment_to_nav_graph_property_detail,
-                    bundle
-                )
-            }
-        }
+        val direction: NavDirections =
+            DashboardFragmentDirections
+                .actionDashboardFragmentToNavGraphPropertyDetail(propertyItem)
 
-        viewModel.goToSeeAllListScreen.observe(
-            viewLifecycleOwner
-        ) {
-            it.getContentIfNotHandled()?.let { propertyListModel ->
+        (view as? CardView)?.let { cardView ->
+            val extras = FragmentNavigatorExtras(
+                cardView to cardView.transitionName
 
-                val bundle = bundleOf("propertyListModel" to propertyListModel)
+            )
+            findNavController().navigate(direction, extras)
+        } ?: findNavController().navigate(direction)
+    }
 
-                findNavController().navigate(
-                    R.id.action_dashboardFragment_to_dashboardSeeAllFragment,
-                    bundle
-                )
-            }
-        }
+    private fun goToSeeAllScreen(propertyListModel: PropertyListModel, view: View?) {
+        val direction: NavDirections = DashboardFragmentDirections
+            .actionDashboardFragmentToDashboardSeeAllFragment(propertyListModel)
+
+        val extras = FragmentNavigatorExtras(
+//                    binding.cardView to binding.cardView.transitionName
+        )
+
+        findNavController().navigate(direction, extras)
     }
 
     private fun initCoreDependentInjection() {

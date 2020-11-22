@@ -52,10 +52,18 @@ class PropertyListViewModelRxJava3 @ViewModelInject constructor(
 
         getOrderByKey()
             .flatMap {
+                println("👻 GET RXJAVA PROPERTY LIST")
                 getPropertiesUseCase.getPropertiesOfflineFirst(_orderByKey)
             }
             .flatMap {
                 setPropertyStatsUseCase.getStatusOfPropertiesForUser(properties = it)
+            }
+            // Since we have multiple tabs with same data with same transition id
+            // map it to something unique to this tab for shared transition to work
+            .map {
+                it.onEach { propertyItem ->
+                    propertyItem.transitionName = "TabRxJava3${propertyItem.id}"
+                }
             }
             .convertFromSingleToObservableViewStateWithLoading()
             .observeOn(AndroidSchedulers.mainThread())
@@ -75,6 +83,13 @@ class PropertyListViewModelRxJava3 @ViewModelInject constructor(
             .flatMap {
                 setPropertyStatsUseCase.getStatusOfPropertiesForUser(properties = it)
             }
+            // Since we have multiple tabs with same data with same transition id
+            // map it to something unique to this tab for shared transition to work
+            .map {
+                it.onEach { propertyItem ->
+                    propertyItem.transitionName = "TabRxJava3${propertyItem.id}"
+                }
+            }
             .convertFromSingleToObservableViewStateWithLoading()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
@@ -88,7 +103,17 @@ class PropertyListViewModelRxJava3 @ViewModelInject constructor(
     }
 
     override fun onClick(item: PropertyItem) {
-        _goToDetailScreen.value = Event(item)
+//        _goToDetailScreen.value = Event(item)
+
+        item.viewCount++
+        setPropertyStatsUseCase
+            .updatePropertyStatus(property = item)
+            .subscribe(
+                {
+                },
+                {
+                }
+            )
     }
 
     fun onLikeButtonClick(item: PropertyItem) {
