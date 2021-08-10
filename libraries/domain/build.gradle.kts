@@ -12,10 +12,6 @@ android {
 
     compileSdkVersion(AndroidVersion.COMPILE_SDK_VERSION)
     defaultConfig {
-        minSdkVersion(AndroidVersion.MIN_SDK_VERSION)
-        targetSdkVersion(AndroidVersion.TARGET_SDK_VERSION)
-        versionCode = AndroidVersion.VERSION_CODE
-        versionName = AndroidVersion.VERSION_NAME
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 

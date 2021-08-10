@@ -1,8 +1,6 @@
 package com.smarttoolfactory.dashboard
 
 import android.os.Parcelable
-import androidx.hilt.Assisted
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
@@ -17,17 +15,20 @@ import com.smarttoolfactory.dashboard.adapter.model.PropertyListModel
 import com.smarttoolfactory.dashboard.adapter.model.RecommendedSectionModel
 import com.smarttoolfactory.domain.usecase.property.GetDashboardStatsUseCase
 import com.smarttoolfactory.domain.usecase.property.SetPropertyStatsUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
+import javax.inject.Inject
 
 typealias CombinedData = ViewState<Array<Any?>>
 
-class DashboardViewModel @ViewModelInject constructor(
-    @Assisted private val savedStateHandle: SavedStateHandle,
+@HiltViewModel
+class DashboardViewModel @Inject constructor(
+    private val savedStateHandle: SavedStateHandle,
     private val coroutineScope: CoroutineScope,
     private val dashboardStatsUseCase: GetDashboardStatsUseCase,
     private val setPropertyStatsUseCase: SetPropertyStatsUseCase

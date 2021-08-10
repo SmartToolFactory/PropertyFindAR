@@ -1,6 +1,5 @@
 package com.smarttoolfactory.home.propertylist.rxjava
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.smarttoolfactory.core.util.Event
@@ -12,11 +11,14 @@ import com.smarttoolfactory.domain.model.PropertyItem
 import com.smarttoolfactory.domain.usecase.property.GetPropertiesUseCaseRxJava3
 import com.smarttoolfactory.domain.usecase.property.SetPropertyStatsUseCaseRxJava3
 import com.smarttoolfactory.home.propertylist.AbstractPropertyListVM
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
+import javax.inject.Inject
 
-class PropertyListViewModelRxJava3 @ViewModelInject constructor(
+@HiltViewModel
+class PropertyListViewModelRxJava3 @Inject constructor(
     private val getPropertiesUseCase: GetPropertiesUseCaseRxJava3,
     private val setPropertyStatsUseCase: SetPropertyStatsUseCaseRxJava3
 ) : AbstractPropertyListVM() {

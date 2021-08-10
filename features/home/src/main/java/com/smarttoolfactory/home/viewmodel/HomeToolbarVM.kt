@@ -1,6 +1,5 @@
 package com.smarttoolfactory.home.viewmodel
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.smarttoolfactory.core.util.Event
@@ -9,8 +8,11 @@ import com.smarttoolfactory.domain.ORDER_BY_DES_DESCENDING
 import com.smarttoolfactory.domain.ORDER_BY_NONE
 import com.smarttoolfactory.domain.ORDER_BY_PRICE_ASCENDING
 import com.smarttoolfactory.domain.ORDER_BY_PRICE_DESCENDING
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class HomeToolbarVM @ViewModelInject constructor() : ViewModel() {
+@HiltViewModel
+class HomeToolbarVM @Inject constructor() : ViewModel() {
 
     var currentSortFilter = ORDER_BY_NONE
 

@@ -13,16 +13,10 @@ plugins {
 
 android {
 
-    compileSdkVersion(AndroidVersion.COMPILE_SDK_VERSION)
-
     defaultConfig {
 
-        applicationId = "com.smarttoolfactory.dashboard"
-
-        minSdkVersion(AndroidVersion.MIN_SDK_VERSION)
-        targetSdkVersion(AndroidVersion.TARGET_SDK_VERSION)
-        versionCode = AndroidVersion.VERSION_CODE
-        versionName = AndroidVersion.VERSION_NAME
+        compileSdk = AndroidVersion.COMPILE_SDK_VERSION
+        minSdk = AndroidVersion.MIN_SDK_VERSION
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 

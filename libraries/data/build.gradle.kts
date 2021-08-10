@@ -13,10 +13,6 @@ android {
 
     compileSdkVersion(AndroidVersion.COMPILE_SDK_VERSION)
     defaultConfig {
-        minSdkVersion(AndroidVersion.MIN_SDK_VERSION)
-        targetSdkVersion(AndroidVersion.TARGET_SDK_VERSION)
-        versionCode = AndroidVersion.VERSION_CODE
-        versionName = AndroidVersion.VERSION_NAME
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         javaCompileOptions {
@@ -134,8 +130,7 @@ dependencies {
     implementation(Deps.RETROFIT)
     implementation(Deps.RETROFIT_GSON_CONVERTER)
     implementation(Deps.RETROFIT_RX_JAVA3_ADAPTER)
-    // change base url runtime
-    implementation(Deps.RETROFIT_URL_MANAGER)
+
     // Gson
     implementation(Deps.GSON)
     // Chucker

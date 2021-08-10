@@ -9,18 +9,17 @@ import com.smarttoolfactory.data.constant.BASE_URL
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ApplicationComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
-import me.jessyan.retrofiturlmanager.RetrofitUrlManager
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
 @Module
-@InstallIn(ApplicationComponent::class)
+@InstallIn(SingletonComponent::class)
 class NetworkModule {
 
     companion object {
@@ -36,7 +35,7 @@ class NetworkModule {
     fun provideOkHttpClient(
         chuckInterceptor: ChuckerInterceptor
     ): OkHttpClient {
-        val okHttpBuilder = RetrofitUrlManager.getInstance().with(OkHttpClient.Builder())
+        val okHttpBuilder = OkHttpClient.Builder()
         okHttpBuilder
             .addInterceptor(chuckInterceptor)
             .connectTimeout(CLIENT_TIME_OUT, TimeUnit.SECONDS)

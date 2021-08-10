@@ -3,7 +3,7 @@ buildscript {
 
     repositories {
         google()
-        jcenter()
+        mavenCentral()
         maven { url = uri("https://plugins.gradle.org/m2/") }
         maven { url = uri("https://jitpack.io") }
     }
@@ -26,7 +26,7 @@ plugins {
 allprojects {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
         maven { url = uri("https://jitpack.io") }
     }
 }

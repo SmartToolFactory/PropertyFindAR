@@ -8,14 +8,14 @@ import com.smarttoolfactory.domain.usecase.property.SetPropertyStatsUseCase
 import com.smarttoolfactory.domain.usecase.property.SetPropertyStatsUseCaseRxJava3
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ApplicationComponent
+import dagger.hilt.components.SingletonComponent
 
 /**
  * This component is required for adding dependencies to Dynamic Feature Modules by
  * adding [CoreModule] as dependent component
  */
 @EntryPoint
-@InstallIn(ApplicationComponent::class)
+@InstallIn(SingletonComponent::class)
 interface CoreModuleDependencies {
 
     /*

@@ -72,29 +72,11 @@ object Deps {
     const val NAVIGATION_DYNAMIC =
         "androidx.navigation:navigation-dynamic-features-fragment:${Version.NAVIGATION_VERSION}"
 
-    // Dagger Core dependencies
-    const val DAGGER = "com.google.dagger:dagger:${Version.MATERIAL_VERSION}"
-    const val DAGGER_COMPILER = "com.google.dagger:dagger-compiler:${Version.DAGGER_VERSION}"
-    const val DAGGER_ANNOTATION_PROCESSOR =
-        "com.google.dagger:dagger-android-processor:${Version.DAGGER_VERSION}"
-
     // Dagger Hilt
-    const val DAGGER_HILT_ANDROID = "com.google.dagger:hilt-android:${Version.DAGGER_HILT_VERSION}"
+    const val DAGGER_HILT_ANDROID = "com.google.dagger:hilt-android:${Version.DAGGER_VERSION}"
     const val DAGGER_HILT_COMPILER =
-        "com.google.dagger:hilt-android-compiler:${Version.DAGGER_HILT_VERSION}"
+        "com.google.dagger:hilt-android-compiler:${Version.DAGGER_VERSION}"
 
-    // Dagger Hilt AndroidX
-    const val DAGGER_HILT_VIEWMODEL =
-        "androidx.hilt:hilt-lifecycle-viewmodel:${Version.DAGGER_HILT_ANDRIODX}"
-    const val DAGGER_HILT_ANDROIDX_HILT_COMPILER =
-        "androidx.hilt:hilt-compiler:${Version.DAGGER_HILT_ANDRIODX}"
-
-    // RxJava2
-    const val RX_JAVA2 = "io.reactivex.rxjava2:rxjava:${Version.RX_JAVA2_VERSION}"
-
-    // RxJava2 Android
-    const val RX_JAVA2_ANDROID =
-        "io.reactivex.rxjava2:rxandroid:${Version.RX_JAVA2_ANDROID_VERSION}"
 
     // RxJava3
     const val RX_JAVA3 = "io.reactivex.rxjava3:rxjava:${Version.RX_JAVA3_VERSION}"
@@ -116,9 +98,6 @@ object Deps {
     const val RETROFIT_RX_JAVA2_ADAPTER = "com.jakewharton.retrofit:retrofit2-rxjava2-adapter:1.0.0"
     const val RETROFIT_RX_JAVA3_ADAPTER =
         "com.squareup.retrofit2:adapter-rxjava3:${Version.RETROFIT_RXJAVA3_ADAPTER}"
-
-    // Retrofit change base url runtime
-    const val RETROFIT_URL_MANAGER = "me.jessyan:retrofit-url-manager:1.4.0"
 
     const val OK_HTTP3 = "com.squareup.okhttp3:okhttp:${Version.OK_HTTP3_VERSION}"
 
@@ -154,7 +133,7 @@ object Deps {
 
     // Chucker
     const val CHUCKER_DEBUG = "com.github.chuckerteam.chucker:library:${Version.CHUCKER_VERSION}"
-    const val CHUCKER_RELEASE_NO_OP =
+    const val CHUCKER_RELEASE =
         "com.github.chuckerteam.chucker:library-no-op:${Version.CHUCKER_VERSION}"
 
     // Leak Canary

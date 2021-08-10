@@ -13,7 +13,7 @@ fun DependencyHandler.addAppModuleDependencies() {
 
     implementation(Deps.KOTLIN)
     implementation(Deps.ANDROIDX_CORE_KTX)
-    implementation(Deps.ANDROIDX_FRAGMENT_KTX)
+//    implementation(Deps.ANDROIDX_FRAGMENT_KTX)
 
     // Support and Widgets
     implementation(Deps.APPCOMPAT)
@@ -43,9 +43,6 @@ fun DependencyHandler.addAppModuleDependencies() {
     // Dagger Hilt
     implementation(Deps.DAGGER_HILT_ANDROID)
     kapt(Deps.DAGGER_HILT_COMPILER)
-    // Dagger Hilt AndroidX & ViewModel
-    implementation(Deps.DAGGER_HILT_VIEWMODEL)
-    kapt(Deps.DAGGER_HILT_ANDROIDX_HILT_COMPILER)
 
     // RxJava
     implementation(Deps.RX_JAVA3)
@@ -72,8 +69,7 @@ fun DependencyHandler.addAppModuleDependencies() {
     implementation(Deps.RETROFIT)
     implementation(Deps.RETROFIT_GSON_CONVERTER)
     implementation(Deps.RETROFIT_RX_JAVA3_ADAPTER)
-    // change base url runtime
-    implementation(Deps.RETROFIT_URL_MANAGER)
+
     // Gson
     implementation(Deps.GSON)
     implementation(Deps.CHUCKER_DEBUG)
@@ -117,9 +113,6 @@ fun DependencyHandler.addCoreModuleDependencies() {
     // Dagger Hilt
     implementation(Deps.DAGGER_HILT_ANDROID)
     kapt(Deps.DAGGER_HILT_COMPILER)
-    // Dagger Hilt AndroidX & ViewModel
-    implementation(Deps.DAGGER_HILT_VIEWMODEL)
-    kapt(Deps.DAGGER_HILT_ANDROIDX_HILT_COMPILER)
 
     // RxJava
     implementation(Deps.RX_JAVA3)
@@ -161,9 +154,6 @@ fun DependencyHandler.addBaseDynamicFeatureModuleDependencies() {
     // Dagger Hilt
     implementation(Deps.DAGGER_HILT_ANDROID)
     kapt(Deps.DAGGER_HILT_COMPILER)
-    // Dagger Hilt AndroidX & ViewModel
-    implementation(Deps.DAGGER_HILT_VIEWMODEL)
-    kapt(Deps.DAGGER_HILT_ANDROIDX_HILT_COMPILER)
 
     // RxJava
     implementation(Deps.RX_JAVA3)

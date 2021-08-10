@@ -13,16 +13,16 @@ plugins {
 
 android {
 
-    lintOptions {
+    lint {
         isCheckReleaseBuilds = false
     }
 
-    compileSdkVersion(AndroidVersion.COMPILE_SDK_VERSION)
 
     defaultConfig {
         applicationId = AndroidVersion.APPLICATION_ID
-        minSdkVersion(AndroidVersion.MIN_SDK_VERSION)
-        targetSdkVersion(AndroidVersion.TARGET_SDK_VERSION)
+        compileSdk = AndroidVersion.COMPILE_SDK_VERSION
+        minSdk= AndroidVersion.MIN_SDK_VERSION
+        targetSdk = AndroidVersion.TARGET_SDK_VERSION
         versionCode = AndroidVersion.VERSION_CODE
         versionName = AndroidVersion.VERSION_NAME
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -103,13 +103,13 @@ android {
         jvmTarget = "1.8"
     }
 
-    dynamicFeatures = mutableSetOf(
-        Modules.DynamicFeature.HOME,
-        Modules.DynamicFeature.PROPERTY_DETAIL,
-        Modules.DynamicFeature.DASHBOARD,
-        Modules.DynamicFeature.NOTIFICATION,
-        Modules.DynamicFeature.ACCOUNT
-    )
+    dynamicFeatures.apply {
+        add(Modules.DynamicFeature.HOME)
+        add(Modules.DynamicFeature.PROPERTY_DETAIL)
+        add(Modules.DynamicFeature.DASHBOARD)
+        add(Modules.DynamicFeature.NOTIFICATION)
+        add(Modules.DynamicFeature.ACCOUNT)
+    }
 
     testOptions {
         unitTests.isIncludeAndroidResources = true

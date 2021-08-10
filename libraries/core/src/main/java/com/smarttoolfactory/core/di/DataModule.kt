@@ -31,10 +31,10 @@ import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ApplicationComponent
+import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
-@InstallIn(ApplicationComponent::class)
+@InstallIn(SingletonComponent::class)
 @Module(
     includes = [
         DataProviderModule::class,
@@ -86,7 +86,7 @@ interface DataModule {
 }
 
 @Module
-@InstallIn(ApplicationComponent::class)
+@InstallIn(SingletonComponent::class)
 interface DataModuleRxJava3 {
 
     @Singleton
@@ -119,7 +119,7 @@ interface DataModuleRxJava3 {
  * This module is for injections with @Provides annotation
  */
 @Module
-@InstallIn(ApplicationComponent::class)
+@InstallIn(SingletonComponent::class)
 object DataProviderModule {
     @Provides
     fun provideDTOtoEntityMapper() = PropertyDTOtoEntityListMapper()

@@ -1,6 +1,5 @@
 package com.smarttoolfactory.home.propertylist.flow
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.smarttoolfactory.core.util.Event
@@ -12,6 +11,7 @@ import com.smarttoolfactory.domain.model.PropertyItem
 import com.smarttoolfactory.domain.usecase.property.GetPropertiesUseCaseFlow
 import com.smarttoolfactory.domain.usecase.property.SetPropertyStatsUseCase
 import com.smarttoolfactory.home.propertylist.AbstractPropertyListVM
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -20,8 +20,10 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
+import javax.inject.Inject
 
-class PropertyListViewModel @ViewModelInject constructor(
+@HiltViewModel
+class PropertyListViewModel @Inject constructor(
     private val coroutineScope: CoroutineScope,
     private val getPropertiesUseCase: GetPropertiesUseCaseFlow,
     private val setPropertyStatsUseCase: SetPropertyStatsUseCase
