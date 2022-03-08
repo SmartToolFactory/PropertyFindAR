@@ -5,8 +5,6 @@
 [![API](https://img.shields.io/badge/API-21%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=21)
 
 
-## Note: ⚠️ Augmented Reality and maps COMING SOON‼️ After Notification, Account and Search modules are completed
-
 ## About
 
 Sample project that build with MVVM clean architecture and various cool techs including RxJava3 and Coroutines Flow, Dynamic Feature modules as base of BottomNavigationView or ViewPager2, with both OfflineFirst and OfflineLast approaches as database Single Source of Truth Merge Adapter, ViewBinders for setting inner RecyclerViews, RecycledViewPools, SavedStateHandle, and more.
